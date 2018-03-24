@@ -25,12 +25,12 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="Email"
+                android:hint="@string/user_email"
                 android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/city_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -39,7 +39,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="City"
+                android:hint="@string/user_city"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -53,7 +53,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="Name"
+                android:hint="@string/user_name"
                 android:inputType="text" />
 
             <EditText
@@ -66,7 +66,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="Short Bio"
+                android:hint="@string/user_ShortBio"
                 android:inputType="none" />
 
             <EditText
@@ -79,7 +79,7 @@
                 android:layout_toEndOf="@+id/city_edit"
                 android:layout_toRightOf="@+id/city_edit"
                 android:ems="10"
-                android:hint="ZIP Code"
+                android:hint="@string/user_zipCode"
                 android:inputType="text" />
 
             <EditText
@@ -93,7 +93,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="Zone"
+                android:hint="@string/user_zone"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -107,7 +107,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
-                android:hint="Phone number (optional)"
+                android:hint="@string/user_PhoneNumber"
                 android:inputType="phone" />
 
         </RelativeLayout>
