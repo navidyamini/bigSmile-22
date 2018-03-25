@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Condividi i Tuoi Libri</string>
+    <string name="user_name">Name</string>
+    <string name="user_email">Email</string>
+    <string name="user_zone">Zone</string>
+    <string name="user_zipCode">Zip Cc</string>
+    <string name="user_PhoneNumber">Phone Number (optional)"</string>
+    <string name="user_city">City</string>
+    <string name="user_ShortBio">Short Bio</string>
+</resources>
