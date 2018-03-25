@@ -3,7 +3,7 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_edit"
+        android:id="@+id/action_save"
         android:icon="@android:drawable/ic_menu_save"
         android:title="Save"
         app:showAsAction="always" />
