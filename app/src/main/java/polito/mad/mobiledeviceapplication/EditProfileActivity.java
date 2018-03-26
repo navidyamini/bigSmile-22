@@ -6,11 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private TextView nameText,emailText,phoneText,bioText, cityText, zipCodeText, zoneText;
+    private EditText nameText,emailText,phoneText,bioText, cityText, zipCodeText, zoneText;
 
     private static int PICK_IMAGE = 1;
 
@@ -19,13 +20,13 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_activity);
 
-        nameText = (TextView)findViewById(R.id.name_edit);
-        emailText = (TextView)findViewById(R.id.email_edit);
-        phoneText = (TextView)findViewById(R.id.phone_edit);
-        bioText = (TextView)findViewById(R.id.bio_edit);
-        cityText = (TextView)findViewById(R.id.city_edit);
-        zipCodeText = (TextView)findViewById(R.id.zip_edit);
-        zoneText = (TextView)findViewById(R.id.zone_edit);
+        nameText = (EditText)findViewById(R.id.name_edit);
+        emailText = (EditText)findViewById(R.id.email_edit);
+        phoneText = (EditText)findViewById(R.id.phone_edit);
+        bioText = (EditText)findViewById(R.id.bio_edit);
+        cityText = (EditText)findViewById(R.id.city_edit);
+        zipCodeText = (EditText)findViewById(R.id.zip_edit);
+        zoneText = (EditText)findViewById(R.id.zone_edit);
 
         SharedPreferences settings = getSharedPreferences("ProfilePref",0);
 
@@ -50,6 +51,14 @@ public class EditProfileActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.action_save:
                 Intent intent = new Intent(this, ShowProfileActivity.class);
+                intent.putExtra("nameValue", nameText.getText().toString());
+                intent.putExtra("nameValue", nameText.getText().toString());
+                intent.putExtra("emailValue", emailText.getText().toString());
+                intent.putExtra("phoneValue", phoneText.getText().toString());
+                intent.putExtra("bioValue", bioText.getText().toString());
+                intent.putExtra("cityValue", cityText.getText().toString());
+                intent.putExtra("zipCodeValue", zipCodeText.getText().toString());
+                intent.putExtra("zoneValue", zoneText.getText().toString());
                 this.startActivity(intent);
                 break;
             default:
