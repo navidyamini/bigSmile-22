@@ -121,5 +121,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:background="@drawable/add"/>
+
+
 </RelativeLayout>
