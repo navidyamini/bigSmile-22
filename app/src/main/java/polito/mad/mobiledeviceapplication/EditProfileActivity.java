@@ -2,66 +2,52 @@ package polito.mad.mobiledeviceapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private static final int RESULT_LOAD_IMAGE = 10;
-    private EditText nameText,emailText,phoneText,bioText, cityText, zipCodeText, zoneText;
-    private ImageView profileImage;
-    private static int PICK_IMAGE = 1;
+    private ListView listView;
+    private ArrayList<String[]> arrayList;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_activity);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_edit);
+        setSupportActionBar(myToolbar);
 
-        profileImage = (ImageView) findViewById(R.id.image);
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-            }
-        });
-        nameText = (EditText)findViewById(R.id.name_edit);
-        emailText = (EditText)findViewById(R.id.email_edit);
-        phoneText = (EditText)findViewById(R.id.phone_edit);
-        bioText = (EditText)findViewById(R.id.bio_edit);
-        cityText = (EditText)findViewById(R.id.city_edit);
-        zipCodeText = (EditText)findViewById(R.id.zip_edit);
-        zoneText = (EditText)findViewById(R.id.zone_edit);
+        listView = (ListView) findViewById(R.id.list_edit);
 
-        SharedPreferences settings = getSharedPreferences("ProfilePref",0);
 
-        nameText.setText(settings.getString("nameValue",""));
-        emailText.setText(settings.getString("emailValue",""));
-        phoneText.setText(settings.getString("phoneValue",""));
-        bioText.setText(settings.getString("bioValue",""));
-        cityText.setText(settings.getString("cityValue",""));
-        zipCodeText.setText(settings.getString("zipCodeValue",""));
-        zoneText.setText(settings.getString("zoneValue",""));
+        arrayList = new ArrayList<>();
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("name", ""), "Name"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("surname", ""), "Surname"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("email", ""), "Email"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("phone", ""), "Telephone number"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("bio", ""), "Bio"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("address", ""), "Address"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("ZIP", ""), "ZIP"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("zone", ""), "Zone"});
+
+        listView.setAdapter(new CustomAdapterEdit(getApplicationContext(), arrayList));
+
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_save,menu);
+        getMenuInflater().inflate(R.menu.menu_show,menu);
         return true;
     }
 
@@ -69,16 +55,29 @@ public class EditProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_save:
+
                 Intent intent = new Intent(this, ShowProfileActivity.class);
-                intent.putExtra("nameValue", nameText.getText().toString());
-                intent.putExtra("nameValue", nameText.getText().toString());
-                intent.putExtra("emailValue", emailText.getText().toString());
-                intent.putExtra("phoneValue", phoneText.getText().toString());
-                intent.putExtra("bioValue", bioText.getText().toString());
-                intent.putExtra("cityValue", cityText.getText().toString());
-                intent.putExtra("zipCodeValue", zipCodeText.getText().toString());
-                intent.putExtra("zoneValue", zoneText.getText().toString());
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                System.out.println(listView.getChildCount());
+                if(listView.getChildAt(0)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("name",((TextInputEditText)listView.getChildAt(0).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(1)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("surname",((TextInputEditText)listView.getChildAt(1).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(2)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("email",((TextInputEditText)listView.getChildAt(2).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(3)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("phone",((TextInputEditText)listView.getChildAt(3).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(4)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("bio",((TextInputEditText)listView.getChildAt(4).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(5)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("address",((TextInputEditText)listView.getChildAt(5).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(6)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("ZIP",((TextInputEditText)listView.getChildAt(6).findViewById(R.id.edit_text)).getText().toString()).apply();
+                if(listView.getChildAt(7)!=null)
+                    getSharedPreferences("ProfilePref",0).edit().putString("zone",((TextInputEditText)listView.getChildAt(7).findViewById(R.id.edit_text)).getText().toString()).apply();
+
                 this.startActivity(intent);
+                finish();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -86,48 +85,27 @@ public class EditProfileActivity extends AppCompatActivity {
         return true;
     }
 
+/*
     @Override
     protected void onStop(){
         super.onStop();
         SharedPreferences settings = getSharedPreferences("ProfilePref",0);
 
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("nameValue", nameText.getText().toString());
-        editor.putString("emailValue", emailText.getText().toString());
-        editor.putString("phoneValue", phoneText.getText().toString());
-        editor.putString("bioValue", bioText.getText().toString());
-        editor.putString("cityValue", cityText.getText().toString());
-        editor.putString("zipCodeValue", zipCodeText.getText().toString());
-        editor.putString("zoneValue", zoneText.getText().toString());
+        editor.putString("name", ((TextInputEditText)listView.getChildAt(0).findViewById(R.id.edit_text)).getText().toString());
+        editor.putString("email", ((TextInputEditText)listView.getChildAt(1).findViewById(R.id.edit_text)).getText().toString());
+        editor.putString("phone", ((TextInputEditText)listView.getChildAt(2).findViewById(R.id.edit_text)).getText().toString());
+        editor.putString("bio",((TextInputEditText)listView.getChildAt(3).findViewById(R.id.edit_text)).getText().toString());
+        editor.putString("address", ((TextInputEditText)listView.getChildAt(4).findViewById(R.id.edit_text)).getText().toString());
+        editor.putString("ZIP", ((TextInputEditText)listView.getChildAt(5).findViewById(R.id.edit_text)).getText().toString());
+        editor.putString("zone", ((TextInputEditText)listView.getChildAt(6).findViewById(R.id.edit_text)).getText().toString());
         editor.commit();
 
     }
+*/
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
-                && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
 
-            if (cursor == null || cursor.getCount() < 1) {
-                return; // no cursor or no record. DO YOUR ERROR HANDLING
-            }
 
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 
-            if(columnIndex < 0) // no column index
-                return; // DO YOUR ERROR HANDLING
 
-            String picturePath = cursor.getString(columnIndex);
-
-            cursor.close(); // close cursor
-            profileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath.toString()));
-
-        }
-    }
 }

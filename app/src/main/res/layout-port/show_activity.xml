@@ -3,117 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_show"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleMarginStart="30dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/list_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/imageLayout"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="14dp" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/imageLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/changePictureBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/profileImage"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="-22dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_camera_white_24dp" />
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/profileImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="fitXY"
-                android:background="@drawable/people"/>
-
+                android:layout_height="250dp"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_marginBottom="34dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/books" />
 
             <TextView
-                android:id="@+id/email_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/name_view"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:text="@string/user_email"/>
-
-            <TextView
-                android:id="@+id/city_view"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/profileImage"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/bio_view"
+                android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:text="@string/user_city" />
-
-            <TextView
-                android:id="@+id/name_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/image"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:text="@string/user_name" />
-
-            <TextView
-                android:id="@+id/bio_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/city_view"
-                android:layout_alignStart="@+id/city_view"
-                android:layout_below="@+id/phone_view"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:text="@string/user_ShortBio" />
-
-            <TextView
-                android:id="@+id/zip_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/city_view"
-                android:layout_alignBottom="@+id/city_view"
-                android:layout_marginRight="16dp"
-                android:layout_toEndOf="@+id/city_view"
-                android:layout_toRightOf="@+id/city_view"
-                android:ems="10"
-                android:text="@string/user_zipCode" />
-
-            <TextView
-                android:id="@+id/zone_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/city_view"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:text="@string/user_zone" />
-
-            <TextView
-                android:id="@+id/phone_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/email_view"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:text="@string/user_PhoneNumber" />
-
-
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
         </RelativeLayout>
 
-    </ScrollView>
+
+    </RelativeLayout>
 
 </RelativeLayout>

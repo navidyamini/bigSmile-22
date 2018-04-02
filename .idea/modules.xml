@@ -4,9 +4,7 @@
     <modules>
       <module fileurl="file://C:\Users\Asus\Documents\bigSmile-22\MobileDeviceApplication.iml" filepath="C:\Users\Asus\Documents\bigSmile-22\MobileDeviceApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\user\AndroidProjects\bigSmile-22\app\app.iml" filepath="C:\Users\user\AndroidProjects\bigSmile-22\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bigSmile-22.iml" filepath="$PROJECT_DIR$/bigSmile-22.iml" />
-      <module fileurl="file://C:\Users\user\AndroidProjects\bigSmile-22\bigSmile-22.iml" filepath="C:\Users\user\AndroidProjects\bigSmile-22\bigSmile-22.iml" />
     </modules>
   </component>
 </project>

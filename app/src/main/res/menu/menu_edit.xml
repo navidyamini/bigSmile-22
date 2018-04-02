@@ -2,9 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- "Mark Favorite", should appear as action button if possible -->
+    <group >
+        <item
+            android:iconTint="@android:color/white"
+            android:title="More"
+            android:visible="true" />
+    </group>
     <item
         android:id="@+id/action_edit"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_edit_white_24dp"
         android:title="Edit"
         app:showAsAction="always" />
 

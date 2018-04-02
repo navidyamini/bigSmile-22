@@ -1,125 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_edit"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Edit profile"
+        app:titleMarginStart="30dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    </android.support.v7.widget.Toolbar>
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="fitXY"
-                android:background="@drawable/add"/>
-
-
-            <EditText
-                android:id="@+id/email_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/name_edit"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/user_email"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/city_edit"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/bio_edit"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/user_city"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/name_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/image"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/user_name"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/bio_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/city_edit"
-                android:layout_alignStart="@+id/city_edit"
-                android:layout_below="@+id/phone_edit"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/user_ShortBio"
-                android:inputType="none" />
-
-            <EditText
-                android:id="@+id/zip_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/city_edit"
-                android:layout_alignBottom="@+id/city_edit"
-                android:layout_marginRight="16dp"
-                android:layout_toEndOf="@+id/city_edit"
-                android:layout_toRightOf="@+id/city_edit"
-                android:ems="10"
-                android:hint="@string/user_zipCode"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/zone_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/city_edit"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/user_zone"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/phone_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/email_edit"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/user_PhoneNumber"
-                android:inputType="phone" />
-
-        </RelativeLayout>
-
-    </ScrollView>
+    <ListView
+        android:id="@+id/list_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/my_toolbar_edit"
+        android:divider="@android:color/transparent" />
 
 </RelativeLayout>
