@@ -230,11 +230,13 @@ public class ShowProfileActivity extends AppCompatActivity {
             }
 
         } else if (requestCode == CAMERA) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
-            profileImage.setImageBitmap(thumbnail);
-            saveImage(thumbnail);
-            Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
+            if (data!=null) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                profileImage.setImageBitmap(thumbnail);
+                saveImage(thumbnail);
+                Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
+            }
         }
 
 
