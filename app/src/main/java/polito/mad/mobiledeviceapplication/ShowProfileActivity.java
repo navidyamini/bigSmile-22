@@ -73,6 +73,7 @@ public class ShowProfileActivity extends AppCompatActivity {
         pickImageButton = (FloatingActionButton) findViewById(R.id.changePictureBtn);
         profileImage = (ImageView) findViewById(R.id.profileImage);
 
+
         retrieveProfileImage(profileImage);
 
 

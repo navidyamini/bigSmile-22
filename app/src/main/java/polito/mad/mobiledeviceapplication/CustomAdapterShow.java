@@ -29,6 +29,7 @@ class CustomAdapterShow extends BaseAdapter {
 
     }
 
+
     @Override
     public int getCount() {
         return this.array.size();

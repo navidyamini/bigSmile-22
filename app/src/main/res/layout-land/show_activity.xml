@@ -48,6 +48,21 @@
             android:background="@drawable/books"
             android:scaleType="centerCrop"
             android:src="@drawable/books" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/profileImage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@+id/changePictureBtn"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
     </RelativeLayout>
 
     <ListView
