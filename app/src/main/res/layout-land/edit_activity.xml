@@ -12,7 +12,7 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Edit profile"
+        app:title="@string/edit_profile"
         app:titleMarginStart="30dp">
 
     </android.support.v7.widget.Toolbar>
@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Name"
+                        android:hint="@string/user_name"
                         android:imeOptions="actionUnspecified|actionNext"
                         android:inputType="text|textPersonName"
                         android:singleLine="true"
@@ -98,7 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Surname"
+                        android:hint="@string/user_surname"
                         android:imeOptions="actionUnspecified|actionNext"
                         android:inputType="text|textPersonName"
                         android:singleLine="true"
@@ -147,7 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Email"
+                        android:hint="@string/user_email"
                         android:imeOptions="actionNext"
                         android:inputType="text|textEmailAddress"
                         android:singleLine="true"
@@ -167,7 +167,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
+                    app:srcCompat="@drawable/ic_email_white_24dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -194,7 +194,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Phone"
+                        android:hint="@string/user_PhoneNumber"
                         android:imeOptions="actionUnspecified|actionNext"
                         android:inputType="text|phone"
                         android:singleLine="true"
@@ -214,7 +214,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
+                    app:srcCompat="@drawable/ic_phone_white_24dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -241,7 +241,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Short bio"
+                        android:hint="@string/user_ShortBio"
                         android:imeOptions="actionUnspecified"
                         android:inputType="text|textMultiLine"
                         android:textColor="@color/textColorEntryList"
@@ -260,7 +260,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
+                    app:srcCompat="@drawable/ic_textsms_white_24dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -287,7 +287,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Address"
+                        android:hint="@string/user_address"
                         android:imeOptions="actionUnspecified|actionNext"
                         android:inputType="text|textPostalAddress"
                         android:singleLine="true"
@@ -307,7 +307,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
+                    app:srcCompat="@drawable/ic_place_white_24dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -336,7 +336,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="ZIP code"
+                        android:hint="@string/user_zipCode"
                         android:imeOptions="actionUnspecified|actionNext"
                         android:inputType="text|textPostalAddress"
                         android:singleLine="true"
@@ -356,7 +356,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
+                    app:srcCompat="@drawable/ic_location_city_white_24dp" />
 
 
             </RelativeLayout>
@@ -388,7 +388,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Zone"
+                        android:hint="@string/user_zone"
                         android:imeOptions="actionUnspecified|actionDone"
                         android:inputType="text|textPostalAddress"
                         android:singleLine="true"
@@ -408,7 +408,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
+                    app:srcCompat="@drawable/ic_streetview_white_24dp" />
             </RelativeLayout>
 
         </RelativeLayout>

@@ -5,13 +5,13 @@
     <group >
         <item
             android:iconTint="@android:color/white"
-            android:title="More"
+            android:title="@string/more"
             android:visible="true" />
     </group>
     <item
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_edit_white_24dp"
-        android:title="Edit"
+        android:title="@string/edit"
         app:showAsAction="always" />
 
 

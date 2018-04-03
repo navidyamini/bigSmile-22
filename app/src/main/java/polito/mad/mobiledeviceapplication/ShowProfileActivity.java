@@ -92,14 +92,14 @@ public class ShowProfileActivity extends AppCompatActivity {
             name.setText(getSharedPreferences("ProfilePref",0).getString("name","") + " " + getSharedPreferences("ProfilePref",0).getString("surname",""));
 
         arrayList = new ArrayList<>();
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("name", ""), "Name"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("surname", ""), "Surname"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("email", ""), "Email"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("phone", ""), "Telephone number"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("bio", ""), "Bio"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("address", ""), "Address"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("ZIP", ""), "ZIP"});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("zone", ""), "Zone"});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("name", ""), getString(R.string.user_name)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("surname", ""), getString(R.string.user_surname)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("email", ""), getString(R.string.user_email)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("phone", ""), getString(R.string.user_PhoneNumber)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("bio", ""), getString(R.string.user_ShortBio)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("address", ""), getString(R.string.user_address)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("ZIP", ""), getString(R.string.user_zipCode)});
+        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("zone", ""), getString(R.string.user_zone)});
 
         listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
 
@@ -128,10 +128,10 @@ public class ShowProfileActivity extends AppCompatActivity {
 
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this, R.style.CustomDialog);
-        pictureDialog.setTitle("Select Action");
+        pictureDialog.setTitle(getString(R.string.select_action));
         String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera"};
+                getString(R.string.gallery),
+                getString(R.string.camera)};
 
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
@@ -220,12 +220,12 @@ public class ShowProfileActivity extends AppCompatActivity {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                     String path = saveImage(bitmap);
-                    Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.save_image), Toast.LENGTH_SHORT).show();
                     profileImage.setImageBitmap(bitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -235,7 +235,7 @@ public class ShowProfileActivity extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 profileImage.setImageBitmap(thumbnail);
                 saveImage(thumbnail);
-                Toast.makeText(this, "Image Saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.save_image), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -282,8 +282,8 @@ public class ShowProfileActivity extends AppCompatActivity {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomDialog);
-                        builder.setTitle("Permission required");
-                        builder.setMessage("You need to provide this permission to properly use this app");
+                        builder.setTitle(getString(R.string.permission));
+                        builder.setMessage(getString(R.string.permission_message));
                         builder.setCancelable(true);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -329,8 +329,8 @@ public class ShowProfileActivity extends AppCompatActivity {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomDialog);
-                        builder.setTitle("Permission required");
-                        builder.setMessage("You need to provide this permission to properly use this app");
+                        builder.setTitle(getString(R.string.permission));
+                        builder.setMessage(getString(R.string.permission_message));
                         builder.setCancelable(true);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override

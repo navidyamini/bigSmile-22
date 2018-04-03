@@ -1,10 +1,25 @@
 <resources>
     <string name="app_name">Book Sharing</string>
     <string name="user_name">Name</string>
+    <string name="user_surname">Surname</string>
     <string name="user_email">Email</string>
+    <string name="user_address">Address</string>
     <string name="user_zone">Zone</string>
     <string name="user_zipCode">Zip Cc</string>
-    <string name="user_PhoneNumber">Phone Number (optional)"</string>
+    <string name="user_PhoneNumber">Phone Number"</string>
     <string name="user_city">City</string>
     <string name="user_ShortBio">Short Bio</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="description">Description</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name ="not_empty">This field must not be empty</string>
+    <string name ="select_action">Select Action</string>
+    <string name ="camera">Capture photo from camera</string>
+    <string name ="gallery">Select photo from gallery</string>
+    <string name ="save_image">Image Saved!</string>
+    <string name ="failed">Failed!</string>
+    <string name ="permission">Permission required!</string>
+    <string name ="permission_message">You need to provide this permission to properly use this app!</string>
+    <string name ="more">More</string>
 </resources>

@@ -40,7 +40,7 @@
         android:layout_toEndOf="@+id/icon_entry"
         android:layout_toRightOf="@+id/icon_entry"
         android:fontFamily="@font/roboto_regular"
-        android:text="Description"
+        android:text="@string/description"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp" />
 </RelativeLayout>

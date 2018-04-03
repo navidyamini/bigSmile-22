@@ -61,21 +61,21 @@ class CustomAdapterShow extends BaseAdapter {
         text.setText(array.get(i)[0]);
         description.setText(array.get(i)[1]);
 
-        if (array.get(i)[1].equals("Name"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_name)))
             image.setImageResource(R.drawable.ic_account_circle_white_24dp);
-        if (array.get(i)[1].equals("Surname"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_surname)))
             image.setImageResource(R.drawable.ic_account_circle_white_24dp);
-        if (array.get(i)[1].equals("Email"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_email)))
             image.setImageResource(R.drawable.ic_email_white_24dp);
-        if (array.get(i)[1].equals("Telephone number"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_PhoneNumber)))
             image.setImageResource(R.drawable.ic_phone_white_24dp);
-        if (array.get(i)[1].equals("Bio"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_ShortBio)))
             image.setImageResource(R.drawable.ic_textsms_white_24dp);
-        if (array.get(i)[1].equals("Address"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_address)))
             image.setImageResource(R.drawable.ic_place_white_24dp);
-        if (array.get(i)[1].equals("ZIP"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_zipCode)))
             image.setImageResource(R.drawable.ic_location_city_white_24dp);
-        if (array.get(i)[1].equals("Zone"))
+        if (array.get(i)[1].equals(context.getString(R.string.user_zone)))
             image.setImageResource(R.drawable.ic_streetview_white_24dp);
 
 /*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

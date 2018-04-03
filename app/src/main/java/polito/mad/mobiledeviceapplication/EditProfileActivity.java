@@ -83,9 +83,9 @@ public class EditProfileActivity extends AppCompatActivity {
             case R.id.action_save:
 
                 if (name_edit.getText().length()==0)
-                    name_text_layout.setError("This field must not be empty");
+                    name_text_layout.setError(getString(R.string.not_empty));
                 else if (surname_edit.getText().length()==0)
-                    surname_text_layout.setError("This field must not be empty");
+                    surname_text_layout.setError(getString(R.string.not_empty));
                 else{
                     name_text_layout.setErrorEnabled(false);
                     surname_text_layout.setErrorEnabled(false);

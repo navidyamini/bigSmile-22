@@ -2,10 +2,25 @@
 <resources>
     <string name="app_name">Condividi i Tuoi Libri</string>
     <string name="user_name">Nome</string>
+    <string name="user_surname">Cognome</string>
     <string name="user_email">E-mail</string>
+    <string name="user_address">Indirizzo</string>
     <string name="user_zone">Zona</string>
     <string name="user_zipCode">Cap</string>
-    <string name="user_PhoneNumber">Telefono (opzionale)"</string>
+    <string name="user_PhoneNumber">Telefono"</string>
     <string name="user_city">Citta</string>
     <string name="user_ShortBio">Breve Biografia</string>
+    <string name="edit_profile">Modifica Profilo</string>
+    <string name="description">Descrizione</string>
+    <string name="edit">Modifica</string>
+    <string name="save">Salva</string>
+    <string name ="not_empty">Questo campo non deve essere vuoto</string>
+    <string name ="select_action">Seleziona Azione</string>
+    <string name ="camera">Ottieni foto dalla Scatta</string>
+    <string name ="gallery">Seleziona la foto dalla galleria</string>
+    <string name ="save_image">Immagine salvata!</string>
+    <string name ="failed">Fallito!</string>
+    <string name ="permission">Autorizzazione richiesta!</string>
+    <string name ="permission_message">È necessario fornire questa autorizzazione per utilizzare correttamente questa app!</string>
+    <string name ="more">Di Più</string>
 </resources>
