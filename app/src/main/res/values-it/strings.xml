@@ -16,7 +16,7 @@
     <string name="save">Salva</string>
     <string name ="not_empty">Questo campo non deve essere vuoto</string>
     <string name ="select_action">Seleziona Azione</string>
-    <string name ="camera">Ottieni foto dalla Scatta</string>
+    <string name ="camera">Scatta foto</string>
     <string name ="gallery">Seleziona la foto dalla galleria</string>
     <string name ="save_image">Immagine salvata!</string>
     <string name ="failed">Fallito!</string>
