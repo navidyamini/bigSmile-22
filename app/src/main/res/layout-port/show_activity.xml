@@ -3,18 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar_show"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleMarginStart="30dp">
-
-    </android.support.v7.widget.Toolbar>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -34,6 +22,17 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_marginBottom="34dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/books" />
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/changePictureBtn"
                 android:layout_width="wrap_content"
@@ -45,17 +44,6 @@
                 android:layout_marginRight="16dp"
                 android:clickable="true"
                 app:srcCompat="@drawable/ic_camera_white_24dp" />
-
-            <ImageView
-                android:id="@+id/profileImage"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="false"
-                android:layout_marginBottom="34dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/books" />
 
             <TextView
                 android:id="@+id/name"
@@ -74,5 +62,17 @@
 
 
     </RelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_show"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleMarginStart="30dp">
+
+    </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>

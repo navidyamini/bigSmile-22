@@ -3,20 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar_show"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_toLeftOf="@+id/list_profile"
-        android:layout_toStartOf="@+id/list_profile"
-        android:background="@android:color/transparent"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleMarginStart="30dp">
-
-    </android.support.v7.widget.Toolbar>
-
     <RelativeLayout
         android:id="@+id/imageLayout"
         android:layout_width="300dp"
@@ -25,6 +11,17 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="false"
         android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:background="@drawable/books"
+            android:scaleType="centerCrop"
+            android:src="@drawable/books" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/changePictureBtn"
@@ -37,17 +34,6 @@
             android:layout_marginRight="16dp"
             android:clickable="true"
             app:srcCompat="@drawable/ic_camera_white_24dp" />
-
-        <ImageView
-            android:id="@+id/profileImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            android:background="@drawable/books"
-            android:scaleType="centerCrop"
-            android:src="@drawable/books" />
 
         <TextView
             android:id="@+id/name"
@@ -74,5 +60,19 @@
         android:layout_toRightOf="@+id/imageLayout"
         android:divider="@android:color/transparent"
         android:dividerHeight="14dp" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_show"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_toLeftOf="@+id/list_profile"
+        android:layout_toStartOf="@+id/list_profile"
+        android:background="@android:color/transparent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleMarginStart="30dp">
+
+    </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>
