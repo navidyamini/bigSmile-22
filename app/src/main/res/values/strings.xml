@@ -22,4 +22,5 @@
     <string name ="permission">Permission required!</string>
     <string name ="permission_message">You need to provide this permission to properly use this app!</string>
     <string name ="more">More</string>
+
 </resources>

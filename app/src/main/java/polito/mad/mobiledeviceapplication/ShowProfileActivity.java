@@ -28,8 +28,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,6 +50,9 @@ public class ShowProfileActivity extends AppCompatActivity {
     private ImageView profileImage;
 
     private boolean permission_bool = false;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,8 @@ public class ShowProfileActivity extends AppCompatActivity {
         arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("zone", ""), getString(R.string.user_zone)});
 
         listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
+
+
 
 
     }
@@ -238,6 +241,7 @@ public class ShowProfileActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.save_image), Toast.LENGTH_SHORT).show();
             }
         }
+
 
 
     }

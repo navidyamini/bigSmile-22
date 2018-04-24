@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Condividi i Tuoi Libri</string>
+    <string name="app_name">Book Sharing</string>
     <string name="user_name">Nome</string>
     <string name="user_surname">Cognome</string>
     <string name="user_email">E-mail</string>
