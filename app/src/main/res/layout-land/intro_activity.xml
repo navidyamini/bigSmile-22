@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_login"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Sign in"
+        app:titleMarginStart="30dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <Button
+        android:id="@+id/EmailAccessBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="65dp"
+        android:background="#D50000"
+        android:drawableLeft="@drawable/ic_email_white_24dp"
+        android:drawablePadding="10dp"
+        android:padding="15dp"
+        android:text="Sign in with email" />
+
+    <Button
+        android:id="@+id/PhoneAccessBtn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/EmailAccessBtn"
+        android:layout_alignStart="@+id/EmailAccessBtn"
+        android:layout_below="@+id/EmailAccessBtn"
+        android:layout_marginTop="43dp"
+        android:background="#00C853"
+        android:drawableLeft="@drawable/ic_phone_white_24dp"
+        android:drawablePadding="10dp"
+        android:padding="15dp"
+        android:text="Sign in with phone" />
+
+
+
+</RelativeLayout>

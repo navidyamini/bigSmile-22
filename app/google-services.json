@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "585362344645",
+    "firebase_url": "https://bigsmile22-38e1c.firebaseio.com",
+    "project_id": "bigsmile22-38e1c",
+    "storage_bucket": "bigsmile22-38e1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585362344645:android:90855cb010c8f18c",
+        "android_client_info": {
+          "package_name": "polito.mad.mobiledeviceapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585362344645-gq02c6m3rld2b295sng1s3smfjgmduua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtVzXKSU3b3omQVwvUGQ0RSoGggsityuQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

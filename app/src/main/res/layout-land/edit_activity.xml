@@ -171,7 +171,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/phone_layout"
+                android:id="@+id/email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/email_layout"
@@ -221,7 +221,7 @@
                 android:id="@+id/bio_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/phone_layout"
+                android:layout_below="@+id/email_layout"
                 android:layout_marginTop="5dp">
 
                 <android.support.design.widget.TextInputLayout

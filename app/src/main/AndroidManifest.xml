@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_final"
@@ -13,7 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_final"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true"
         >
+
+
         <activity android:name=".EditProfileActivity"
          android:windowSoftInputMode="stateVisible|adjustPan">
 
@@ -21,12 +26,20 @@
         <activity android:name=".ShowProfileActivity">
 
 
+        </activity>
+
+        <activity android:name=".loginsignin.LoginSigninActivity" android:windowSoftInputMode="adjustPan">
+
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
