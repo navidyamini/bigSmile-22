@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/my_profile"
+        android:icon="@drawable/ic_account_circle_white_24dp"
+        android:title="@string/my_profile"></item>
+    <item
+        android:id="@+id/my_books"
+        android:icon="@drawable/ic_book_white_24dp"
+        android:title="@string/my_books"
+        ></item>
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search"></item>
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/setting"></item>
+
+    <item
+        android:id="@+id/exit"
+        android:icon="@drawable/ic_exit_to_app_white_24dp"
+        android:title="@string/exit"></item>
+</menu>
