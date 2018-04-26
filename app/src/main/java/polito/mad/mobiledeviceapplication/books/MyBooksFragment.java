@@ -1,4 +1,4 @@
-package polito.mad.mobiledeviceapplication;
+package polito.mad.mobiledeviceapplication.books;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

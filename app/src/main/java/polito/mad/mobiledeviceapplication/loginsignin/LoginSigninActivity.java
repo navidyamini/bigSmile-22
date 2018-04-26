@@ -146,20 +146,26 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren())
-                    {
-                        User user = child.getValue(User.class);
-                        if (user != null) {
-                            if (user.username.equals(intent.getStringExtra("username"))
-                                    && user.password.equals(intent.getStringExtra("password"))) {
-                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                                System.out.println("WOW OK");
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                            User user = child.getValue(User.class);
+                            if (user != null) {
+                                if (user.username.equals(intent.getStringExtra("username"))
+                                        && user.password.equals(intent.getStringExtra("password"))) {
+
+                                    getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID",child.getKey()).apply();
+
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    System.out.println("WOW OK");
+                                } else
+                                    System.out.println("USER NOT FOUND");
                             }
-                            else
-                                System.out.println("USER NOT FOUND");
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+
                     }
 
                 }
@@ -179,8 +185,6 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
 
 
             if (mAuth!=null) {
-
-
 
                 mAuth.signInWithEmailAndPassword(intent.getStringExtra("email"), intent.getStringExtra("password"))
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -294,9 +298,6 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
 
                         mDatabase.addListenerForSingleValueEvent(postListener);
 
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                        startActivity(intent);
-                        finish();
 
                     }
 
@@ -361,9 +362,9 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
         // Check if user is signed in (non-null) and update UI accordingly.
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser!=null) {
+        if (currentUser!=null || !getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","").equals("")) {
             //ALREADY LOGGED
-            System.out.println("User " + currentUser.getPhoneNumber());
+            //System.out.println("User " + currentUser.getPhoneNumber());
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
             finish();
@@ -425,7 +426,6 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                     }
                 });
     }
-
 
 
 

@@ -8,5 +8,16 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Button" />
+        android:text="Disconnect" />
+
+    <Button
+        android:id="@+id/insert_book_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/disconnect"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="Insert book" />
+
+
 </RelativeLayout>

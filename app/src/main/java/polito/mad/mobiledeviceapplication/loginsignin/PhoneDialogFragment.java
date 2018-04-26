@@ -30,7 +30,7 @@ public class PhoneDialogFragment extends android.support.v4.app.DialogFragment {
         View v = li.inflate(R.layout.phone_fragment, vg, false);
         confirm_button=(Button)v.findViewById(R.id.phone_button);
         phone = (TextInputEditText) v.findViewById(R.id.phone);
-        phone_layout = (TextInputLayout) v.findViewById(R.id.phone_layout);
+        phone_layout = (TextInputLayout) v.findViewById(R.id.edit_year_layout);
         loading_progress = (ProgressBar) v.findViewById(R.id.loadingProgressBar);
         //code = (TextInputEditText) v.findViewById(R.id.code);
 

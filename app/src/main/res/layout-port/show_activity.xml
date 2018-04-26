@@ -34,7 +34,7 @@
                 android:src="@drawable/books" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/changePictureBtn"
+                android:id="@+id/confirmBook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/profileImage"

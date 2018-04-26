@@ -24,7 +24,7 @@
             android:src="@drawable/books" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/changePictureBtn"
+            android:id="@+id/confirmBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/profileImage"
@@ -45,7 +45,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_toLeftOf="@+id/changePictureBtn"
+            android:layout_toLeftOf="@+id/confirmBook"
             android:fontFamily="@font/roboto_medium"
             android:textColor="@android:color/white"
             android:textSize="24sp" />

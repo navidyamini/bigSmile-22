@@ -31,7 +31,7 @@ public class MailDialogFragment extends DialogFragment {
         confirm_button=(Button)v.findViewById(R.id.button);
         email = (TextInputEditText) v.findViewById(R.id.email);
         password = (TextInputEditText) v.findViewById(R.id.password);
-        email_layout = (TextInputLayout) v.findViewById(R.id.email_layout);
+        email_layout = (TextInputLayout) v.findViewById(R.id.publisher_layout);
         password_layout = (TextInputLayout) v.findViewById(R.id.password_lay);
 
         confirm_button.requestFocus();

@@ -71,7 +71,7 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         name = (TextView) findViewById(R.id.name);
         listView = (ListView) findViewById(R.id.list_profile);
-        pickImageButton = (FloatingActionButton) findViewById(R.id.changePictureBtn);
+        pickImageButton = (FloatingActionButton) findViewById(R.id.confirmBook);
         profileImage = (ImageView) findViewById(R.id.profileImage);
 
 
