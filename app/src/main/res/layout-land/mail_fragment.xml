@@ -13,7 +13,7 @@
         android:layout_marginBottom="-10dp"
         android:layout_marginLeft="-10dp"
         android:layout_marginRight="-10dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#B71C1C"
         android:fontFamily="@font/roboto_light"
         android:text="Login" />
@@ -22,10 +22,8 @@
         android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/text2"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="5dp">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/publisher_layout"
