@@ -32,7 +32,7 @@
                 android:elevation="2dp"
                 android:fontFamily="@font/roboto_light"
                 android:padding="10dp"
-                android:text="Sign up with email" />
+                android:text="@string/register_email" />
 
             <RelativeLayout
                 android:id="@+id/formLayout"
@@ -132,7 +132,7 @@
                 android:elevation="2dp"
                 android:fontFamily="@font/roboto_light"
                 android:padding="10dp"
-                android:text="Register" />
+                android:text="@string/register" />
 
             <TextView
                 android:id="@+id/or"

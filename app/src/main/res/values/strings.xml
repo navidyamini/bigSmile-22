@@ -55,4 +55,6 @@
     <string name="search">Search</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="register">Sign up</string>
+    <string name="register_email">Sign up with email</string>
 </resources>

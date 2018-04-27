@@ -57,6 +57,8 @@
 
     <string name="book_insert_hint">Questo libro sarà disponibile nella tua biblioteca e potrai condividerlo con i tuoi amici.</string>
     <string name="press_insert_book">Premi il pulsante per inserire un nuovo libro nella tua libreria</string>
+    <string name="register">Registrati</string>
+    <string name="register_email">Registrati tramite email</string>
 
 
 </resources>
