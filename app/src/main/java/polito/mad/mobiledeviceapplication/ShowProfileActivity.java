@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -28,17 +29,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import polito.mad.mobiledeviceapplication.utils.Constants;
+import polito.mad.mobiledeviceapplication.utils.User;
+
 public class ShowProfileActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArrayList<String[]> arrayList;
     private TextView name;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     private FloatingActionButton pickImageButton;
     private static final int CAMERA = 10;
@@ -58,6 +71,9 @@ public class ShowProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_activity);
+
+        mAuth = FirebaseAuth.getInstance();
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_show);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle(null);
@@ -74,9 +90,7 @@ public class ShowProfileActivity extends AppCompatActivity {
         pickImageButton = (FloatingActionButton) findViewById(R.id.confirmBook);
         profileImage = (ImageView) findViewById(R.id.profileImage);
 
-
         retrieveProfileImage(profileImage);
-
 
         pickImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,22 +102,100 @@ public class ShowProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (!getSharedPreferences("ProfilePref",0).getString("name","").equals("")
-                && !getSharedPreferences("ProfilePref",0).getString("surname","").equals(""))
-            name.setText(getSharedPreferences("ProfilePref",0).getString("name","") + " " + getSharedPreferences("ProfilePref",0).getString("surname",""));
-
         arrayList = new ArrayList<>();
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("name", ""), getString(R.string.user_name)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("surname", ""), getString(R.string.user_surname)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("email", ""), getString(R.string.user_email)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("phone", ""), getString(R.string.user_PhoneNumber)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("bio", ""), getString(R.string.user_ShortBio)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("address", ""), getString(R.string.user_address)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("ZIP", ""), getString(R.string.user_zipCode)});
-        arrayList.add(new String[]{getSharedPreferences("ProfilePref", 0).getString("zone", ""), getString(R.string.user_zone)});
 
-        listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
+        if (mDatabase==null)
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        if (mAuth.getCurrentUser()==null) {
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                            if (getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
+
+                                User user = child.getValue(User.class);
+
+                                arrayList.add(new String[]{user.name, getString(R.string.user_name)});
+                                arrayList.add(new String[]{user.surname, getString(R.string.user_surname)});
+                                arrayList.add(new String[]{user.email, getString(R.string.user_email)});
+                                arrayList.add(new String[]{user.phone, getString(R.string.user_PhoneNumber)});
+                                arrayList.add(new String[]{user.bio, getString(R.string.user_ShortBio)});
+                                arrayList.add(new String[]{user.address, getString(R.string.user_address)});
+                                arrayList.add(new String[]{user.ZIP, getString(R.string.user_zipCode)});
+                                arrayList.add(new String[]{user.zone, getString(R.string.user_zone)});
+
+                                listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
+
+                            }
+
+
+                        }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
+
+                }
+            };
+
+            mDatabase.addListenerForSingleValueEvent(postListener);
+
+
+        } else {
+
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                            if (mAuth.getCurrentUser().getUid().equals(child.getKey())) {
+
+                                User user = child.getValue(User.class);
+
+                                arrayList.add(new String[]{user.name, getString(R.string.user_name)});
+                                arrayList.add(new String[]{user.surname, getString(R.string.user_surname)});
+                                arrayList.add(new String[]{user.email, getString(R.string.user_email)});
+                                arrayList.add(new String[]{user.phone, getString(R.string.user_PhoneNumber)});
+                                arrayList.add(new String[]{user.bio, getString(R.string.user_ShortBio)});
+                                arrayList.add(new String[]{user.address, getString(R.string.user_address)});
+                                arrayList.add(new String[]{user.ZIP, getString(R.string.user_zipCode)});
+                                arrayList.add(new String[]{user.zone, getString(R.string.user_zone)});
+
+                                listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
+
+                            }
+                        }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
+
+                }
+            };
+
+            mDatabase.addListenerForSingleValueEvent(postListener);
+
+        }
 
 
 

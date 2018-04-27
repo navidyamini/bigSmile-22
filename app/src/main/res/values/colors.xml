@@ -6,6 +6,6 @@
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="textColorSecondary">#00838f</color>
     <color name="textColorEntryList">#757575</color>
-
+    <color name="gray">#757575</color>
 
 </resources>

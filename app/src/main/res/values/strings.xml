@@ -22,5 +22,11 @@
     <string name ="permission">Permission required!</string>
     <string name ="permission_message">You need to provide this permission to properly use this app!</string>
     <string name ="more">More</string>
-
+    <string name="my_profile">My Profile</string>
+    <string name="my_books">My Books</string>
+    <string name="exit">Exit</string>
+    <string name="setting">Setting</string>
+    <string name="search">Search</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>

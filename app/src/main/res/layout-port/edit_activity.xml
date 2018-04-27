@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
@@ -12,7 +13,7 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/edit_profile"
+        app:title="Edit profile"
         app:titleMarginStart="30dp">
 
     </android.support.v7.widget.Toolbar>
@@ -51,9 +52,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_name"
+                        android:hint="Name"
                         android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPersonName"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
@@ -75,7 +76,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/author_layout"
+                android:id="@+id/surname_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/name_layout"
@@ -98,9 +99,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_surname"
+                        android:hint="Surname"
                         android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPersonName"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
@@ -122,12 +123,12 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/publisher_layout"
+                android:id="@+id/email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/author_layout"
+                android:layout_below="@+id/surname_layout"
                 android:layout_marginTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -149,7 +150,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:hint="Email"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textEmailAddress"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
@@ -171,10 +172,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/publisher_layout"
+                android:id="@+id/phone_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/publisher_layout"
+                android:layout_below="@+id/email_layout"
                 android:layout_marginTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -194,9 +195,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_PhoneNumber"
+                        android:hint="Phone"
                         android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|phone"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
@@ -221,7 +222,7 @@
                 android:id="@+id/bio_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/publisher_layout"
+                android:layout_below="@+id/phone_layout"
                 android:layout_marginTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -241,7 +242,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_ShortBio"
+                        android:hint="Short bio"
                         android:imeOptions="actionUnspecified"
                         android:inputType="text|textMultiLine"
                         android:textColor="@color/textColorEntryList"
@@ -260,11 +261,11 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_textsms_white_24dp" />
+                    app:srcCompat="@drawable/ic_account_circle_white_24dp" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/book_conditions_layout"
+                android:id="@+id/address_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/bio_layout"
@@ -287,13 +288,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_address"
+                        android:hint="Address"
                         android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPostalAddress"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
                         android:textSize="18sp"
+                        android:visibility="visible"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -311,12 +313,12 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/genre_layout"
+                android:id="@+id/zip_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/book_conditions_layout"
+                android:layout_below="@+id/address_layout"
                 android:layout_marginTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -336,9 +338,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_zipCode"
+                        android:hint="ZIP code"
                         android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPostalAddress"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
@@ -356,7 +358,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_location_city_white_24dp" />
+                    app:srcCompat="@drawable/ic_place_white_24dp" />
 
 
             </RelativeLayout>
@@ -368,7 +370,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentTop="false"
-                android:layout_below="@+id/genre_layout"
+                android:layout_below="@+id/zip_layout"
                 android:layout_marginTop="5dp">
 
                 <android.support.design.widget.TextInputLayout
@@ -388,9 +390,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="@string/user_zone"
+                        android:hint="Zone"
                         android:imeOptions="actionUnspecified|actionDone"
-                        android:inputType="text|textPostalAddress"
+                        android:inputType="text"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
@@ -408,7 +410,7 @@
                     android:layout_marginLeft="16dp"
                     android:scaleType="fitXY"
                     android:tint="@color/textColorSecondary"
-                    app:srcCompat="@drawable/ic_streetview_white_24dp" />
+                    app:srcCompat="@drawable/ic_place_white_24dp" />
             </RelativeLayout>
 
         </RelativeLayout>

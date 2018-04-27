@@ -6,10 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextSwitcher;
@@ -37,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
+import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSigninActivity;
 import polito.mad.mobiledeviceapplication.loginsignin.MailDialogFragment;
 import polito.mad.mobiledeviceapplication.utils.Book;
@@ -47,7 +55,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends FragmentActivity implements AddBookDialogFragment.FragBookObserver {
+public class MainActivity extends AppCompatActivity implements AddBookDialogFragment.FragBookObserver {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -55,6 +63,11 @@ public class MainActivity extends FragmentActivity implements AddBookDialogFragm
     private Button disconnect;
     private Button insert_book;
     private Button scan_book;
+
+    private DrawerLayout mDrawerlayout;
+    private ActionBarDrawerToggle mToggle;
+    private NavigationView navigation;
+
 
     @Override
     public void notifyActionBook(Intent intent) {
@@ -144,32 +157,65 @@ public class MainActivity extends FragmentActivity implements AddBookDialogFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        insert_book =(Button) findViewById(R.id.insert_book_btn);
-        disconnect = (Button) findViewById(R.id.disconnect);
-        scan_book = (Button) findViewById(R.id.scan_book_btn);
-
         mAuth = FirebaseAuth.getInstance();
 
-        insert_book.setOnClickListener(new View.OnClickListener() {
+
+
+        mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer);
+        mToggle = new ActionBarDrawerToggle(this,mDrawerlayout,R.string.open,R.string.close);
+        mDrawerlayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+
+        navigation = (NavigationView) findViewById(R.id.drawer_navigation);
+        ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText("Welcome " + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onNavigationItemSelected(MenuItem item) {
+                item.setChecked(true);
+                mDrawerlayout.closeDrawers();
+                switch(item.getItemId()) {
+                    case R.id.my_profile:
+                        // Handle menu click
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyProfileFragment()).commit();
 
-                AddBookDialogFragment addBookDialogFragment = new AddBookDialogFragment();
-                addBookDialogFragment.show(getSupportFragmentManager(),"AddBookDialog");
+                        return true;
+                    case R.id.my_books:
 
-            }
-        });
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyBooksFragment()).commit();
+                        // Handle settings click
+                        return true;
+                    case R.id.search:
 
-        disconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SearchFragment()).commit();
 
-                FirebaseAuth.getInstance().signOut();
-                getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
-                Intent i = new Intent(getApplicationContext(), LoginSigninActivity.class);
-                startActivity(i);
-                finish();
+                        // Handle logout click
+                        return true;
+                    case R.id.setting:
 
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SettingsFragment()).commit();
+
+                        // Handle logout click
+                        return true;
+                    case R.id.exit:
+                        // Handle logout click
+                        FirebaseAuth.getInstance().signOut();
+                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
+                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username","").apply();
+
+                        Intent i = new Intent(getApplicationContext(), LoginSigninActivity.class);
+                        startActivity(i);
+                        finish();
+                        return true;
+                    default:
+                        return false;
+                }
 
             }
         });
@@ -287,5 +333,16 @@ public class MainActivity extends FragmentActivity implements AddBookDialogFragm
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)){
+            if (mDrawerlayout.isDrawerOpen(Gravity.LEFT))
+                mDrawerlayout.closeDrawer(Gravity.LEFT);
+            else
+                mDrawerlayout.openDrawer(Gravity.LEFT);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

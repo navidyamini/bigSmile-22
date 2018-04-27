@@ -154,6 +154,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                                         && user.password.equals(intent.getStringExtra("password"))) {
 
                                     getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID",child.getKey()).apply();
+                                    getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username).apply();
 
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
@@ -257,7 +258,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
             if (mDatabase==null)
                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            User user = new User(intent.getStringExtra("username"), intent.getStringExtra("password"));
+            User user = new User(intent.getStringExtra("username"), intent.getStringExtra("password"),"","","","","","","","");
 
             mDatabase.child("users").push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -279,6 +280,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                                             && user.password.equals(intent.getStringExtra("password"))) {
 
                                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID",child.getKey()).apply();
+                                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username).apply();
 
                                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                                         startActivity(intent);
