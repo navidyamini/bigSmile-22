@@ -40,6 +40,11 @@
     <string name="edition_year">Edition year</string>
     <string name="book_conditions">Book conditions</string>
     <string name="genre">Genre</string>
+    <string name="press_button">Press the button to see and edit your personal information</string>
+    <string name="profile_info">Access profile info</string>
+    <string name="login">Login</string>
+    <string name="insert_code">Insert the received code</string>
+    <string name="fetching_data">Fetching data from our servers</string>
 
     <string name="my_profile">My Profile</string>
     <string name="my_books">My Books</string>

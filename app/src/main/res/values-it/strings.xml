@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Book Sharing</string>
+    <string name="app_name">Condivisione Di Libri</string>
     <string name="user_name">Nome</string>
     <string name="user_surname">Cognome</string>
     <string name="user_email">E-mail</string>
@@ -41,6 +41,19 @@
     <string name="edition_year">Edizione anno</string>
     <string name="book_conditions">Condizioni del libro</string>
     <string name="genre">Genere</string>
+    <string name="press_button">Premi il pulsante per vedere e modificare le tue informazioni personali</string>
+    <string name="profile_info">Accedi alle informazioni del profilo</string>
+    <string name="login">Accesso</string>
+    <string name="insert_code">Inserisci il codice ricevuto</string>
+    <string name="fetching_data">Recupero dei dati dai nostri server</string>
+
+    <string name="my_profile">Il mio profilo</string>
+    <string name="my_books">I miei libri</string>
+    <string name="exit">Uscita</string>
+    <string name="setting">Ambientazione</string>
+    <string name="search">Ricerca</string>
+    <string name="open">Aperto</string>
+    <string name="close">Vicino</string>
 
 
 </resources>

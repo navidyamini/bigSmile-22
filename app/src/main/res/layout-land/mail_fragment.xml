@@ -24,7 +24,7 @@
                 android:layout_marginTop="60dp"
                 android:backgroundTint="#B71C1C"
                 android:fontFamily="@font/roboto_light"
-                android:text="Login" />
+                android:text="@string/login" />
 
             <RelativeLayout
                 android:id="@+id/relativeLayout"
@@ -53,7 +53,7 @@
                         android:drawablePadding="6dp"
                         android:drawableTint="#B71C1C"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Email"
+                        android:hint="@string/user_email"
                         android:inputType="textEmailAddress"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
@@ -78,7 +78,7 @@
                         android:drawablePadding="6dp"
                         android:drawableTint="#B71C1C"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:inputType="textPassword"
                         android:textColor="@color/textColorEntryList"
                         android:textSize="16sp" />

@@ -39,7 +39,7 @@
                         android:drawablePadding="6dp"
                         android:drawableTint="#009688"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Phone"
+                        android:hint="@string/user_PhoneNumber"
                         android:inputType="textEmailAddress|phone"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
@@ -65,7 +65,7 @@
                         android:drawablePadding="6dp"
                         android:drawableTint="#009688"
                         android:fontFamily="@font/roboto_light"
-                        android:hint="Insert the received code"
+                        android:hint="@string/insert_code"
                         android:inputType="text"
                         android:textColor="@color/textColorEntryList"
                         android:textSize="16sp" />

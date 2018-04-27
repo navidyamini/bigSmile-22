@@ -45,7 +45,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/roboto_light"
-            android:text="Fetching data from our servers"
+            android:text="@string/fetching_data"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </RelativeLayout>
