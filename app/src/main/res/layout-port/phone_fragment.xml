@@ -119,7 +119,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Phone number"
+        android:text="@string/user_PhoneNumber"
         android:textAllCaps="true"
         android:textSize="18sp" />
 

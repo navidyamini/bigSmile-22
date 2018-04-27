@@ -119,7 +119,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
 
 
                         if (((TextInputEditText)frag.getView().findViewById(R.id.code)).getText().toString().equals(""))
-                            ((TextInputLayout)frag.getView().findViewById(R.id.code_lay)).setError("This field cannot be empty");
+                            ((TextInputLayout)frag.getView().findViewById(R.id.code_lay)).setError(getString(R.string.cant_empty));
                         else {
                             frag.getView().findViewById(R.id.loadingProgressBar).setVisibility(View.VISIBLE);
                             ((Button)frag.getView().findViewById(R.id.phone_button)).setText("");
@@ -166,7 +166,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                             }
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -200,15 +200,15 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginSigninActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginSigninActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                                     //if (task.getException().getClass().equals("com.google.firebase.auth.FirebaseAuthInvalidUserException"))
                                     String error = ((FirebaseAuthException)task.getException()).getErrorCode();
                                     if(error.equals(FirebaseError.ERROR_INVALID_CREDENTIAL))
-                                        Toast.makeText(getApplicationContext(),"Credentials are bad formatted",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(),getString(R.string.credentials),Toast.LENGTH_LONG).show();
                                     if(error.equals(FirebaseError.ERROR_USER_NOT_FOUND))
-                                        Toast.makeText(getApplicationContext(),"This email is not present in our systems",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(),getString(R.string.email_not_found),Toast.LENGTH_LONG).show();
                                     if (error.equals(FirebaseError.ERROR_WRONG_PASSWORD))
-                                        Toast.makeText(getApplicationContext(), "The password is incorrect", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getString(R.string.wrong_password), Toast.LENGTH_SHORT).show();
 
                                 }
 
@@ -343,7 +343,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginSigninActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginSigninActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
@@ -469,7 +469,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
 
-                                Toast.makeText(getApplicationContext(),"The code is invalid",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),getString(R.string.invalid_code),Toast.LENGTH_LONG).show();
 
                             }
                         }

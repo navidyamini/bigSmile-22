@@ -33,7 +33,7 @@
     <string name="or">Or</string>
     <string name="welcome">Welcome</string>
     <string name = "add_book">Add a new book</string>
-    <string name="extra_tags">Tag extra</string>
+    <string name="extra_tags">Extra tags</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
 
@@ -57,4 +57,23 @@
     <string name="close">Close</string>
     <string name="register">Sign up</string>
     <string name="register_email">Sign up with email</string>
+
+    <string name="user_pass_not_empty">Username and password fields must not be empty</string>
+    <string name="cant_empty">This field cannot be empty</string>
+    <string name="user_not_found">USER NOT FOUND</string>
+    <string name="authentication_failed">Authentication failed.</string>
+    <string name="credentials">Credentials are bad formatted</string>
+    <string name="email_not_found">This email is not present in our system</string>
+
+    <string name="invalid_code">The code is invalid</string>
+    <string name="wrong_phone_format">"Phone number must be formatted with global format. ([+][country code][subscriber number including area code])"</string>
+    <string name="edit_complete">Modification has been successfully completed</string>
+    <string name="try_again">There was an error. Please retry later</string>
+    <string name="wait_book_insert">We are performing the insertion of your book inside our database. Please wait...</string>
+    <string name="insert_complete">Insertion has been accomplished successfully</string>
+    <string name="available_book">This book will be available in your library and you will be able to share it with your friends.</string>
+    <string name="barcode_scan">Scan the barcode of your book to retrieve its information online</string>
+    <string name="wait_book_retrieve">We are retrieving information about your book on the Internet. Please wait...</string>
+    <string name="wait_for_connection">You cannot modify your profile until a connection with the server is established</string>
 </resources>
+

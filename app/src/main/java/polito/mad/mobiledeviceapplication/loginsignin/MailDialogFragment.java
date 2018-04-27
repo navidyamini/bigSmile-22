@@ -64,10 +64,10 @@ public class MailDialogFragment extends DialogFragment {
 
 
                 if (email.getText().toString().equals(""))
-                    email_layout.setError("This field cannot be empty");
+                    email_layout.setError(getString(R.string.cant_empty));
 
                 else if (password.getText().toString().equals(""))
-                    password_layout.setError("This field cannot be empty");
+                    password_layout.setError(getString(R.string.cant_empty));
 
                 else {
 

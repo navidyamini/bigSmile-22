@@ -164,9 +164,9 @@ public class ShowProfileActivity extends AppCompatActivity {
                     } else {
 
                         wait_lay.setVisibility(View.VISIBLE);
-                        wait_message.setText("Some problem occured while retrieving your data. Please retry later.");
+                        wait_message.setText(getString(R.string.try_again));
                         wait_progress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -218,9 +218,9 @@ public class ShowProfileActivity extends AppCompatActivity {
                     } else {
 
                         wait_lay.setVisibility(View.VISIBLE);
-                        wait_message.setText("Some problem occured while retrieving your data. Please retry later.");
+                        wait_message.setText(getString(R.string.try_again));
                         wait_progress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -254,7 +254,7 @@ public class ShowProfileActivity extends AppCompatActivity {
                     this.startActivity(intent);
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "You cannot modify your profile until a connection with the server is established", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.wait_for_connection), Toast.LENGTH_SHORT).show();
 
                 }
                 break;

@@ -65,7 +65,7 @@ public class PhoneDialogFragment extends android.support.v4.app.DialogFragment {
                     }
                 } else {
 
-                    phone_layout.setError("Phone number must be formatted with global format. ([+][country code][subscriber number including area code])");
+                    phone_layout.setError(getString(R.string.wrong_phone_format));
 
                 }
 

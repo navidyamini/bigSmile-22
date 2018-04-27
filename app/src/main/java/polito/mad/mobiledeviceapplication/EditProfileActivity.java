@@ -137,7 +137,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
 
-                                    Toast.makeText(getApplicationContext(), "Modification has been successfully completed", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
 
                                     Intent intent = new Intent(getApplicationContext(), ShowProfileActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -146,7 +146,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 } else {
 
-                                    Toast.makeText(getApplicationContext(), "There was an error. Please retry later", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.try_again), Toast.LENGTH_LONG).show();
 
 
                                 }
@@ -163,7 +163,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
 
-                                    Toast.makeText(getApplicationContext(), "Modification has been successfully completed", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
 
                                     Intent intent = new Intent(getApplicationContext(), ShowProfileActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -172,7 +172,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 } else {
 
-                                    Toast.makeText(getApplicationContext(), "There was an error. Please retry later", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), getString(R.string.try_again), Toast.LENGTH_LONG).show();
 
 
                                 }
@@ -245,7 +245,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -288,7 +288,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                     }
 

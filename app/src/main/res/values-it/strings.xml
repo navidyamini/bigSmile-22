@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Condivisione Di Libri</string>
+    <string name="app_name">Condividi i Tuoi Libri</string>
     <string name="user_name">Nome</string>
     <string name="user_surname">Cognome</string>
     <string name="user_email">E-mail</string>
@@ -34,11 +34,11 @@
     <string name="or">O</string>
     <string name="welcome">Benvenuto!</string>
     <string name = "add_book">Aggiungi un nuovo libro</string>
-    <string name="extra_tags">Extra tags</string>
+    <string name="extra_tags">Tag extra</string>
     <string name="title">Titolo</string>
     <string name="author">Autore</string>
     <string name="publisher">Editore</string>
-    <string name="edition_year">Edizione anno</string>
+    <string name="edition_year">Edizione</string>
     <string name="book_conditions">Condizioni del libro</string>
     <string name="genre">Genere</string>
     <string name="press_button">Premi il pulsante per vedere e modificare le tue informazioni personali</string>
@@ -50,15 +50,32 @@
     <string name="my_profile">Il mio profilo</string>
     <string name="my_books">I miei libri</string>
     <string name="exit">Uscita</string>
-    <string name="setting">Ambientazione</string>
+    <string name="setting">Impostazioni</string>
     <string name="search">Ricerca</string>
     <string name="open">Aperto</string>
-    <string name="close">Vicino</string>
+    <string name="close">Chiuso</string>
 
     <string name="book_insert_hint">Questo libro sarà disponibile nella tua biblioteca e potrai condividerlo con i tuoi amici.</string>
     <string name="press_insert_book">Premi il pulsante per inserire un nuovo libro nella tua libreria</string>
     <string name="register">Registrati</string>
     <string name="register_email">Registrati tramite email</string>
 
+    <string name="user_pass_not_empty">I campi Nome Utente e Password non possono essere vuoti</string>
+    <string name="cant_empty">Questi campi non possono essere vuoti</string>
+    <string name="user_not_found">UTENTE NON TROVATO</string>
+    <string name="authentication_failed">Autenticazione fallita.</string>
+    <string name="credentials">Le credenziali non sono corrette</string>
+    <string name="email_not_found">Questa email non è presente nel nostro sistema</string>
+    <string name="wrong_password">La password non è corretta</string>
+    <string name="invalid_code">Il codice non è valido</string>
+    <string name="wrong_phone_format">"Il numero di telefono deve essere nel seguente formato[+][prefisso internazionale][numero di telefono])"</string>
+    <string name="edit_complete">Le modifiche sono state completate con successo</string>
+    <string name="try_again">C\'è stato un errore. Per favore riprova più tardi</string>
+    <string name="wait_book_insert">Stiamo inserendo il suo libro nel nostro database. Attendere prego...</string>
+    <string name="insert_complete">Il libro è stato inserito con successo</string>
+    <string name="available_book">Questo libro sarà disponibile nella tua libreria e potrai condividerlo con i tuoi amici.</string>
+    <string name="barcode_scan">Scannerizza il codice a barre del tuo libro per recuperare le sue informazioni online</string>
+    <string name="wait_book_retrieve">Stiamo recuperando le informazioni relative al suo libro da Internet. Attendere prego...</string>
+    <string name="wait_for_connection">Non puoi modificare il tuo profilo finché la connessione col server non sarà stabilita</string>
 
 </resources>

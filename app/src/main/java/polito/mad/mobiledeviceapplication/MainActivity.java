@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
             final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
             if (fragment.isAdded() && fragment.isVisible()) {
-                ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText("We are performing the insertion of your book inside our database. Please wait...");
+                ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_insert));
                 fragment.setFormEnabled(false);
             }
             if (mAuth.getCurrentUser() == null) {
@@ -105,14 +105,14 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                             System.out.println("BOOK INSERTED");
                             if (fragment.isAdded() && fragment.isVisible()) {
                                 fragment.dismiss();
-                                Toast.makeText(getApplicationContext(),"Insertion has been accomplished successfully",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
                             }
 
                             }
 
                         if (fragment.isAdded() && fragment.isVisible()) {
                             fragment.setFormEnabled(true);
-                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText("This book will be available in your library and you will be able to share it with your friends.");
+                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
                         }
                     }
                 });
@@ -127,14 +127,14 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                             System.out.println("BOOK INSERTED");
                             if (fragment.isAdded() && fragment.isVisible()) {
                                 fragment.dismiss();
-                                Toast.makeText(getApplicationContext(),"Insertion has been accomplished successfully",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
 
                             }
                         }
 
                         if (fragment.isVisible() && fragment.isAdded()) {
                             fragment.setFormEnabled(true);
-                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText("This book will be available in your library and you will be able to share it with your friends.");
+                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
                         }
                     }
                 });
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
             IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
             scanIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-            scanIntegrator.setPrompt("Scan the barcode of your book to retrieve its information online");
+            scanIntegrator.setPrompt(getString(R.string.barcode_scan));
             scanIntegrator.setBeepEnabled(false);
             scanIntegrator.setOrientationLocked(true);
             scanIntegrator.setBarcodeImageEnabled(true);
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
         navigation = (NavigationView) findViewById(R.id.drawer_navigation);
-        ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText("Welcome " + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
+        ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                 final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
                 if (fragment.isVisible() && fragment.isAdded())
-                    ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText("We are retrieving information about your book on the Internet. Please wait...");
+                    ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_retrieve));
 
 
 
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                     if (fragment.isVisible() && fragment.isAdded()) {
                                         fragment.setFields(isbn, title, authors.deleteCharAt(authors.length() - 1).toString(), publisher, "", edition_year, genre.deleteCharAt(genre.length() - 1).toString(), "");
                                         fragment.setFormEnabled(true);
-                                        ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText("This book will be available in your library and you will be able to share it with your friends.");
+                                        ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
 
                                     }
 
@@ -288,11 +288,11 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(MainActivity.this, "Error while retrieving data from server", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
 
                         if (fragment.isAdded() && fragment.isVisible()) {
                             fragment.setFormEnabled(true);
-                            ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText("This book will be available in your library and you will be able to share it with your friends.");
+                            ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
 
                         }
                     }

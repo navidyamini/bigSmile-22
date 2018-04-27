@@ -69,7 +69,7 @@ public class IntroSignupFragment extends Fragment {
                     }
                 }
                 else{
-                    Toast.makeText(getContext(),"Username and password fields must not be empty",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),getString(R.string.user_pass_not_empty),Toast.LENGTH_LONG).show();
 
                 }
             }
