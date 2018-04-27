@@ -305,9 +305,15 @@ public class ShowProfileActivity extends AppCompatActivity {
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures");
+        File wallpaperDirectory;
+        if (mAuth==null)
+            mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser()!=null)
+          wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid());
         // have the object build the directory structure, if needed.
+        else
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID",""));
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
         }
@@ -508,7 +514,12 @@ public class ShowProfileActivity extends AppCompatActivity {
     private void retrieveProfileImage(ImageView imageView){
 
         try {
-            String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/profile.jpg";
+            String photoPath = "";
+            if (mAuth.getCurrentUser()!=null)
+                 photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid()+"/profile.jpg";
+            else
+                photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","")+"/profile.jpg";
+
             Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
             if (bitmap!=null)
                 imageView.setImageBitmap(bitmap);

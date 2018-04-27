@@ -202,7 +202,10 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username","").apply();
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password","").apply();
 
-                        if (mAuth!=null){
+                        if (mAuth==null)
+                            mAuth = FirebaseAuth.getInstance();
+
+                        if (mAuth.getCurrentUser()!=null){
 
                             if (mDatabase==null)
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -218,6 +221,14 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
                                 }
                             });
+
+
+                        } else {
+
+                            FirebaseAuth.getInstance().signOut();
+                            Intent i = new Intent(getApplicationContext(), LoginSignupActivity.class);
+                            startActivity(i);
+                            finish();
 
 
                         }
