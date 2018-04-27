@@ -154,6 +154,8 @@ public class ShowProfileActivity extends AppCompatActivity {
 
                                 wait_lay.setVisibility(View.INVISIBLE);
 
+
+
                             }
 
 
@@ -165,6 +167,7 @@ public class ShowProfileActivity extends AppCompatActivity {
                         wait_message.setText("Some problem occured while retrieving your data. Please retry later.");
                         wait_progress.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
+
 
                     }
 
@@ -243,8 +246,14 @@ public class ShowProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                Intent intent = new Intent(this, EditProfileActivity.class);
-                this.startActivity(intent);
+                if (wait_lay.getVisibility()==View.INVISIBLE) {
+                    Intent intent = new Intent(this, EditProfileActivity.class);
+                    this.startActivity(intent);
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "You cannot modify your profile until a connection with the server is established", Toast.LENGTH_SHORT).show();
+
+                }
                 break;
             default:
                 return super.onOptionsItemSelected(item);
