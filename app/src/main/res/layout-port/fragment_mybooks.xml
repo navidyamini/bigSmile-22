@@ -15,7 +15,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="80dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Press the button to insert a new book in your library"
+        android:text="@string/press_insert_book"
         android:textAlignment="center"
         android:textColor="#37474f"
         android:textSize="30sp" />

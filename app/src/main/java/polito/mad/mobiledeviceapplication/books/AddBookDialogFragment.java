@@ -80,7 +80,7 @@ public class AddBookDialogFragment extends DialogFragment{
         explaination_switcher.setInAnimation(in);
         explaination_switcher.setOutAnimation(out);
 
-        explaination_switcher.setCurrentText("This book will be available in your library and you will be able to share it with your friends.");
+        explaination_switcher.setCurrentText(getString(R.string.book_insert_hint));
 
         confirmBook = (FloatingActionButton) v.findViewById(R.id.confirmBook);
         scanBook = (FloatingActionButton) v.findViewById(R.id.scan_book_btn);

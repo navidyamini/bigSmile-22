@@ -15,7 +15,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="80dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Press the button to see and edit your personal information"
+        android:text="@string/press_button"
         android:textAlignment="center"
         android:textColor="#37474f"
         android:textSize="24sp" />
@@ -31,6 +31,6 @@
         android:backgroundTint="@color/colorPrimaryDark"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="Access profile info" />
+        android:text="@string/profile_info" />
 
 </RelativeLayout>
