@@ -16,6 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import polito.mad.mobiledeviceapplication.R;
 
 /**
@@ -25,6 +29,8 @@ import polito.mad.mobiledeviceapplication.R;
 public class MyBooksFragment extends Fragment {
 
     private FloatingActionButton add_book;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +48,8 @@ public class MyBooksFragment extends Fragment {
             }
         });
 
-
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         return rootView;
     }
