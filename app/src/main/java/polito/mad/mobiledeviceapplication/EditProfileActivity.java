@@ -96,8 +96,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     if (mDatabase == null)
                         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-                    User user = new User("",
-                            "",
+                    User user = new User(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username","2"),
+                            getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("password",""),
                             name_edit.getText().toString(),
                             surname_edit.getText().toString(),
                             email_edit.getText().toString(),
@@ -108,7 +108,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             zone_edit.getText().toString());
 
                     if (mAuth.getCurrentUser() == null) {
-                        mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).setValue(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
 
@@ -130,6 +130,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                             }
                         });
+
                     } else {
 
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -187,7 +188,6 @@ public class EditProfileActivity extends AppCompatActivity {
                             if (getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
 
                                 User user = child.getValue(User.class);
-
 
                                 name_edit.setText(user.name);
                                 surname_edit.setText(user.surname);

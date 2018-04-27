@@ -17,6 +17,38 @@
             android:dividerHeight="14dp" />
 
         <RelativeLayout
+            android:id="@+id/waitLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/imageLayout"
+            android:background="#b30097a7"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:id="@+id/waitProgress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminateTint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/waitMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/waitProgress"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="Fetching data from our servers"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/imageLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -10,22 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="80dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Work in progress"
+        android:text="Press the button to insert a new book in your library"
+        android:textAlignment="center"
         android:textColor="#37474f"
         android:textSize="30sp" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:backgroundTint="@android:color/transparent"
-        android:tint="#37474f"
-        app:srcCompat="@drawable/work_in_progress" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addBookBtn"

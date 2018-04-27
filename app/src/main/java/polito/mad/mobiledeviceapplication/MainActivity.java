@@ -89,10 +89,12 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
             Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags);
 
-            final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentByTag("AddBookDialog");
-            ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText("We are performing the insertion of your book inside our database. Please wait...");
-            fragment.setFormEnabled(false);
+            final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
+            if (fragment.isAdded() && fragment.isVisible()) {
+                ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText("We are performing the insertion of your book inside our database. Please wait...");
+                fragment.setFormEnabled(false);
+            }
             if (mAuth.getCurrentUser() == null) {
 
                 mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).child("books").push().setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                             System.out.println("BOOK INSERTED");
                             if (fragment.isAdded() && fragment.isVisible()) {
                                 fragment.dismiss();
+                                Toast.makeText(getApplicationContext(),"Insertion has been accomplished successfully",Toast.LENGTH_LONG).show();
                             }
 
                             }
@@ -124,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                             System.out.println("BOOK INSERTED");
                             if (fragment.isAdded() && fragment.isVisible()) {
                                 fragment.dismiss();
+                                Toast.makeText(getApplicationContext(),"Insertion has been accomplished successfully",Toast.LENGTH_LONG).show();
+
                             }
                         }
 
@@ -208,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                         FirebaseAuth.getInstance().signOut();
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username","").apply();
+                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password","").apply();
 
                         Intent i = new Intent(getApplicationContext(), LoginSigninActivity.class);
                         startActivity(i);
@@ -233,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
                 final String isbn = result.getContents();
 
-                final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentByTag("AddBookDialog");
+                final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
                 if (fragment.isVisible() && fragment.isAdded())
                     ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText("We are retrieving information about your book on the Internet. Please wait...");

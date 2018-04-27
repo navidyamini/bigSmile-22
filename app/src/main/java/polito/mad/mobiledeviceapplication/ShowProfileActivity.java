@@ -26,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +54,9 @@ public class ShowProfileActivity extends AppCompatActivity {
     private TextView name;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private RelativeLayout wait_lay;
+    private TextView wait_message;
+    private ProgressBar wait_progress;
 
     private FloatingActionButton pickImageButton;
     private static final int CAMERA = 10;
@@ -90,7 +95,10 @@ public class ShowProfileActivity extends AppCompatActivity {
         pickImageButton = (FloatingActionButton) findViewById(R.id.confirmBook);
         profileImage = (ImageView) findViewById(R.id.profileImage);
 
-        retrieveProfileImage(profileImage);
+
+        wait_lay = (RelativeLayout) findViewById(R.id.waitLayout);
+        wait_message = (TextView) findViewById(R.id.waitMessage);
+        wait_progress = (ProgressBar) findViewById(R.id.waitProgress);
 
         pickImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,8 +112,23 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
 
+
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        retrieveProfileImage(profileImage);
+
+
         if (mDatabase==null)
             mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        wait_lay.setVisibility(View.VISIBLE);
 
         if (mAuth.getCurrentUser()==null) {
             ValueEventListener postListener = new ValueEventListener() {
@@ -129,15 +152,23 @@ public class ShowProfileActivity extends AppCompatActivity {
 
                                 listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
 
+                                wait_lay.setVisibility(View.INVISIBLE);
+
                             }
 
 
                         }
 
                     } else {
+
+                        wait_lay.setVisibility(View.VISIBLE);
+                        wait_message.setText("Some problem occured while retrieving your data. Please retry later.");
+                        wait_progress.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
 
                     }
+
+
 
                 }
 
@@ -179,6 +210,10 @@ public class ShowProfileActivity extends AppCompatActivity {
                         }
 
                     } else {
+
+                        wait_lay.setVisibility(View.VISIBLE);
+                        wait_message.setText("Some problem occured while retrieving your data. Please retry later.");
+                        wait_progress.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "USER NOT FOUND", Toast.LENGTH_SHORT).show();
 
                     }
@@ -196,9 +231,6 @@ public class ShowProfileActivity extends AppCompatActivity {
             mDatabase.addListenerForSingleValueEvent(postListener);
 
         }
-
-
-
     }
 
     @Override

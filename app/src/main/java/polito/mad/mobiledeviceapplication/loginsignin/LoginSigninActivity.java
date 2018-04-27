@@ -155,6 +155,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
 
                                     getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID",child.getKey()).apply();
                                     getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username).apply();
+                                    getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password",user.password).apply();
 
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
@@ -281,6 +282,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
 
                                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID",child.getKey()).apply();
                                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username).apply();
+                                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password",user.password).apply();
 
                                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                                         startActivity(intent);
