@@ -45,6 +45,8 @@
     <string name="login">Login</string>
     <string name="insert_code">Insert the received code</string>
     <string name="fetching_data">Fetching data from our servers</string>
+    <string name="book_insert_hint">This book will be available in your library and you will be able to share it with your friends.</string>
+    <string name="press_insert_book">Press the button to insert a new book in your library</string>
 
     <string name="my_profile">My Profile</string>
     <string name="my_books">My Books</string>
