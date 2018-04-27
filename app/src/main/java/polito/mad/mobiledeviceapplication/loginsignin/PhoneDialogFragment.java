@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -42,6 +43,12 @@ public class PhoneDialogFragment extends android.support.v4.app.DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
+
+/*
+        getDialog().getWindow()
+                .setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+*/
+
         confirm_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

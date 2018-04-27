@@ -10,7 +10,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true">
@@ -66,23 +66,22 @@
                 android:id="@+id/buttonsLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/formLayout"
-                android:layout_marginRight="16dp"
-                android:clipToPadding="false"
-                android:padding="10dp">
+                android:layout_alignTop="@+id/or"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="-10dp"
+                android:layout_toEndOf="@+id/or"
+                android:layout_toRightOf="@+id/or"
+                android:clipToPadding="false">
 
 
                 <Button
                     android:id="@+id/EmailAccessBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/PhoneAccessBtn"
-                    android:layout_alignLeft="@+id/PhoneAccessBtn"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignRight="@+id/PhoneAccessBtn"
-                    android:layout_alignStart="@+id/PhoneAccessBtn"
+                    android:layout_alignBaseline="@+id/accessButton"
+                    android:layout_alignBottom="@+id/accessButton"
+                    android:layout_alignLeft="@+id/buttonsLayout"
+                    android:layout_alignStart="@+id/buttonsLayout"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="#B71C1C"
                     android:drawableLeft="@drawable/ic_email_white_24dp"
@@ -98,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/EmailAccessBtn"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="#009688"
@@ -114,8 +114,10 @@
                 android:id="@+id/signupLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+                android:layout_below="@+id/buttonsLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:id="@+id/noAccountText"
@@ -147,10 +149,9 @@
                 android:id="@+id/accessButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/formLayout"
-                android:layout_marginEnd="73dp"
-                android:layout_marginRight="73dp"
-                android:layout_marginTop="24dp"
+                android:layout_alignTop="@+id/or"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="-10dp"
                 android:layout_toLeftOf="@+id/or"
                 android:layout_toStartOf="@+id/or"
                 android:background="@drawable/rounded_button"
@@ -166,9 +167,9 @@
                 android:id="@+id/or"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/accessButton"
-                android:layout_alignBottom="@+id/accessButton"
+                android:layout_below="@+id/formLayout"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="35dp"
                 android:fontFamily="@font/roboto_light"
                 android:text="Or"
                 android:textColor="@android:color/white"

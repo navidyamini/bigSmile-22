@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import polito.mad.mobiledeviceapplication.R;
@@ -45,6 +46,13 @@ public class MailDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
+
+
+   /*     getDialog().getWindow()
+                .setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+*/
+
         confirm_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

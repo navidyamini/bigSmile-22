@@ -16,6 +16,24 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="20dp">
 
+            <Button
+                android:id="@+id/EmailRegisterBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/or"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="-10dp"
+                android:layout_toEndOf="@+id/or"
+                android:layout_toRightOf="@+id/or"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#B71C1C"
+                android:drawableLeft="@drawable/ic_email_white_24dp"
+                android:drawablePadding="10dp"
+                android:elevation="2dp"
+                android:fontFamily="@font/roboto_light"
+                android:padding="10dp"
+                android:text="Sign up with email" />
+
             <RelativeLayout
                 android:id="@+id/formLayout"
                 android:layout_width="match_parent"
@@ -64,37 +82,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/buttonsLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/or"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:clipToPadding="false"
-                android:padding="10dp">
-
-
-                <Button
-                    android:id="@+id/EmailRegisterBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/registerButton"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/rounded_button"
-                    android:backgroundTint="#B71C1C"
-                    android:drawableLeft="@drawable/ic_email_white_24dp"
-                    android:drawablePadding="10dp"
-                    android:elevation="2dp"
-                    android:fontFamily="@font/roboto_light"
-                    android:padding="10dp"
-                    android:text="Sign up with email" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/signinLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/buttonsLayout"
+                android:layout_below="@+id/EmailRegisterBtn"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp">
@@ -129,9 +120,11 @@
                 android:id="@+id/registerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/formLayout"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_above="@+id/signinLayout"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="-10dp"
+                android:layout_toLeftOf="@+id/or"
+                android:layout_toStartOf="@+id/or"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="#1565C0"
                 android:drawableLeft="@drawable/ic_check_circle_white_24dp"
@@ -145,9 +138,9 @@
                 android:id="@+id/or"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/registerButton"
+                android:layout_below="@+id/formLayout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/roboto_light"
                 android:text="Or"
                 android:textColor="@android:color/white"

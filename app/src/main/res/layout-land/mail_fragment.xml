@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@+id/relativeLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-10dp"
+                android:layout_marginLeft="-10dp"
+                android:layout_marginRight="-10dp"
+                android:layout_marginTop="60dp"
+                android:backgroundTint="#B71C1C"
+                android:fontFamily="@font/roboto_light"
+                android:text="Login" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/text2"
+                android:layout_marginTop="40dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/publisher_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:theme="@style/mailStyle">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_email_white_24dp"
+                        android:drawablePadding="6dp"
+                        android:drawableTint="#B71C1C"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:textColor="@color/textColorEntryList"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/password_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/publisher_layout"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="10dp"
+                    android:theme="@style/mailStyle">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
+                        android:drawablePadding="6dp"
+                        android:drawableTint="#B71C1C"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:textColor="@color/textColorEntryList"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
