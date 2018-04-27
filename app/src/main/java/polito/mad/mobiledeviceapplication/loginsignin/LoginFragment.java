@@ -21,7 +21,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
  * Created by user on 22/04/2018.
  */
 
-public class IntroLoginFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
     private EditText username, password;
     private Button access_btn, mail_signin, phone_signin;

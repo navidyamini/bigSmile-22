@@ -75,5 +75,9 @@
     <string name="barcode_scan">Scan the barcode of your book to retrieve its information online</string>
     <string name="wait_book_retrieve">We are retrieving information about your book on the Internet. Please wait...</string>
     <string name="wait_for_connection">You cannot modify your profile until a connection with the server is established</string>
+    <string name="have_account_already">Have you already an account?</string>
+    <string name="publisher">Publisher</string>
+    <string name="wrong_password">The password is incorrect</string>
+    <string name="sign_in">Sign in now!</string>
 </resources>
 

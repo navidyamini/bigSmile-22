@@ -44,7 +44,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 20/04/2018.
  */
 
-public class LoginSigninActivity extends FragmentActivity implements IntroLoginFragment.Frag1Observer, IntroSignupFragment.Frag2Observer {
+public class LoginSignupActivity extends FragmentActivity implements LoginFragment.Frag1Observer, SignupFragment.Frag2Observer {
 
     private FirebaseAuth mAuth;
     private Button signup,logout,signin;
@@ -200,7 +200,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginSigninActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginSignupActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                                     //if (task.getException().getClass().equals("com.google.firebase.auth.FirebaseAuthInvalidUserException"))
                                     String error = ((FirebaseAuthException)task.getException()).getErrorCode();
                                     if(error.equals(FirebaseError.ERROR_INVALID_CREDENTIAL))
@@ -242,7 +242,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
 
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, new IntroSignupFragment());
+            transaction.replace(R.id.container, new SignupFragment());
             transaction.addToBackStack(null);
             transaction.commit();
 
@@ -343,7 +343,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginSigninActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginSignupActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
@@ -356,7 +356,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
             getSupportFragmentManager().popBackStack();
-            transaction.replace(R.id.container, new IntroLoginFragment());
+            transaction.replace(R.id.container, new LoginFragment());
             transaction.addToBackStack(null);
             transaction.commit();
 
@@ -387,7 +387,7 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
         if (fragment==null) {
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, new IntroLoginFragment());
+            transaction.replace(R.id.container, new LoginFragment());
             transaction.commit();
 
         }

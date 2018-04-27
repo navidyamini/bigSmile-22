@@ -9,7 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
 
     private TextInputEditText isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags;
+    private TextInputLayout isbn_layout, title_layout, author_layout, publisher_layout, edition_year_layout, book_conditions_layout, genre_layout, extra_tags_layout;
 
     public interface FragBookObserver {
         void notifyActionBook(Intent intent);
@@ -55,6 +59,15 @@ public class AddBookDialogFragment extends DialogFragment{
         edition_year = (TextInputEditText) v.findViewById(R.id.edition_year);
         genre = (TextInputEditText) v.findViewById(R.id.genre);
         extra_tags = (TextInputEditText) v.findViewById(R.id.tags);
+
+        isbn_layout = (TextInputLayout) v.findViewById(R.id.isbn_text_input_layout);
+        title_layout = (TextInputLayout) v.findViewById(R.id.title_text_input_layout);
+        author_layout = (TextInputLayout) v.findViewById(R.id.author_text_input_layout);
+        publisher_layout = (TextInputLayout) v.findViewById(R.id.publisher_text_input_layout);
+        book_conditions_layout = (TextInputLayout) v.findViewById(R.id.book_conditions_text_input_layout);
+        edition_year_layout = (TextInputLayout) v.findViewById(R.id.edit_year_text_input_layout);
+        genre_layout = (TextInputLayout) v.findViewById(R.id.genre_text_input_layout);
+        extra_tags_layout = (TextInputLayout) v.findViewById(R.id.tags_text_input_layout);
 
         explaination_switcher = (TextSwitcher) v.findViewById(R.id.explaination_switcher);
         explaination_switcher.setInAnimation(getContext(),android.R.anim.fade_in);
@@ -90,21 +103,23 @@ public class AddBookDialogFragment extends DialogFragment{
             @Override
             public void onClick(View v) {
 
-                Activity a=getActivity();
-                if (a instanceof AddBookDialogFragment.FragBookObserver) {
-                    AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
-                    Intent intent = new Intent(Constants.NEW_BOOK);
-                    intent.putExtra("isbn",isbn.getText().toString());
-                    intent.putExtra("title",title.getText().toString());
-                    intent.putExtra("author",author.getText().toString());
-                    intent.putExtra("publisher",publisher.getText().toString());
-                    intent.putExtra("book_conditions",book_conditions.getText().toString());
-                    intent.putExtra("edition_year",edition_year.getText().toString());
-                    intent.putExtra("genre",genre.getText().toString());
-                    intent.putExtra("extra_tags",extra_tags.getText().toString());
+                if (checkFields()){
+                    Activity a=getActivity();
+                    if (a instanceof AddBookDialogFragment.FragBookObserver) {
+                        AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
+                        Intent intent = new Intent(Constants.NEW_BOOK);
+                        intent.putExtra("isbn", isbn.getText().toString());
+                        intent.putExtra("title", title.getText().toString());
+                        intent.putExtra("author", author.getText().toString());
+                        intent.putExtra("publisher", publisher.getText().toString());
+                        intent.putExtra("book_conditions", book_conditions.getText().toString());
+                        intent.putExtra("edition_year", edition_year.getText().toString());
+                        intent.putExtra("genre", genre.getText().toString());
+                        intent.putExtra("extra_tags", extra_tags.getText().toString());
 
-                    observer.notifyActionBook(intent);
+                        observer.notifyActionBook(intent);
 
+                    }
                 }
 
 
@@ -124,6 +139,112 @@ public class AddBookDialogFragment extends DialogFragment{
                 }
             }
         });
+
+        author.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        publisher.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        edition_year.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        genre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        isbn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
 
         return v;
     }
@@ -195,5 +316,54 @@ public class AddBookDialogFragment extends DialogFragment{
 
         explaination_switcher.removeAllViews();
         super.onDestroyView();
+    }
+
+
+    private boolean checkFields(){
+
+        boolean isValid = true;
+        if (isbn.getText().length()==0) {
+            isbn_layout.setError(getString(R.string.not_empty));
+            isValid = false;
+        }
+        else
+            isbn_layout.setErrorEnabled(false);
+
+        if (title.getText().length()==0) {
+            title_layout.setError(getString(R.string.not_empty));
+            isValid = false;
+        }
+        else
+            title_layout.setErrorEnabled(false);
+
+        if (author.getText().length()==0) {
+            author_layout.setError(getString(R.string.not_empty));
+            isValid = false;
+        }
+        else
+            author_layout.setErrorEnabled(false);
+
+        if (publisher.getText().length()==0) {
+            publisher_layout.setError(getString(R.string.not_empty));
+            isValid = false;
+        }
+        else
+            publisher_layout.setErrorEnabled(false);
+
+        if (edition_year.getText().length()==0) {
+            edition_year_layout.setError(getString(R.string.not_empty));
+            isValid = false;
+        }
+        else
+            edition_year_layout.setErrorEnabled(false);
+
+        if (genre.getText().length()==0) {
+            genre_layout.setError(getString(R.string.not_empty));
+            isValid = false;
+        }
+        else
+            genre_layout.setErrorEnabled(false);
+
+        return isValid;
     }
 }

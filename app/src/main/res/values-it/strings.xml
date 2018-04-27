@@ -77,5 +77,7 @@
     <string name="barcode_scan">Scannerizza il codice a barre del tuo libro per recuperare le sue informazioni online</string>
     <string name="wait_book_retrieve">Stiamo recuperando le informazioni relative al suo libro da Internet. Attendere prego...</string>
     <string name="wait_for_connection">Non puoi modificare il tuo profilo finché la connessione col server non sarà stabilita</string>
+    <string name="have_account_already">Hai già un account?</string>
+    <string name="sign_in">Accedi subito!</string>
 
 </resources>

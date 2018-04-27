@@ -8,7 +8,6 @@ import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -56,8 +55,8 @@ public class PhoneDialogFragment extends android.support.v4.app.DialogFragment {
                 if (android.util.Patterns.PHONE.matcher(phone.getText().toString()).matches()) {
                     phone_layout.setErrorEnabled(false);
                     Activity a = getActivity();
-                    if (a instanceof IntroLoginFragment.Frag1Observer) {
-                        IntroLoginFragment.Frag1Observer observer = (IntroLoginFragment.Frag1Observer) a;
+                    if (a instanceof LoginFragment.Frag1Observer) {
+                        LoginFragment.Frag1Observer observer = (LoginFragment.Frag1Observer) a;
                         Intent intent = new Intent(Constants.SIGNIN_PHONE);
                         intent.putExtra("phone", phone.getText().toString());
                         //intent.putExtra("password",password.getText().toString());

@@ -22,7 +22,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
  * Created by user on 22/04/2018.
  */
 
-public class IntroSignupFragment extends Fragment {
+public class SignupFragment extends Fragment {
 
     private Button register_btn, mail_signup;
     private TextView signin_txt;
@@ -60,8 +60,8 @@ public class IntroSignupFragment extends Fragment {
 
                 if (!username.getText().toString().equals("") && !password.getText().toString().equals("")) {
                     Activity a = getActivity();
-                    if (a instanceof IntroSignupFragment.Frag2Observer) {
-                        IntroSignupFragment.Frag2Observer observer = (IntroSignupFragment.Frag2Observer) a;
+                    if (a instanceof SignupFragment.Frag2Observer) {
+                        SignupFragment.Frag2Observer observer = (SignupFragment.Frag2Observer) a;
                         Intent intent = new Intent(Constants.SIGNUP);
                         intent.putExtra("username", username.getText().toString());
                         intent.putExtra("password", password.getText().toString());
@@ -90,8 +90,8 @@ public class IntroSignupFragment extends Fragment {
             public void onClick(View v) {
 
                 Activity a=getActivity();
-                if (a instanceof IntroSignupFragment.Frag2Observer) {
-                    IntroSignupFragment.Frag2Observer observer = (IntroSignupFragment.Frag2Observer) a;
+                if (a instanceof SignupFragment.Frag2Observer) {
+                    SignupFragment.Frag2Observer observer = (SignupFragment.Frag2Observer) a;
                     Intent intent = new Intent(Constants.CHANGE_FRAGMENT);
                     observer.notifyActionSignup(intent);
                 }

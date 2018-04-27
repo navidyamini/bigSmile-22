@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import polito.mad.mobiledeviceapplication.R;
@@ -74,17 +73,17 @@ public class MailDialogFragment extends DialogFragment {
                     email_layout.setErrorEnabled(false);
                     password_layout.setErrorEnabled(false);
                     Activity a = getActivity();
-                    if (a instanceof IntroLoginFragment.Frag1Observer && getTag().equals("MailDialog")) {
+                    if (a instanceof LoginFragment.Frag1Observer && getTag().equals("MailDialog")) {
 
-                        IntroLoginFragment.Frag1Observer observer = (IntroLoginFragment.Frag1Observer) a;
+                        LoginFragment.Frag1Observer observer = (LoginFragment.Frag1Observer) a;
                         Intent intent = new Intent(Constants.SIGNIN_EMAIL);
                         intent.putExtra("email", email.getText().toString());
                         intent.putExtra("password", password.getText().toString());
                         observer.notifyActionLogin(intent);
 
-                    } else if (a instanceof IntroSignupFragment.Frag2Observer && getTag().equals("MailDialogSignup")){
+                    } else if (a instanceof SignupFragment.Frag2Observer && getTag().equals("MailDialogSignup")){
 
-                        IntroSignupFragment.Frag2Observer observer = (IntroSignupFragment.Frag2Observer) a;
+                        SignupFragment.Frag2Observer observer = (SignupFragment.Frag2Observer) a;
                         Intent intent = new Intent(Constants.SIGNUP_EMAIL);
                         intent.putExtra("email", email.getText().toString());
                         intent.putExtra("password", password.getText().toString());
