@@ -352,9 +352,6 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.intro_activity);
         mAuth = FirebaseAuth.getInstance();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.container,new IntroLoginFragment());
-        transaction.commit();
 
 
     }
@@ -364,6 +361,9 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container,new IntroLoginFragment());
+        transaction.commit();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser!=null || !getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","").equals("")) {

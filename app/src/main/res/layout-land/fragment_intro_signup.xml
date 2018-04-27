@@ -8,151 +8,152 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
-
         <RelativeLayout
-            android:id="@+id/formLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#609e9e9e">
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp">
 
-            <EditText
-                android:id="@+id/username"
-                style="@style/introStyle"
+            <RelativeLayout
+                android:id="@+id/formLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_account_circle_white_24dp"
-                android:drawablePadding="6dp"
-                android:fontFamily="@font/roboto_light"
-                android:hint="Username"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/white"
-                android:textColorHint="#E0E0E0"
-                android:textSize="16sp"
-                android:theme="@style/introStyle" />
+                android:background="#609e9e9e">
 
-            <EditText
-                android:id="@+id/password"
-                style="@style/introStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/username"
-                android:layout_alignLeft="@+id/username"
-                android:layout_alignRight="@+id/username"
-                android:layout_alignStart="@+id/username"
-                android:layout_below="@+id/username"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
-                android:drawablePadding="6dp"
-                android:fontFamily="@font/roboto_light"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:textColor="@android:color/white"
-                android:textColorHint="#E0E0E0"
-                android:textSize="16sp"
-                android:theme="@style/introStyle" />
-        </RelativeLayout>
+                <EditText
+                    android:id="@+id/username"
+                    style="@style/introStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_account_circle_white_24dp"
+                    android:drawablePadding="6dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:hint="Username"
+                    android:inputType="textPersonName"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#E0E0E0"
+                    android:textSize="16sp"
+                    android:theme="@style/introStyle" />
 
-        <RelativeLayout
-            android:id="@+id/buttonsLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/or"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:clipToPadding="false"
-            android:padding="10dp">
+                <EditText
+                    android:id="@+id/password"
+                    style="@style/introStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/username"
+                    android:layout_alignLeft="@+id/username"
+                    android:layout_alignRight="@+id/username"
+                    android:layout_alignStart="@+id/username"
+                    android:layout_below="@+id/username"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
+                    android:drawablePadding="6dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#E0E0E0"
+                    android:textSize="16sp"
+                    android:theme="@style/introStyle" />
+            </RelativeLayout>
 
-
-            <Button
-                android:id="@+id/EmailRegisterBtn"
+            <RelativeLayout
+                android:id="@+id/buttonsLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/registerButton"
+                android:layout_below="@+id/or"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:clipToPadding="false"
+                android:padding="10dp">
+
+
+                <Button
+                    android:id="@+id/EmailRegisterBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/registerButton"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="#B71C1C"
+                    android:drawableLeft="@drawable/ic_email_white_24dp"
+                    android:drawablePadding="10dp"
+                    android:elevation="2dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:padding="10dp"
+                    android:text="Sign up with email" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/signinLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buttonsLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/noAccountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="false"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentStart="false"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="Have you already an account?"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/signinText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/noAccountText"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toEndOf="@+id/noAccountText"
+                    android:layout_toRightOf="@+id/noAccountText"
+                    android:fontFamily="@font/roboto_light"
+                    android:text="Sign in."
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/formLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/rounded_button"
-                android:backgroundTint="#B71C1C"
-                android:drawableLeft="@drawable/ic_email_white_24dp"
+                android:backgroundTint="#1565C0"
+                android:drawableLeft="@drawable/ic_check_circle_white_24dp"
                 android:drawablePadding="10dp"
                 android:elevation="2dp"
                 android:fontFamily="@font/roboto_light"
                 android:padding="10dp"
-                android:text="Sign up with email" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/signinLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp">
+                android:text="Register" />
 
             <TextView
-                android:id="@+id/noAccountText"
+                android:id="@+id/or"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="false"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="false"
+                android:layout_below="@+id/registerButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="Have you already an account?"
+                android:text="Or"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/signinText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/noAccountText"
-                android:layout_marginLeft="4dp"
-                android:layout_toEndOf="@+id/noAccountText"
-                android:layout_toRightOf="@+id/noAccountText"
-                android:fontFamily="@font/roboto_light"
-                android:text="Sign in."
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
         </RelativeLayout>
-
-        <Button
-            android:id="@+id/registerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/formLayout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="#1565C0"
-            android:drawableLeft="@drawable/ic_check_circle_white_24dp"
-            android:drawablePadding="10dp"
-            android:elevation="2dp"
-            android:fontFamily="@font/roboto_light"
-            android:padding="10dp"
-            android:text="Register" />
-
-        <TextView
-            android:id="@+id/or"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/registerButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/roboto_light"
-            android:text="Or"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
