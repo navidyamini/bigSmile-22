@@ -41,6 +41,8 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_activity);
+        if (savedInstanceState!=null)
+            System.out.println(savedInstanceState.getString("name"));
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -281,6 +283,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
 
+        outState.putString("name",name_edit.getText().toString());
+        outState.putString("surname",surname_edit.getText().toString());
+        outState.putString("email",email_edit.getText().toString());
+        outState.putString("phone",phone_edit.getText().toString());
+        outState.putString("bio",bio_edit.getText().toString());
+        outState.putString("address",address_edit.getText().toString());
+        outState.putString("zip",zip_edit.getText().toString());
+        outState.putString("zone",zone_edit.getText().toString());
 
+        super.onSaveInstanceState(outState);
+
+    }
 }
