@@ -69,10 +69,31 @@ public class EditProfileActivity extends AppCompatActivity {
         zone_edit = (TextInputEditText) findViewById(R.id.zone_edit_text);
 
 
+
         retrieveUserInformation();
 
 
 
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState!=null){
+
+            System.out.println("MAIL " + savedInstanceState.getString("email"));
+            name_edit.setText(savedInstanceState.getString("name"));
+            surname_edit.setText(savedInstanceState.getString("surname"));
+            email_edit.setText(savedInstanceState.getString("email"));
+            phone_edit.setText(savedInstanceState.getString("phone"));
+            bio_edit.setText(savedInstanceState.getString("bio"));
+            address_edit.setText(savedInstanceState.getString("address"));
+            zip_edit.setText(savedInstanceState.getString("zip"));
+            zone_edit.setText(savedInstanceState.getString("zone"));
+
+
+        }
 
     }
 
@@ -191,14 +212,31 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 User user = child.getValue(User.class);
 
-                                name_edit.setText(user.name);
-                                surname_edit.setText(user.surname);
-                                email_edit.setText(user.email);
-                                phone_edit.setText(user.phone);
-                                bio_edit.setText(user.bio);
-                                address_edit.setText(user.address);
-                                zip_edit.setText(user.ZIP);
-                                zone_edit.setText(user.zone);
+                                if (!user.name.equals(""))
+                                    name_edit.setText(user.name);
+
+                                if (!user.surname.equals(""))
+                                    surname_edit.setText(user.surname);
+
+                                if (!user.email.equals(""))
+                                    email_edit.setText(user.email);
+
+                                if (!user.phone.equals(""))
+                                    phone_edit.setText(user.phone);
+
+                                if (!user.bio.equals(""))
+                                    bio_edit.setText(user.bio);
+
+                                if (!user.address.equals(""))
+                                    address_edit.setText(user.address);
+
+                                if (!user.ZIP.equals(""))
+                                    zip_edit.setText(user.ZIP);
+
+                                if (!user.zone.equals(""))
+                                    zone_edit.setText(user.zone);
+
+
 
 
                             }

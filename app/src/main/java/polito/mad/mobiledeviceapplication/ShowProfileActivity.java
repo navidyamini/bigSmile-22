@@ -209,6 +209,9 @@ public class ShowProfileActivity extends AppCompatActivity {
 
                                 listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
 
+                                wait_lay.setVisibility(View.INVISIBLE);
+
+
                             }
                         }
 

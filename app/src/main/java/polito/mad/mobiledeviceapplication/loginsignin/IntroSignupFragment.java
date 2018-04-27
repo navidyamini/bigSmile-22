@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Constants;
@@ -57,13 +58,19 @@ public class IntroSignupFragment extends Fragment {
             public void onClick(View v) {
 
 
-                Activity a=getActivity();
-                if (a instanceof IntroSignupFragment.Frag2Observer) {
-                    IntroSignupFragment.Frag2Observer observer = (IntroSignupFragment.Frag2Observer) a;
-                    Intent intent = new Intent(Constants.SIGNUP);
-                    intent.putExtra("username",username.getText().toString());
-                    intent.putExtra("password",password.getText().toString());
-                    observer.notifyActionSignup(intent);
+                if (!username.getText().toString().equals("") && !password.getText().toString().equals("")) {
+                    Activity a = getActivity();
+                    if (a instanceof IntroSignupFragment.Frag2Observer) {
+                        IntroSignupFragment.Frag2Observer observer = (IntroSignupFragment.Frag2Observer) a;
+                        Intent intent = new Intent(Constants.SIGNUP);
+                        intent.putExtra("username", username.getText().toString());
+                        intent.putExtra("password", password.getText().toString());
+                        observer.notifyActionSignup(intent);
+                    }
+                }
+                else{
+                    Toast.makeText(getContext(),"Username and password fields must not be empty",Toast.LENGTH_LONG).show();
+
                 }
             }
         });

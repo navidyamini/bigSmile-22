@@ -318,9 +318,28 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            startActivity(intent);
-                            finish();
+
+
+                            if (mDatabase==null)
+                                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                            User new_user = new User("", intent.getStringExtra("password"),"","",intent.getStringExtra("email"),"","","","","");
+
+                            mDatabase.child("users").child(user.getUid()).setValue(new_user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    if (task.isSuccessful()){
+
+                                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
+                                }
+                            });
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -360,10 +379,18 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container,new IntroLoginFragment());
-        transaction.commit();
+
+
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+
+        if (fragment==null) {
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, new IntroLoginFragment());
+            transaction.commit();
+
+        }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser!=null || !getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","").equals("")) {
@@ -413,9 +440,28 @@ public class LoginSigninActivity extends FragmentActivity implements IntroLoginF
                             Log.d(TAG, "signInWithCredential:success");
 
                             FirebaseUser user = task.getResult().getUser();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            startActivity(intent);
-                            finish();
+
+
+                            if (mDatabase==null)
+                                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                            User new_user = new User("", "","","","",user.getPhoneNumber(),"","","","");
+
+                            mDatabase.child("users").child(user.getUid()).setValue(new_user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    if (task.isSuccessful()){
+
+                                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
+                                }
+                            });
+
+
                             // ...
                         } else {
                             // Sign in failed, display a message and update the UI

@@ -35,6 +35,11 @@ public class MailDialogFragment extends DialogFragment {
         email_layout = (TextInputLayout) v.findViewById(R.id.publisher_layout);
         password_layout = (TextInputLayout) v.findViewById(R.id.password_lay);
 
+        if (getTag().equals("MailDialog"))
+            confirm_button.setText("Log in");
+        else
+            confirm_button.setText("Sign up");
+
         confirm_button.requestFocus();
 
         //typology = b.getString("typology");
@@ -69,7 +74,7 @@ public class MailDialogFragment extends DialogFragment {
                     email_layout.setErrorEnabled(false);
                     password_layout.setErrorEnabled(false);
                     Activity a = getActivity();
-                    if (a instanceof IntroLoginFragment.Frag1Observer) {
+                    if (a instanceof IntroLoginFragment.Frag1Observer && getTag().equals("MailDialog")) {
 
                         IntroLoginFragment.Frag1Observer observer = (IntroLoginFragment.Frag1Observer) a;
                         Intent intent = new Intent(Constants.SIGNIN_EMAIL);
@@ -77,7 +82,7 @@ public class MailDialogFragment extends DialogFragment {
                         intent.putExtra("password", password.getText().toString());
                         observer.notifyActionLogin(intent);
 
-                    } else if (a instanceof IntroSignupFragment.Frag2Observer){
+                    } else if (a instanceof IntroSignupFragment.Frag2Observer && getTag().equals("MailDialogSignup")){
 
                         IntroSignupFragment.Frag2Observer observer = (IntroSignupFragment.Frag2Observer) a;
                         Intent intent = new Intent(Constants.SIGNUP_EMAIL);
