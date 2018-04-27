@@ -32,7 +32,7 @@
                     android:drawableLeft="@drawable/ic_account_circle_white_24dp"
                     android:drawablePadding="6dp"
                     android:fontFamily="@font/roboto_light"
-                    android:hint="Username"
+                    android:hint="@string/username"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/white"
                     android:textColorHint="#E0E0E0"
@@ -54,7 +54,7 @@
                     android:drawableLeft="@drawable/ic_lock_outline_white_24dp"
                     android:drawablePadding="6dp"
                     android:fontFamily="@font/roboto_light"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:textColor="@android:color/white"
                     android:textColorHint="#E0E0E0"
@@ -89,7 +89,7 @@
                     android:elevation="2dp"
                     android:fontFamily="@font/roboto_light"
                     android:padding="10dp"
-                    android:text="Sign in with email" />
+                    android:text="@string/signin_email" />
 
                 <Button
                     android:id="@+id/PhoneAccessBtn"
@@ -106,7 +106,7 @@
                     android:elevation="2dp"
                     android:fontFamily="@font/roboto_light"
                     android:padding="10dp"
-                    android:text="Continue with phone" />
+                    android:text="@string/by_telephone" />
 
             </RelativeLayout>
 
@@ -127,7 +127,7 @@
                     android:layout_alignParentLeft="false"
                     android:layout_alignParentStart="false"
                     android:fontFamily="@font/roboto_light"
-                    android:text="Don't you have an account?"
+                    android:text="@string/no_account"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
 
@@ -140,7 +140,7 @@
                     android:layout_toEndOf="@+id/noAccountText"
                     android:layout_toRightOf="@+id/noAccountText"
                     android:fontFamily="@font/roboto_light"
-                    android:text="Sign up for free!"
+                    android:text="@string/free_signup"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
             </RelativeLayout>
@@ -161,7 +161,7 @@
                 android:elevation="2dp"
                 android:fontFamily="@font/roboto_light"
                 android:padding="10dp"
-                android:text="Access" />
+                android:text="@string/access" />
 
             <TextView
                 android:id="@+id/or"
@@ -171,7 +171,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="35dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="Or"
+                android:text="@string/or"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 

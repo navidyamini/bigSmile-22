@@ -22,6 +22,25 @@
     <string name ="permission">Permission required!</string>
     <string name ="permission_message">You need to provide this permission to properly use this app!</string>
     <string name ="more">More</string>
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signin_email">Sign in with email</string>
+    <string name="by_telephone">Continue with phone</string>
+    <string name="no_account">Don\'t you have an account?</string>
+    <string name="free_signup">Sign up for free!</string>
+    <string name="access">Access</string>
+    <string name="or">Or</string>
+    <string name="welcome">Welcome</string>
+    <string name = "add_book">Add a new book</string>
+    <string name="extra_tags">Tag extra</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+
+    <string name="edition_year">Edition year</string>
+    <string name="book_conditions">Book conditions</string>
+    <string name="genre">Genre</string>
+
     <string name="my_profile">My Profile</string>
     <string name="my_books">My Books</string>
     <string name="exit">Exit</string>

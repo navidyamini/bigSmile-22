@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/roboto_light"
-                android:text="Welcome"
+                android:text="@string/welcome"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="24sp" />
 
