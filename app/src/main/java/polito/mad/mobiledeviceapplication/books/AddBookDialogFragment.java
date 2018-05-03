@@ -1,30 +1,55 @@
 package polito.mad.mobiledeviceapplication.books;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Constants;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by user on 24/04/2018.
@@ -44,10 +69,44 @@ public class AddBookDialogFragment extends DialogFragment{
     private RelativeLayout form;
     private TextSwitcher explaination_switcher;
 
+    //add Image
+    private FloatingActionButton pickImageButton;
+    private static final int CAMERA = 10;
+    private static final int GALLERY = 11;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE = 2;
+    private static final int REQUEST_PERMISSION_SETTING = 3;
+
+    private ImageView bookImg;
+
+    private boolean permission_bool = false;
+///////////////////////////////////////////////////////////////
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_book, container, false);
+
+        //add image
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+        else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+        else
+            permission_bool = true;
+
+        pickImageButton = (FloatingActionButton) v.findViewById(R.id.takeBookImage);
+        bookImg = (ImageView) v.findViewById(R.id.bookImage);
+
+        pickImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (permission_bool)
+                    showPictureDialog();
+
+            }
+        });
+/////////////////////////////////////////////////////////////
 
         form = (RelativeLayout) v.findViewById(R.id.form_layout);
 
@@ -249,11 +308,247 @@ public class AddBookDialogFragment extends DialogFragment{
         return v;
     }
 
+    private void showPictureDialog() {
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this.getActivity(), R.style.CustomDialog);
+        pictureDialog.setTitle(getString(R.string.select_action));
+        String[] pictureDialogItems = {
+                getString(R.string.gallery),
+                getString(R.string.camera)};
+
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallary();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA);
+    }
+
+    public void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY);
+    }
+    public String saveImage(Bitmap myBitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File wallpaperDirectory = null;
+        /*
+        if (mAuth==null)
+            mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser()!=null)
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid());
+            // have the object build the directory structure, if needed.
+        else
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID",""));
+
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
+*/
+        try {
+            File f = new File(wallpaperDirectory, "book.jpg");
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            MediaScannerConnection.scanFile(this.getActivity(),
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            fo.close();
+            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+
+            return f.getAbsolutePath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return "";
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+
+        if (requestCode == REQUEST_PERMISSION_SETTING){
+
+
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+
+            } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+
+            }
+
+
+        }
+
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), contentURI);
+                    String path = saveImage(bitmap);
+                    Toast.makeText(this.getActivity(), getString(R.string.save_image), Toast.LENGTH_SHORT).show();
+                    bookImg.setImageBitmap(bitmap);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this.getActivity(), getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        } else if (requestCode == CAMERA) {
+
+            if (data!=null) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                bookImg.setImageBitmap(thumbnail);
+                saveImage(thumbnail);
+                Toast.makeText(this.getActivity(), getString(R.string.save_image), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+
+
+        BitmapDrawable drawable = (BitmapDrawable) bookImg.getDrawable();
+        if (drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            saveImage(bitmap);
+        }
+        super.onSaveInstanceState(outState);
+
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+
+
+                } else {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.CAMERA)) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity(),R.style.CustomDialog);
+                        builder.setTitle(getString(R.string.permission));
+                        builder.setMessage(getString(R.string.permission_message));
+                        builder.setCancelable(true);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                dialogInterface.cancel();
+                                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+                                }
+
+                            }
+                        });
+
+                        builder.create().show();
+
+                    } else {
+
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+
+
+                    }
+
+
+                }
+
+                break;
+            }
+
+
+            case MY_PERMISSIONS_REQUEST_WRITE: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    permission_bool = true;
+
+
+                } else {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity(),R.style.CustomDialog);
+                        builder.setTitle(getString(R.string.permission));
+                        builder.setMessage(getString(R.string.permission_message));
+                        builder.setCancelable(true);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                dialogInterface.cancel();
+                                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+                            }
+                        });
+
+                        builder.create().show();
+
+                    } else {
+
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+
+
+                    }
+
+
+                }
+
+
+                break;
+
+            }
+
+        }
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();
 
-
+        retrieveBookImage(bookImg);
         getDialog().getWindow()
                 .setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -262,6 +557,20 @@ public class AddBookDialogFragment extends DialogFragment{
 
 
 
+    }
+
+    private void retrieveBookImage(ImageView imageView) {
+        try {
+            String photoPath = "";
+            //if (mAuth.getCurrentUser()!=null)
+            //    photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid()+"/book.jpg";
+            //else
+            photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+this.getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","")+"/book.jpg";
+
+            Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+            if (bitmap!=null)
+                imageView.setImageBitmap(bitmap);
+        }catch (Exception e){}
     }
 
     public void setFields(String isbn, String title, String author, String publisher, String book_conditions, String edition_year, String genre, String extra_tags){

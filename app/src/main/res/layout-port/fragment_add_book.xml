@@ -40,13 +40,24 @@
             android:id="@+id/scan_book_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/takeBookImage"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@+id/takeBookImage"
+            android:layout_toStartOf="@+id/takeBookImage"
+            android:clickable="true"
+            app:backgroundTint="@android:color/white"
+            app:srcCompat="@drawable/qr" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/takeBookImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignTop="@+id/confirmBook"
             android:layout_marginRight="16dp"
             android:layout_toLeftOf="@+id/confirmBook"
             android:layout_toStartOf="@+id/confirmBook"
             android:clickable="true"
-            app:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/qr" />
+            app:srcCompat="@drawable/ic_camera_white_24dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/confirmBook"
