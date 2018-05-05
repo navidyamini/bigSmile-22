@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/takeBookImage"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/takeBookImage"
             android:layout_toStartOf="@+id/takeBookImage"
             android:clickable="true"
@@ -53,10 +53,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/confirmBook"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/confirmBook"
             android:layout_toStartOf="@+id/confirmBook"
             android:clickable="true"
+            android:tint="@color/colorPrimaryDark"
+            app:backgroundTint="@android:color/white"
             app:srcCompat="@drawable/ic_camera_white_24dp" />
 
         <android.support.design.widget.FloatingActionButton
@@ -80,6 +82,19 @@
             android:layout_below="@+id/title_dialog"
             android:layout_marginRight="16dp"
             android:layout_marginTop="20dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/delete_image_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/scan_book_btn"
+            android:layout_marginLeft="16dp"
+            android:clickable="true"
+            android:scaleType="center"
+            app:backgroundTint="#c62828"
+            app:srcCompat="@drawable/ic_delete_forever_white_24dp" />
 
     </RelativeLayout>
 

@@ -6,18 +6,31 @@
     <RelativeLayout
         android:id="@+id/imageLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/scrollView2"
+        android:layout_toStartOf="@+id/scrollView2">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/delete_image_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/bookImage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:clickable="true"
+            app:backgroundTint="#c62828"
+            app:srcCompat="@drawable/ic_delete_forever_white_24dp" />
 
         <ImageView
             android:id="@+id/bookImage"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
-            android:layout_marginBottom="34dp"
             android:scaleType="fitXY"
             android:src="@drawable/header_add_book" />
 
@@ -41,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/takeBookImage"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/takeBookImage"
             android:layout_toStartOf="@+id/takeBookImage"
             android:clickable="true"
@@ -53,10 +66,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/confirmBook"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/confirmBook"
             android:layout_toStartOf="@+id/confirmBook"
             android:clickable="true"
+            android:tint="@color/colorPrimaryDark"
+            app:backgroundTint="@android:color/white"
             app:srcCompat="@drawable/ic_camera_white_24dp" />
 
         <android.support.design.widget.FloatingActionButton
@@ -64,9 +79,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/bookImage"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="-22dp"
+            android:layout_alignEnd="@+id/bookImage"
+            android:layout_alignParentRight="false"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="16dp"
             android:clickable="true"
             app:srcCompat="@drawable/ic_check_circle_white_24dp" />
@@ -75,325 +90,329 @@
             android:id="@+id/explaination_switcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/scan_book_btn"
+            android:layout_alignEnd="@+id/title_dialog"
             android:layout_alignLeft="@+id/title_dialog"
+            android:layout_alignRight="@+id/title_dialog"
             android:layout_alignStart="@+id/title_dialog"
             android:layout_below="@+id/title_dialog"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="24dp" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/bookImage"
+            android:layout_toRightOf="@+id/bookImage">
+
+            <RelativeLayout
+                android:id="@+id/form_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <RelativeLayout
+                    android:id="@+id/tags_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/isbn_layout">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tags_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/zone_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/tags"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/extra_tags"
+                            android:imeOptions="actionUnspecified|actionDone"
+                            android:inputType="text|textPostalAddress"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusableInTouchMode="false">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/title_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/name_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/title"
+                            android:imeOptions="actionUnspecified|actionNext"
+                            android:inputType="text|textPersonName"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/author_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/name_layout"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/author_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/surname_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/author"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/author"
+                            android:imeOptions="actionUnspecified|actionNext"
+                            android:inputType="text|textPersonName"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/publisher_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/author_layout"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/publisher_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/email_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/publisher"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/publisher"
+                            android:imeOptions="actionNext"
+                            android:inputType="text|textEmailAddress"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/edit_year_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/publisher_layout"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/edit_year_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/phone_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edition_year"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/edition_year"
+                            android:imeOptions="actionUnspecified|actionNext"
+                            android:inputType="text|phone"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/book_conditions_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/edit_year_layout"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/book_conditions_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/address_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/book_conditions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/book_conditions"
+                            android:imeOptions="actionUnspecified|actionNext"
+                            android:inputType="text|textPostalAddress"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/genre_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/book_conditions_layout"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/genre_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/zip_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="@string/genre"
+                            android:imeOptions="actionUnspecified|actionNext"
+                            android:inputType="text|textPostalAddress"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/isbn_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_below="@+id/genre_layout"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/isbn_text_input_layout"
+                        style="@style/AppTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/zone_icon_entry"
+                        android:theme="@style/AppTheme">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/isbn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:hint="ISBN"
+                            android:imeOptions="actionUnspecified|actionDone"
+                            android:inputType="text|textPostalAddress"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorEntryList"
+                            android:textColorHint="@color/textColorEntryList"
+                            android:textSize="16sp"
+                            app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </ScrollView>
 
     </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageLayout">
-
-        <RelativeLayout
-            android:id="@+id/form_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <RelativeLayout
-                android:id="@+id/tags_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/isbn_layout">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/tags_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/zone_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/tags"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/extra_tags"
-                        android:imeOptions="actionUnspecified|actionDone"
-                        android:inputType="text|textPostalAddress"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/name_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusableInTouchMode="false">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/title_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/name_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/title"
-                        android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPersonName"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/author_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/name_layout"
-                android:layout_marginTop="5dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/author_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/surname_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/author"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/author"
-                        android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPersonName"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/publisher_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/author_layout"
-                android:layout_marginTop="5dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/publisher_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/email_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/publisher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/publisher"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textEmailAddress"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/edit_year_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/publisher_layout"
-                android:layout_marginTop="5dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/edit_year_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/phone_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/edition_year"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/edition_year"
-                        android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|phone"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/book_conditions_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/edit_year_layout"
-                android:layout_marginTop="5dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/book_conditions_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/address_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/book_conditions"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/book_conditions"
-                        android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPostalAddress"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/genre_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/book_conditions_layout"
-                android:layout_marginTop="5dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/genre_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/zip_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/genre"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="@string/genre"
-                        android:imeOptions="actionUnspecified|actionNext"
-                        android:inputType="text|textPostalAddress"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/isbn_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="false"
-                android:layout_below="@+id/genre_layout"
-                android:layout_marginTop="5dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/isbn_text_input_layout"
-                    style="@style/AppTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/zone_icon_entry"
-                    android:theme="@style/AppTheme">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/isbn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_light"
-                        android:hint="ISBN"
-                        android:imeOptions="actionUnspecified|actionDone"
-                        android:inputType="text|textPostalAddress"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorEntryList"
-                        android:textColorHint="@color/textColorEntryList"
-                        android:textSize="16sp"
-                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
-                </android.support.design.widget.TextInputLayout>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-    </ScrollView>
 
 </RelativeLayout>

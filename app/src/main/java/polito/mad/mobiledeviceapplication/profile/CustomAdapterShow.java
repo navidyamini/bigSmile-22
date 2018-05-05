@@ -1,4 +1,4 @@
-package polito.mad.mobiledeviceapplication;
+package polito.mad.mobiledeviceapplication.profile;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import polito.mad.mobiledeviceapplication.R;
 
 /**
  * Created by user on 02/04/2018.

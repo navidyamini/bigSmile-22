@@ -19,11 +19,11 @@
         >
 
 
-        <activity android:name=".EditProfileActivity"
+        <activity android:name=".profile.EditProfileActivity"
          android:windowSoftInputMode="stateVisible|adjustPan">
 
         </activity>
-        <activity android:name=".ShowProfileActivity">
+        <activity android:name=".profile.ShowProfileActivity">
 
 
         </activity>

@@ -1,4 +1,4 @@
-package polito.mad.mobiledeviceapplication;
+package polito.mad.mobiledeviceapplication.profile;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -23,8 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Map;
-
+import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.User;
 
@@ -33,7 +32,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private TextInputLayout name_text_layout, surname_text_layout, email_text_layout, phone_text_layout, bio_text_layout, address_text_layout, zip_text_layout, zone_text_layout;
     private TextInputEditText name_edit, surname_edit, email_edit, phone_edit, bio_edit, address_edit, zip_edit, zone_edit;
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
 

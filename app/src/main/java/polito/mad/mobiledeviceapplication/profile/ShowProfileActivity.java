@@ -1,4 +1,4 @@
-package polito.mad.mobiledeviceapplication;
+package polito.mad.mobiledeviceapplication.profile;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -44,6 +43,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import polito.mad.mobiledeviceapplication.profile.CustomAdapterShow;
+import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.User;
 
@@ -52,7 +53,7 @@ public class ShowProfileActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<String[]> arrayList;
     private TextView name;
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private RelativeLayout wait_lay;
     private TextView wait_message;

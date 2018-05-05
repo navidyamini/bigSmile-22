@@ -29,8 +29,6 @@ import polito.mad.mobiledeviceapplication.R;
 public class MyBooksFragment extends Fragment {
 
     private FloatingActionButton add_book;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,13 +46,18 @@ public class MyBooksFragment extends Fragment {
             }
         });
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 
 }

@@ -46,7 +46,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
 
 public class LoginSignupActivity extends FragmentActivity implements LoginFragment.Frag1Observer, SignupFragment.Frag2Observer {
 
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private Button signup,logout,signin;
     private final static String TAG = "Firebase";
     private DatabaseReference mDatabase;

@@ -1,6 +1,7 @@
 package polito.mad.mobiledeviceapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,10 +23,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -33,9 +39,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
+import polito.mad.mobiledeviceapplication.profile.MyProfileFragment;
+import polito.mad.mobiledeviceapplication.search.SearchFragment;
+import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 
@@ -45,8 +56,9 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
 
 public class MainActivity extends AppCompatActivity implements AddBookDialogFragment.FragBookObserver {
 
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    public FirebaseStorage firebaseStorage;
 
     private Button disconnect;
     private Button insert_book;
@@ -58,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
 
     @Override
-    public void notifyActionBook(Intent intent) {
+    public void notifyActionBook(final Intent intent) {
 
         if (Constants.NEW_BOOK.equals(intent.getAction())) {
 
@@ -73,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
             String publisher = intent.getStringExtra("publisher");
             String isbn = intent.getStringExtra("isbn");
             String genre = intent.getStringExtra("genre");
-            String extra_tags = intent.getStringExtra("extra_tags");
+            final String extra_tags = intent.getStringExtra("extra_tags");
 
             Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags);
 
@@ -83,9 +95,11 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                 ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_insert));
                 fragment.setFormEnabled(false);
             }
+
             if (mAuth.getCurrentUser() == null) {
 
-                mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).child("books").push().setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
+                final DatabaseReference insertRef = mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).child("books").push();
+                insertRef.setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
@@ -96,6 +110,30 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                 Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
                             }
 
+                            if (intent.hasExtra("book_bitmap")) {
+                                Bitmap bitmap = intent.getParcelableExtra("book_bitmap");
+                                StorageReference storageRef = firebaseStorage.getReference().child("images").child("books").child(insertRef.getKey() + ".png");
+
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                byte[] data = baos.toByteArray();
+
+                                UploadTask uploadTask = storageRef.putBytes(data);
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+
+                                        System.out.println("EXCEPTION " + exception);
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                        System.out.println("Book image inserted into Cloud Storage");
+
+                                    }
+                                });
+                            }
                             }
 
                         if (fragment.isAdded() && fragment.isVisible()) {
@@ -107,7 +145,8 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
             }
              else {
 
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").push().setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
+                final DatabaseReference insertRef = mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").push();
+                insertRef.setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
@@ -118,6 +157,30 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                 Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
 
                             }
+
+                            if (intent.hasExtra("book_bitmap")) {
+                                Bitmap bitmap = intent.getParcelableExtra("book_bitmap");
+                                StorageReference storageRef = firebaseStorage.getReference().child("images").child("books").child(insertRef.getKey() + ".png");
+
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                byte[] data = baos.toByteArray();
+
+                                UploadTask uploadTask = storageRef.putBytes(data);
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+
+                                        System.out.println("EXCEPTION " + exception);
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                        System.out.println("Book image inserted into Cloud Storage");
+                                    }
+                                });
+                            }
                         }
 
                         if (fragment.isVisible() && fragment.isAdded()) {
@@ -126,7 +189,17 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                         }
                     }
                 });
+
+
+
+
             }
+
+
+
+
+
+
 
         } else if (Constants.SCAN_BOOK.equals(intent.getAction())) {
 
@@ -151,8 +224,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
-
+        firebaseStorage = FirebaseStorage.getInstance();
 
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this,mDrawerlayout,R.string.open,R.string.close);
@@ -182,22 +254,20 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                     case R.id.my_books:
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyBooksFragment()).commit();
-                        // Handle settings click
+
                         return true;
                     case R.id.search:
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SearchFragment()).commit();
 
-                        // Handle logout click
                         return true;
                     case R.id.setting:
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SettingsFragment()).commit();
 
-                        // Handle logout click
                         return true;
                     case R.id.exit:
-                        // Handle logout click
+
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username","").apply();
                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password","").apply();
@@ -222,14 +292,12 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                 }
                             });
 
-
                         } else {
 
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(getApplicationContext(), LoginSignupActivity.class);
                             startActivity(i);
                             finish();
-
 
                         }
 

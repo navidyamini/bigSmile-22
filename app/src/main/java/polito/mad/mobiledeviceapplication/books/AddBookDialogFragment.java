@@ -45,7 +45,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
+import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 
@@ -60,12 +62,15 @@ public class AddBookDialogFragment extends DialogFragment{
 
     private TextInputEditText isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags;
     private TextInputLayout isbn_layout, title_layout, author_layout, publisher_layout, edition_year_layout, book_conditions_layout, genre_layout, extra_tags_layout;
+    private TextView title_dialog;
+
+    private ImageView book_image;
 
     public interface FragBookObserver {
         void notifyActionBook(Intent intent);
     }
 
-    private FloatingActionButton confirmBook, scanBook;
+    private FloatingActionButton confirmBook, scanBook, deleteImageBook;
     private RelativeLayout form;
     private TextSwitcher explaination_switcher;
 
@@ -78,8 +83,10 @@ public class AddBookDialogFragment extends DialogFragment{
     private static final int REQUEST_PERMISSION_SETTING = 3;
 
     private ImageView bookImg;
+    private Bitmap imageBitmap;
 
     private boolean permission_bool = false;
+
 ///////////////////////////////////////////////////////////////
     @Nullable
     @Override
@@ -132,6 +139,8 @@ public class AddBookDialogFragment extends DialogFragment{
         explaination_switcher.setInAnimation(getContext(),android.R.anim.fade_in);
         explaination_switcher.setOutAnimation(getContext(),android.R.anim.fade_out);
 
+        title_dialog = (TextView) v.findViewById(R.id.title_dialog);
+
         TextView t1 = new TextView(getContext());
         t1.setTextColor(Color.WHITE);
         //t1.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "font/roboto_light.ttf"));
@@ -156,152 +165,11 @@ public class AddBookDialogFragment extends DialogFragment{
 
         confirmBook = (FloatingActionButton) v.findViewById(R.id.confirmBook);
         scanBook = (FloatingActionButton) v.findViewById(R.id.scan_book_btn);
+        deleteImageBook = (FloatingActionButton) v.findViewById(R.id.delete_image_btn);
+        deleteImageBook.setVisibility(View.INVISIBLE);
 
 
-        confirmBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (checkFields()){
-                    Activity a=getActivity();
-                    if (a instanceof AddBookDialogFragment.FragBookObserver) {
-                        AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
-                        Intent intent = new Intent(Constants.NEW_BOOK);
-                        intent.putExtra("isbn", isbn.getText().toString());
-                        intent.putExtra("title", title.getText().toString());
-                        intent.putExtra("author", author.getText().toString());
-                        intent.putExtra("publisher", publisher.getText().toString());
-                        intent.putExtra("book_conditions", book_conditions.getText().toString());
-                        intent.putExtra("edition_year", edition_year.getText().toString());
-                        intent.putExtra("genre", genre.getText().toString());
-                        intent.putExtra("extra_tags", extra_tags.getText().toString());
-
-                        observer.notifyActionBook(intent);
-
-                    }
-                }
-
-
-            }
-        });
-
-        scanBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Activity a=getActivity();
-                if (a instanceof AddBookDialogFragment.FragBookObserver) {
-                    AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
-                    Intent intent = new Intent(Constants.SCAN_BOOK);
-
-                    observer.notifyActionBook(intent);
-                }
-            }
-        });
-
-        author.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkFields();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        publisher.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkFields();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        edition_year.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkFields();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkFields();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        genre.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkFields();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        isbn.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkFields();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
+        book_image = (ImageView) v.findViewById(R.id.bookImage);
 
 
 
@@ -343,23 +211,23 @@ public class AddBookDialogFragment extends DialogFragment{
         startActivityForResult(galleryIntent, GALLERY);
     }
     public String saveImage(Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = null;
-        /*
-        if (mAuth==null)
-            mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser()!=null)
-            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid());
-            // have the object build the directory structure, if needed.
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        File wallpaperDirectory = null;
+
+        if (((MainActivity)getActivity()).mAuth==null)
+            ((MainActivity)getActivity()).mAuth = FirebaseAuth.getInstance();
+
+        if (((MainActivity)getActivity()).mAuth.getCurrentUser()!=null)
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid());
         else
-            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID",""));
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID",""));
 
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
         }
-*/
+
         try {
             File f = new File(wallpaperDirectory, "book.jpg");
             f.createNewFile();
@@ -403,10 +271,13 @@ public class AddBookDialogFragment extends DialogFragment{
             if (data != null) {
                 Uri contentURI = data.getData();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), contentURI);
+                    String path = saveImage(imageBitmap);
                     Toast.makeText(this.getActivity(), getString(R.string.save_image), Toast.LENGTH_SHORT).show();
-                    bookImg.setImageBitmap(bitmap);
+                    bookImg.setImageBitmap(imageBitmap);
+                    explaination_switcher.setVisibility(View.INVISIBLE);
+                    title_dialog.setVisibility(View.INVISIBLE);
+                    deleteImageBook.setVisibility(View.VISIBLE);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -417,9 +288,12 @@ public class AddBookDialogFragment extends DialogFragment{
         } else if (requestCode == CAMERA) {
 
             if (data!=null) {
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                bookImg.setImageBitmap(thumbnail);
-                saveImage(thumbnail);
+                imageBitmap = (Bitmap) data.getExtras().get("data");
+                bookImg.setImageBitmap(imageBitmap);
+                explaination_switcher.setVisibility(View.INVISIBLE);
+                title_dialog.setVisibility(View.INVISIBLE);
+                deleteImageBook.setVisibility(View.VISIBLE);
+                saveImage(imageBitmap);
                 Toast.makeText(this.getActivity(), getString(R.string.save_image), Toast.LENGTH_SHORT).show();
             }
         }
@@ -428,20 +302,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
 
-
-
-        BitmapDrawable drawable = (BitmapDrawable) bookImg.getDrawable();
-        if (drawable != null) {
-            Bitmap bitmap = drawable.getBitmap();
-            saveImage(bitmap);
-        }
-        super.onSaveInstanceState(outState);
-
-
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -553,6 +414,173 @@ public class AddBookDialogFragment extends DialogFragment{
                 .setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
 
+        confirmBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean isValid = true;
+                isValid = checkISBN();
+                isValid = checkAuthor();
+                isValid = checkEditionYear();
+                isValid = checkGenre();
+                isValid = checkPublisher();
+                isValid = checkTitle();
+
+                if (isValid){
+                    Activity a=getActivity();
+                    if (a instanceof AddBookDialogFragment.FragBookObserver) {
+                        AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
+                        Intent intent = new Intent(Constants.NEW_BOOK);
+                        intent.putExtra("isbn", isbn.getText().toString());
+                        intent.putExtra("title", title.getText().toString());
+                        intent.putExtra("author", author.getText().toString());
+                        intent.putExtra("publisher", publisher.getText().toString());
+                        intent.putExtra("book_conditions", book_conditions.getText().toString());
+                        intent.putExtra("edition_year", edition_year.getText().toString());
+                        intent.putExtra("genre", genre.getText().toString());
+                        intent.putExtra("extra_tags", extra_tags.getText().toString());
+
+                        if (imageBitmap!=null)
+                            intent.putExtra("book_bitmap",imageBitmap);
+
+                        observer.notifyActionBook(intent);
+
+                    }
+                }
+
+
+            }
+        });
+
+        scanBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Activity a=getActivity();
+                if (a instanceof AddBookDialogFragment.FragBookObserver) {
+                    AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
+                    Intent intent = new Intent(Constants.SCAN_BOOK);
+
+                    observer.notifyActionBook(intent);
+                }
+            }
+        });
+
+        deleteImageBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                deleteImage();
+                book_image.setImageDrawable(getResources().getDrawable(R.drawable.header_add_book));
+                explaination_switcher.setVisibility(View.VISIBLE);
+                title_dialog.setVisibility(View.VISIBLE);
+                deleteImageBook.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        author.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkAuthor();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        publisher.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkPublisher();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        edition_year.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkEditionYear();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkTitle();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        genre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkGenre();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        isbn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkISBN();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
 
 
@@ -562,14 +590,18 @@ public class AddBookDialogFragment extends DialogFragment{
     private void retrieveBookImage(ImageView imageView) {
         try {
             String photoPath = "";
-            //if (mAuth.getCurrentUser()!=null)
-            //    photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid()+"/book.jpg";
-            //else
-            photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+this.getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","")+"/book.jpg";
+            if (((MainActivity)getActivity()).mAuth.getCurrentUser()!=null)
+                photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid()+"/book.jpg";
+            else
+                photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+this.getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","")+"/book.jpg";
 
             Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-            if (bitmap!=null)
+            if (bitmap!=null) {
                 imageView.setImageBitmap(bitmap);
+                explaination_switcher.setVisibility(View.INVISIBLE);
+                title_dialog.setVisibility(View.INVISIBLE);
+                deleteImageBook.setVisibility(View.VISIBLE);
+            }
         }catch (Exception e){}
     }
 
@@ -624,55 +656,112 @@ public class AddBookDialogFragment extends DialogFragment{
     public void onDestroyView() {
 
         explaination_switcher.removeAllViews();
+        deleteImage();
         super.onDestroyView();
     }
 
 
-    private boolean checkFields(){
+    private boolean checkISBN(){
 
-        boolean isValid = true;
         if (isbn.getText().length()==0) {
             isbn_layout.setError(getString(R.string.not_empty));
-            isValid = false;
+            return false;
         }
-        else
+        else {
             isbn_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkTitle(){
 
         if (title.getText().length()==0) {
             title_layout.setError(getString(R.string.not_empty));
-            isValid = false;
+            return false;
         }
-        else
+        else {
             title_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkAuthor(){
 
         if (author.getText().length()==0) {
             author_layout.setError(getString(R.string.not_empty));
-            isValid = false;
+            return false;
         }
-        else
+        else {
             author_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkPublisher(){
 
         if (publisher.getText().length()==0) {
             publisher_layout.setError(getString(R.string.not_empty));
-            isValid = false;
+            return false;
         }
-        else
+        else {
             publisher_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkEditionYear(){
+
 
         if (edition_year.getText().length()==0) {
             edition_year_layout.setError(getString(R.string.not_empty));
-            isValid = false;
+            return false;
         }
-        else
+        else {
             edition_year_layout.setErrorEnabled(false);
+            return true;
+        }
+
+
+    }
+    private boolean checkGenre(){
 
         if (genre.getText().length()==0) {
             genre_layout.setError(getString(R.string.not_empty));
-            isValid = false;
+            return false;
         }
-        else
+        else {
             genre_layout.setErrorEnabled(false);
+            return true;
+        }
 
-        return isValid;
     }
+
+    public void deleteImage(){
+
+        File wallpaperDirectory = null;
+
+        if (((MainActivity)getActivity()).mAuth==null)
+            ((MainActivity)getActivity()).mAuth = FirebaseAuth.getInstance();
+
+        if (((MainActivity)getActivity()).mAuth.getCurrentUser()!=null)
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid());
+        else
+            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID",""));
+
+
+
+        File fdelete = new File(wallpaperDirectory.getAbsolutePath(),"book.jpg");
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                System.out.println("file Deleted :" + fdelete.getAbsolutePath());
+            } else {
+                System.out.println("file not Deleted :" + fdelete.getAbsolutePath());
+            }
+        }
+
+
+
+    }
+
+
 }

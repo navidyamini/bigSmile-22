@@ -1,4 +1,4 @@
-package polito.mad.mobiledeviceapplication;
+package polito.mad.mobiledeviceapplication.search;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 
 /**
