@@ -370,7 +370,8 @@ public class AllBooks extends Fragment {
             myDatabase.removeEventListener(postListener_firebase);
         }
 
-        request.cancel();
+        if (request!=null)
+            request.cancel();
 
 
 

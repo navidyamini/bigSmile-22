@@ -3,15 +3,14 @@ package polito.mad.mobiledeviceapplication.search;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
-import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 
 /**
  * Created by user on 24/04/2018.
@@ -26,6 +25,9 @@ public class SearchFragment extends Fragment {
                 R.layout.fragment_search, container, false);
 
         ((MainActivity)getActivity()).toolbar.setTitle(R.string.search);
+
+
+        getChildFragmentManager().beginTransaction().add(R.id.container,new SearchForm()).commit();
 
 
 
