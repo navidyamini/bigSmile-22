@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageLayout">
+
+        <RelativeLayout
+            android:id="@+id/form_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageLayout">
+
+            <RelativeLayout
+                android:id="@+id/name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusableInTouchMode="false">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/title_text_input_layout"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/name_icon_entry"
+                    android:theme="@style/AppTheme">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="@string/title"
+                        android:imeOptions="actionUnspecified|actionNext"
+                        android:inputType="text|textPersonName"
+                        android:singleLine="true"
+                        android:textColor="@color/textColorEntryList"
+                        android:textColorHint="@color/textColorEntryList"
+                        android:textSize="16sp"
+                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/author_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/name_layout"
+                android:layout_marginTop="5dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/author_text_input_layout"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/surname_icon_entry"
+                    android:theme="@style/AppTheme">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="@string/author"
+                        android:imeOptions="actionUnspecified|actionNext"
+                        android:inputType="text|textPersonName"
+                        android:singleLine="true"
+                        android:textColor="@color/textColorEntryList"
+                        android:textColorHint="@color/textColorEntryList"
+                        android:textSize="16sp"
+                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/publisher_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/author_layout"
+                android:layout_marginTop="5dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/publisher_text_input_layout"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/email_icon_entry"
+                    android:theme="@style/AppTheme">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/publisher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/publisher_text_input_layout"
+                        android:layout_alignStart="@+id/publisher_text_input_layout"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="@string/publisher"
+                        android:imeOptions="actionNext"
+                        android:inputType="text|textEmailAddress"
+                        android:singleLine="true"
+                        android:textColor="@color/textColorEntryList"
+                        android:textColorHint="@color/textColorEntryList"
+                        android:textSize="16sp"
+                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/genre_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/publisher_layout"
+                android:layout_marginTop="5dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/genre_text_input_layout"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/zip_icon_entry"
+                    android:theme="@style/AppTheme">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/genre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/genre_text_input_layout"
+                        android:layout_alignStart="@+id/genre_text_input_layout"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="@string/genre"
+                        android:imeOptions="actionUnspecified|actionNext"
+                        android:inputType="text|textPostalAddress"
+                        android:singleLine="true"
+                        android:textColor="@color/textColorEntryList"
+                        android:textColorHint="@color/textColorEntryList"
+                        android:textSize="16sp"
+                        app:hintTextAppearance="@android:style/TextAppearance.Medium" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/button_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/genre_layout"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+
+                <Button
+                    android:id="@+id/button_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="30dp"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+
+                    android:text="Search" />
+
+                <Button
+                    android:id="@+id/button_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Clear" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

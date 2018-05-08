@@ -369,9 +369,9 @@ public class AllBooks extends Fragment {
         } else {
             myDatabase.removeEventListener(postListener_firebase);
         }
-        if(request !=null) {
+
+        if (request!=null)
             request.cancel();
-        }
 
 
 
