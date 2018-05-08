@@ -364,6 +364,7 @@ public class AllBooks extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        setRetainInstance(true);
         if (((MainActivity)getActivity()).mAuth.getCurrentUser()==null) {
             myDatabase.removeEventListener(postListener_nofirebase);
         } else {
@@ -374,6 +375,12 @@ public class AllBooks extends Fragment {
             request.cancel();
 
 
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
     }
 }
