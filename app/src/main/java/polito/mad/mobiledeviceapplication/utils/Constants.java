@@ -17,6 +17,7 @@ public class Constants {
     public final static String CHANGE_FRAGMENT = "CHANGE_FRAGMENT";
     public final static String NEW_BOOK = "NEW_BOOK";
     public final static String SCAN_BOOK = "SCAN_BOOK";
+    public final static String SEARCH_RESULT = "SEARCH_RESULT";
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
