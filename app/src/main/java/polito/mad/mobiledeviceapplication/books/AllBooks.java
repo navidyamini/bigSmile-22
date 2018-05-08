@@ -53,6 +53,7 @@ public class AllBooks extends Fragment {
     private RelativeLayout field_lay, wait_lay;
     private ImageRequest request;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -144,6 +145,7 @@ public class AllBooks extends Fragment {
                                 }
 
                                 mAdapter.notifyDataSetChanged();
+                                wait_lay.setVisibility(View.INVISIBLE);
 
 
 
@@ -156,10 +158,10 @@ public class AllBooks extends Fragment {
 
                     } else {
 
-                        /*wait_lay.setVisibility(View.VISIBLE);
-                        wait_message.setText(getString(R.string.try_again));
-                        wait_progress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();*/
+                        wait_lay.setVisibility(View.INVISIBLE);
+                        //wait_message.setText(getString(R.string.try_again));
+                        //wait_progress.setVisibility(View.INVISIBLE);
+                        //Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();*/
 
 
                     }
@@ -176,7 +178,7 @@ public class AllBooks extends Fragment {
                 }
             };
 
-            myDatabase.addValueEventListener(postListener_nofirebase);
+            myDatabase.addListenerForSingleValueEvent(postListener_nofirebase);
 
 
         } else {
@@ -202,6 +204,7 @@ public class AllBooks extends Fragment {
                                 }
 
                                 mAdapter.notifyDataSetChanged();
+                                wait_lay.setVisibility(View.INVISIBLE);
 
 
 
@@ -210,11 +213,11 @@ public class AllBooks extends Fragment {
 
                     } else {
 
-  /*                      wait_lay.setVisibility(View.VISIBLE);
-                        wait_message.setText(getString(R.string.try_again));
-                        wait_progress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-*/
+                        wait_lay.setVisibility(View.INVISIBLE);
+                        //wait_message.setText(getString(R.string.try_again));
+                        //wait_progress.setVisibility(View.INVISIBLE);
+                        //Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+
                     }
 
                 }
@@ -227,7 +230,7 @@ public class AllBooks extends Fragment {
                 }
             };
 
-            myDatabase.addValueEventListener(postListener_firebase);
+            myDatabase.addListenerForSingleValueEvent(postListener_firebase);
 
         }
 
@@ -364,15 +367,15 @@ public class AllBooks extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        setRetainInstance(true);
-        if (((MainActivity)getActivity()).mAuth.getCurrentUser()==null) {
-            myDatabase.removeEventListener(postListener_nofirebase);
-        } else {
-            myDatabase.removeEventListener(postListener_firebase);
-        }
 
-        if (request!=null)
-            request.cancel();
+            if (((MainActivity) getActivity()).mAuth.getCurrentUser() == null) {
+                myDatabase.removeEventListener(postListener_nofirebase);
+            } else {
+                myDatabase.removeEventListener(postListener_firebase);
+            }
+
+            if (request != null)
+                request.cancel();
 
 
 
@@ -381,6 +384,13 @@ public class AllBooks extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
 
     }
 }

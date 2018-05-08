@@ -59,13 +59,18 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Activity a=getActivity();
-                if (a instanceof Frag1Observer) {
-                    Frag1Observer observer = (Frag1Observer) a;
-                    Intent intent = new Intent(Constants.SIGNIN);
-                    intent.putExtra("username",username.getText().toString());
-                    intent.putExtra("password",password.getText().toString());
-                    observer.notifyActionLogin(intent);
+                boolean isUsernameValid = checkUsername();
+                boolean isPasswordValid = checkPassword();
+
+                if (isUsernameValid && isPasswordValid) {
+                    Activity a = getActivity();
+                    if (a instanceof Frag1Observer) {
+                        Frag1Observer observer = (Frag1Observer) a;
+                        Intent intent = new Intent(Constants.SIGNIN);
+                        intent.putExtra("username", username.getText().toString());
+                        intent.putExtra("password", password.getText().toString());
+                        observer.notifyActionLogin(intent);
+                    }
                 }
 
             }
@@ -126,5 +131,31 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+    }
+
+    private boolean checkUsername(){
+
+        if (username.getText().length()==0) {
+            username.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            username.setError("");
+            return true;
+        }
+
+    }
+
+    private boolean checkPassword(){
+
+        if (password.getText().length()==0) {
+            password.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            password.setError("");
+            return true;
+        }
+
     }
 }

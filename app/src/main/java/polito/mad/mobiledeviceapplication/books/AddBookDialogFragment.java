@@ -405,15 +405,14 @@ public class AddBookDialogFragment extends DialogFragment{
             @Override
             public void onClick(View v) {
 
-                boolean isValid = true;
-                isValid = checkISBN();
-                isValid = checkAuthor();
-                isValid = checkEditionYear();
-                isValid = checkGenre();
-                isValid = checkPublisher();
-                isValid = checkTitle();
+                boolean isISBNValid = checkISBN();
+                boolean isAuthorValid = checkAuthor();
+                boolean isEditionYearValid = checkEditionYear();
+                boolean isGenreValid = checkGenre();
+                boolean isPublisherValid = checkPublisher();
+                boolean isTitleValid = checkTitle();
 
-                if (isValid){
+                if (isISBNValid && isAuthorValid && isEditionYearValid && isGenreValid && isPublisherValid && isTitleValid){
                     Activity a=getActivity();
                     if (a instanceof AddBookDialogFragment.FragBookObserver) {
                         AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
@@ -776,6 +775,8 @@ public class AddBookDialogFragment extends DialogFragment{
 
 
     }
+
+
 
 
 }

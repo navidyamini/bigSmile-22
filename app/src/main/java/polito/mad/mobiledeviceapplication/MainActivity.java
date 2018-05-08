@@ -452,7 +452,9 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
     @Override
     public void onBackPressed() {
+
         moveTaskToBack(true);
+
     }
 
     @Override
