@@ -49,8 +49,11 @@ import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
+import polito.mad.mobiledeviceapplication.loginsignin.SignupFragment;
 import polito.mad.mobiledeviceapplication.profile.MyProfileFragment;
+import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
+import polito.mad.mobiledeviceapplication.search.SearchMap;
 import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
@@ -59,7 +62,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements AddBookDialogFragment.FragBookObserver {
+public class MainActivity extends AppCompatActivity implements AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -73,6 +76,16 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigation;
     public android.support.v7.widget.Toolbar toolbar;
+
+    @Override
+    public void notifySearchRequest(Intent intent) {
+        if(Constants.SEARCH_RESULT.equals(intent.getAction())){
+            FragmentTransaction transaction = getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, new SearchMap());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
 
     @Override
     public void notifyActionBook(final Intent intent) {
