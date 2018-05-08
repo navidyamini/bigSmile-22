@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
@@ -49,6 +50,8 @@ public class AllBooks extends Fragment {
     private ImageView book_cover;
     private TextView title,author,ISBN,genre,publisher, published_date,book_conditions, extra_tags;
     private ValueEventListener postListener_nofirebase,postListener_firebase;
+    private RelativeLayout field_lay, wait_lay;
+    private ImageRequest request;
 
     @Nullable
     @Override
@@ -66,6 +69,11 @@ public class AllBooks extends Fragment {
         book_conditions = (TextView) view.findViewById(R.id.conditions);
         extra_tags = (TextView) view.findViewById(R.id.tags);
 
+        field_lay= (RelativeLayout) view.findViewById(R.id.fields);
+        wait_lay = (RelativeLayout) view.findViewById(R.id.wait_lay);
+
+
+
         book_list = (RecyclerView) view.findViewById(R.id.book_list);
         book_list.setHasFixedSize(true);
 
@@ -75,6 +83,41 @@ public class AllBooks extends Fragment {
         books = new ArrayList<>();
         mAdapter = new AllBooksAdapter(getContext(),books);
         book_list.setAdapter(mAdapter);
+
+        book_list.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+
+                if (book_list.getChildAdapterPosition(view)==0) {
+
+                    wait_lay.setVisibility(View.INVISIBLE);
+                    book_cover.setVisibility(View.VISIBLE);
+                    field_lay.setVisibility(View.VISIBLE);
+
+                   /* if (((ImageView)view.findViewById(R.id.cover)).getDrawable()!=null)
+                        book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());*/
+/*                    else
+                        book_cover.setImageResource(R.drawable.no_cover);*/
+
+                    title.setText(mAdapter.mDataset.get(0).title);
+                    author.setText(mAdapter.mDataset.get(0).author);
+                    publisher.setText(mAdapter.mDataset.get(0).publisher);
+                    published_date.setText("Published in: " + mAdapter.mDataset.get(0).edition_year);
+                    book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(0).book_conditions);
+                    extra_tags.setText("Extra tags\n"+ mAdapter.mDataset.get(0).extra_tags);
+                    ISBN.setText("ISBN: " + mAdapter.mDataset.get(0).ISBN);
+
+
+
+                }
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+
+            }
+        });
 
 
 
@@ -252,7 +295,12 @@ public class AllBooks extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    System.out.println(position);
+
+                    book_cover.setVisibility(View.VISIBLE);
+                    field_lay.setVisibility(View.VISIBLE);
+
+                    wait_lay.setVisibility(View.INVISIBLE);
+
 
                     book_cover.setImageDrawable(holder.cover.getDrawable());
                     title.setText(mDataset.get(position).title);
@@ -260,29 +308,8 @@ public class AllBooks extends Fragment {
                     publisher.setText(mDataset.get(position).publisher);
                     published_date.setText("Published in: "+ mDataset.get(position).edition_year);
                     ISBN.setText("ISBN: " + mDataset.get(position).ISBN);
-                    extra_tags.setText("Extra tags:"+mDataset.get(position).extra_tags);
-                    book_conditions.setText("Book conditions: " + mDataset.get(position).book_conditions);
-                    //genre.setText(mDataset.get(position).genre);
-
-/*
-                    switch (position){
-
-                        case 0:
-
-                            book_cover.setImageDrawable(holder.cover.getDrawable());
-                            title.setText(holder.title.getText().toString());
-                            author.setText(holder.author.getText().toString());
-
-
-                            break;
-                        case 1:
-
-                            break;
-
-
-                    }
-*/
-
+                    extra_tags.setText("Extra tags\n"+mDataset.get(position).extra_tags);
+                    book_conditions.setText("Book conditions\n" + mDataset.get(position).book_conditions);
 
 
 
@@ -292,12 +319,16 @@ public class AllBooks extends Fragment {
             holder.title.setText(mDataset.get(position).title);
             holder.author.setText(mDataset.get(position).author);
 
-            ImageRequest request = new ImageRequest(mDataset.get(position).image_url,
+            request = new ImageRequest(mDataset.get(position).image_url,
                     new Response.Listener<Bitmap>() {
                         @Override
                         public void onResponse(Bitmap bitmap) {
                             holder.cover.setImageBitmap(bitmap);
                             holder.no_info.setVisibility(View.INVISIBLE);
+
+
+
+
                         }
                     },0,0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
                     new Response.ErrorListener() {
@@ -308,13 +339,20 @@ public class AllBooks extends Fragment {
                             holder.author.setText(mDataset.get(position).author);
                         }
                     });
-// Access the RequestQueue through your singleton class.
+
+            request.setRetryPolicy(new DefaultRetryPolicy(4 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
             Volley.newRequestQueue(context).add(request);
+
+
+
+
 
 
         }
 
-        // Return the size of your dataset (invoked by the layout manager)
+
+
         @Override
         public int getItemCount() {
             return mDataset.size();
@@ -330,9 +368,12 @@ public class AllBooks extends Fragment {
             myDatabase.removeEventListener(postListener_nofirebase);
         } else {
             myDatabase.removeEventListener(postListener_firebase);
-
-
         }
+
+        request.cancel();
+
+
+
     }
 }
 
