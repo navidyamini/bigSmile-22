@@ -19,8 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -380,9 +382,13 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                     }
 
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                    Toast.makeText(MainActivity.this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
 
+                                    if (fragment.isAdded() && fragment.isVisible()) {
+                                        fragment.setFormEnabled(true);
+                                        ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
+                                    }
+                                }
 
                             }
                         }, new Response.ErrorListener() {
@@ -397,11 +403,13 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
                         }
                     }
+
                 });
 
                 if (fragment.isAdded() && fragment.isVisible())
                     fragment.setFormEnabled(false);
 
+                stringRequest.setRetryPolicy(new DefaultRetryPolicy(5 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 Volley.newRequestQueue(getApplicationContext()).add(stringRequest);
 
 

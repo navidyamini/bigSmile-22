@@ -633,6 +633,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
             this.confirmBook.setEnabled(true);
             this.scanBook.setEnabled(true);
+            this.pickImageButton.setEnabled(true);
 
         }
         else {
@@ -648,6 +649,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
             this.confirmBook.setEnabled(false);
             this.scanBook.setEnabled(false);
+            this.pickImageButton.setEnabled(false);
         }
     }
 

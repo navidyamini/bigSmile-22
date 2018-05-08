@@ -17,6 +17,9 @@
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="true"
         >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCtVzXKSU3b3omQVwvUGQ0RSoGggsityuQ" />
 
 
         <activity android:name=".profile.EditProfileActivity"
