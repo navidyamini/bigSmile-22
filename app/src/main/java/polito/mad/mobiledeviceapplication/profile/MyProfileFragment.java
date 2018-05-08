@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.profile.ShowProfileActivity;
 
@@ -37,6 +38,7 @@ public class MyProfileFragment extends Fragment {
 
             }
         });
+        ((MainActivity)getActivity()).toolbar.setTitle(R.string.my_profile);
 
         return rootView;    }
 }

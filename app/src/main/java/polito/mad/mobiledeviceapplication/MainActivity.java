@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
+import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.profile.MyProfileFragment;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigation;
-
+    public android.support.v7.widget.Toolbar toolbar;
 
     @Override
     public void notifyActionBook(final Intent intent) {
@@ -85,9 +88,10 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
             String publisher = intent.getStringExtra("publisher");
             String isbn = intent.getStringExtra("isbn");
             String genre = intent.getStringExtra("genre");
-            final String extra_tags = intent.getStringExtra("extra_tags");
+            String extra_tags = intent.getStringExtra("extra_tags");
+            String image_url = intent.getStringExtra("image_url");
 
-            Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags);
+            Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags, image_url);
 
             final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
@@ -231,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
         mDrawerlayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionbar = getSupportActionBar();
@@ -246,6 +250,12 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                 item.setChecked(true);
                 mDrawerlayout.closeDrawers();
                 switch(item.getItemId()) {
+
+                    case R.id.home:
+
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
+                        return true;
+
                     case R.id.my_profile:
                         // Handle menu click
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyProfileFragment()).commit();
@@ -310,6 +320,9 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
         });
 
 
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+        tx.replace(R.id.content_frame, new HomeFragment());
+        tx.commit();
     }
 
     @Override
@@ -317,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "It is not possible to retrieve data automatically from this book. Please insert its information manually", Toast.LENGTH_LONG).show();
             } else {
 
                 final String isbn = result.getContents();
@@ -337,25 +350,30 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                 // Display the first 500 characters of the response string.
                                 try {
                                     JSONObject object = new JSONObject(response);
-                                    String title = ((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getString("title");
-                                    String publisher = ((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getString("publisher");
-                                    String edition_year = ((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getString("publishedDate");
+                                    String title = ((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optString("title");
+                                    String publisher = ((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optString("publisher");
+                                    String edition_year = ((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optString("publishedDate");
 
                                     StringBuilder genre = new StringBuilder();
 
-                                    for (int i=0;i<((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getJSONArray("categories").length();i++)
-                                        genre.append(((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getJSONArray("categories").get(i).toString() + ",");
+                                    for (int i=0;i<((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optJSONArray("categories").length();i++)
+                                        genre.append(((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optJSONArray("categories").get(i).toString() + ",");
 
 
                                     StringBuilder authors = new StringBuilder();
 
-                                    for (int i=0;i<((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getJSONArray("authors").length();i++)
-                                        authors.append(((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).get("volumeInfo")).getJSONArray("authors").get(i).toString() + ",");
+                                    for (int i=0;i<((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optJSONArray("authors").length();i++)
+                                        authors.append(((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optJSONArray("authors").get(i).toString() + ",");
 
-                                    System.out.println("TITLE " + title);
+                                    String image_url = "";
+                                    try {
+                                         image_url = (((JSONObject) ((JSONObject) ((JSONArray) object.get("items")).get(0)).opt("volumeInfo")).optJSONObject("imageLinks")).optString("thumbnail");
+                                        //for (int i=0;i<((JSONObject)((JSONObject)((JSONArray)object.get("items")).get(0)).opt("volumeInfo")).optJSONArray("imageLinks").length();i++)
+                                    }catch (Exception e){}
+
 
                                     if (fragment.isVisible() && fragment.isAdded()) {
-                                        fragment.setFields(isbn, title, authors.deleteCharAt(authors.length() - 1).toString(), publisher, "", edition_year, genre.deleteCharAt(genre.length() - 1).toString(), "");
+                                        fragment.setFields(isbn, title, authors.deleteCharAt(authors.length() - 1).toString(), publisher, "", edition_year, genre.deleteCharAt(genre.length() - 1).toString(), "",image_url);
                                         fragment.setFormEnabled(true);
                                         ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
 
@@ -397,7 +415,12 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     protected void onStart() {
         super.onStart();
 
+
+
+
     }
+
+
 
     @Override
     protected void onPause() {

@@ -17,22 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/welcome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/roboto_light"
-                android:text="@string/welcome"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp" />
-
             <FrameLayout
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/toolbar"
+                android:elevation="0dp">
 
             </FrameLayout>
 
@@ -42,6 +34,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:elevation="4dp"
+                android:textAlignment="center"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
         </RelativeLayout>
 

@@ -5,21 +5,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="80dp"
-        android:fontFamily="@font/roboto_light"
-        android:text="@string/press_insert_book"
-        android:textAlignment="center"
-        android:textColor="#37474f"
-        android:textSize="30sp" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addBookBtn"
         android:layout_width="wrap_content"

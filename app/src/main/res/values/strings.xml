@@ -79,5 +79,9 @@
     <string name="publisher">Publisher</string>
     <string name="wrong_password">The password is incorrect</string>
     <string name="sign_in">Sign in now!</string>
+    <string name="all_books">All books</string>
+    <string name="lent_books">Lent books</string>
+    <string name="available_books">Available books</string>
+    <string name="home">Home</string>
 </resources>
 

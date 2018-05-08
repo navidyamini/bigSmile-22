@@ -63,7 +63,7 @@ public class AddBookDialogFragment extends DialogFragment{
     private TextInputEditText isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags;
     private TextInputLayout isbn_layout, title_layout, author_layout, publisher_layout, edition_year_layout, book_conditions_layout, genre_layout, extra_tags_layout;
     private TextView title_dialog;
-
+    private String image_url;
     private ImageView book_image;
 
     public interface FragBookObserver {
@@ -85,7 +85,7 @@ public class AddBookDialogFragment extends DialogFragment{
     private ImageView bookImg;
     private Bitmap imageBitmap;
 
-    private boolean permission_bool = false;
+    private boolean permission_bool;
 
 ///////////////////////////////////////////////////////////////
     @Nullable
@@ -93,26 +93,13 @@ public class AddBookDialogFragment extends DialogFragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_book, container, false);
 
-        //add image
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
-        else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
-        else
-            permission_bool = true;
+        permission_bool = false;
+        checkPermissions();
 
         pickImageButton = (FloatingActionButton) v.findViewById(R.id.takeBookImage);
         bookImg = (ImageView) v.findViewById(R.id.bookImage);
 
-        pickImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if (permission_bool)
-                    showPictureDialog();
-
-            }
-        });
 /////////////////////////////////////////////////////////////
 
         form = (RelativeLayout) v.findViewById(R.id.form_layout);
@@ -257,10 +244,10 @@ public class AddBookDialogFragment extends DialogFragment{
 
 
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
 
             } else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
 
             }
 
@@ -313,12 +300,12 @@ public class AddBookDialogFragment extends DialogFragment{
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
 
 
                 } else {
 
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.CAMERA)) {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity(),R.style.CustomDialog);
                         builder.setTitle(getString(R.string.permission));
@@ -330,7 +317,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
                                 dialogInterface.cancel();
                                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                                 }
 
                             }
@@ -365,7 +352,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
                 } else {
 
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity(),R.style.CustomDialog);
                         builder.setTitle(getString(R.string.permission));
@@ -377,7 +364,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
                                 dialogInterface.cancel();
                                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+                                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
                             }
                         });
 
@@ -439,6 +426,7 @@ public class AddBookDialogFragment extends DialogFragment{
                         intent.putExtra("edition_year", edition_year.getText().toString());
                         intent.putExtra("genre", genre.getText().toString());
                         intent.putExtra("extra_tags", extra_tags.getText().toString());
+                        intent.putExtra("image_url",image_url);
 
                         if (imageBitmap!=null)
                             intent.putExtra("book_bitmap",imageBitmap);
@@ -581,6 +569,15 @@ public class AddBookDialogFragment extends DialogFragment{
             }
         });
 
+        pickImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (permission_bool)
+                    showPictureDialog();
+
+            }
+        });
 
 
 
@@ -605,7 +602,7 @@ public class AddBookDialogFragment extends DialogFragment{
         }catch (Exception e){}
     }
 
-    public void setFields(String isbn, String title, String author, String publisher, String book_conditions, String edition_year, String genre, String extra_tags){
+    public void setFields(String isbn, String title, String author, String publisher, String book_conditions, String edition_year, String genre, String extra_tags, String image_url){
 
         this.isbn.setText(isbn);
         this.title.setText(title);
@@ -615,6 +612,8 @@ public class AddBookDialogFragment extends DialogFragment{
         this.edition_year.setText(edition_year);
         this.genre.setText(genre);
         this.extra_tags.setText(extra_tags);
+
+        this.image_url= image_url;
 
     }
 
@@ -759,6 +758,19 @@ public class AddBookDialogFragment extends DialogFragment{
             }
         }
 
+
+
+    }
+
+    private void checkPermissions(){
+
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+        else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE);
+        else
+            permission_bool = true;
 
 
     }

@@ -20,4 +20,10 @@ public class Constants {
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
+
+    public static final int CAMERA = 10;
+    public static final int GALLERY = 11;
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE = 2;
+    public static final int REQUEST_PERMISSION_SETTING = 3;
 }
