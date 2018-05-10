@@ -25,8 +25,6 @@ public class SearchFragment extends Fragment {
                 R.layout.fragment_search, container, false);
 
         ((MainActivity)getActivity()).toolbar.setTitle(R.string.search);
-
-
         getChildFragmentManager().beginTransaction().add(R.id.container,new SearchForm()).commit();
 
 

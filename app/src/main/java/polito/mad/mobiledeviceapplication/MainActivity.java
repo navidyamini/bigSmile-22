@@ -49,9 +49,11 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
+import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.loginsignin.SignupFragment;
@@ -83,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     private NavigationView navigation;
     public android.support.v7.widget.Toolbar toolbar;
 
+
+
+
     @Override
     public void notifySearchRequest(Intent intent) {
         if(Constants.SEARCH_RESULT.equals(intent.getAction())){
@@ -103,35 +108,52 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    ArrayList<Book> book_list = new ArrayList();
-                    Bundle b = new Bundle();
+                    ArrayList<String> book_list = new ArrayList();
+                    HashMap<String,Bundle> h = new HashMap<>();
 
                     if (dataSnapshot.hasChildren()) {
                         for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+
+                            Bundle b = new Bundle();
+
                             for (DataSnapshot books : child.child("books").getChildren()) {
                                 Book book_element = books.getValue(Book.class);
                                 if(book_element!=null) {
-                                    if (title.equals("") ||
-                                            genre.equals("") ||
-                                            publisher.equals("") ||
-                                            author.equals("") ||
+                                    if ((title.equals("") &&
+                                            genre.equals("") &&
+                                            publisher.equals("") &&
+                                            author.equals("")) ||
                                             book_element.title.equals(title) ||
                                             book_element.genre.equals(genre) ||
                                             book_element.publisher.equals(publisher) ||
                                             book_element.author.equals(author))
 
-                                        book_list.add(book_element);
+                                        book_list.add(books.getKey());
                                 }
 
                             }
 
                             if (!book_list.isEmpty()) {
-                                b.putSerializable("book_list", book_list);
+                                b.putStringArrayList("book_list", (ArrayList)book_list.clone());
                                 b.putString("address",child.getValue(User.class).address);
+                                h.put(child.getKey(),b);
                             }
+                            b = null;
                             book_list.clear();
 
                         }
+
+                        Bundle b1 = new Bundle();
+                        b1.putSerializable("arg",h);
+                        SearchMap fragment = new SearchMap();
+                        fragment.setArguments(b1);
+
+                        FragmentTransaction transaction = getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction();
+                        transaction.replace(R.id.container, fragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
@@ -152,18 +174,13 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
 
 
-            SearchMap fragment = new SearchMap();
 
-
-            FragmentTransaction transaction = getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
         }
     }
 
     @Override
     public void notifyActionBook(final Intent intent) {
+
 
         if (Constants.NEW_BOOK.equals(intent.getAction())) {
 

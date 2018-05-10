@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.User;
@@ -111,7 +112,13 @@ public class EditProfileActivity extends AppCompatActivity {
                     name_text_layout.setError(getString(R.string.not_empty));
                 else if (surname_edit.getText().length() == 0)
                     surname_text_layout.setError(getString(R.string.not_empty));
-                else {
+                else if (address_edit.getText().length() == 0)
+                    address_text_layout.setError(getString(R.string.not_empty));
+                else if (zip_edit.getText().length() == 0)
+                    zip_text_layout.setError(getString(R.string.not_empty));
+                
+                else{
+
                     name_text_layout.setErrorEnabled(false);
                     surname_text_layout.setErrorEnabled(false);
 
@@ -138,7 +145,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                     Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
 
-                                    Intent intent = new Intent(getApplicationContext(), ShowProfileActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
@@ -164,7 +171,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                     Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
 
-                                    Intent intent = new Intent(getApplicationContext(), ShowProfileActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();

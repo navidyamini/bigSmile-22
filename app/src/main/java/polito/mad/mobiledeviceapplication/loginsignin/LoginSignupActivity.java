@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.profile.EditProfileActivity;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.User;
 
@@ -284,7 +285,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username).apply();
                                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password",user.password).apply();
 
-                                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                        Intent intent = new Intent(getApplicationContext(),EditProfileActivity.class);
                                         startActivity(intent);
                                         finish();
                                     }
@@ -331,7 +332,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
 
                                     if (task.isSuccessful()){
 
-                                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                        Intent intent = new Intent(getApplicationContext(),EditProfileActivity.class);
                                         startActivity(intent);
                                         finish();
                                     }
@@ -341,10 +342,10 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
 
 
                         } else {
-                            // If sign in fails, display a message to the user.
+
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginSignupActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+
                         }
 
                         // ...
@@ -469,7 +470,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
 
                                             if (task.isSuccessful()){
 
-                                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(),EditProfileActivity.class);
                                                 startActivity(intent);
                                                 finish();
                                            }

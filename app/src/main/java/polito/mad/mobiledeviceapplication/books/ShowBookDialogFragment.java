@@ -1,0 +1,99 @@
+package polito.mad.mobiledeviceapplication.books;
+
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
+
+import polito.mad.mobiledeviceapplication.R;
+
+/**
+ * Created by user on 11/05/2018.
+ */
+
+public class ShowBookDialogFragment extends DialogFragment {
+
+    private TextView title,author,publisher,edition_year,genre,book_conditions,extra_tags,isbn;
+    private ImageView cover;
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_show_book, container, false);
+
+
+
+        title = (TextView) v.findViewById(R.id.title);
+        author = (TextView) v.findViewById(R.id.author);
+        publisher = (TextView) v.findViewById(R.id.publisher);
+        edition_year = (TextView) v.findViewById(R.id.edition_year);
+        genre = (TextView) v.findViewById(R.id.genre);
+        book_conditions = (TextView) v.findViewById(R.id.book_conditions);
+        extra_tags = (TextView) v.findViewById(R.id.extra_tags);
+        isbn = (TextView) v.findViewById(R.id.isbn);
+
+        cover = (ImageView) v.findViewById(R.id.cover);
+
+
+
+        if (getArguments()!=null){
+
+            title.setText(getArguments().getString("title"));
+            author.setText(getArguments().getString("author"));
+            publisher.setText(getArguments().getString("publisher"));
+            edition_year.setText(getArguments().getString("edition_year"));
+            genre.setText(getArguments().getString("genre"));
+            book_conditions.setText(getArguments().getString("book_conditions"));
+            extra_tags.setText(getArguments().getString("extra_tags"));
+            isbn.setText(getArguments().getString("isbn"));
+
+            ImageRequest request = new ImageRequest(getArguments().getString("image_url"),
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            cover.setImageBitmap(bitmap);
+
+
+                        }
+                    },0,0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            cover.setImageResource(R.drawable.blank);
+
+                        }
+                    });
+
+            request.setRetryPolicy(new DefaultRetryPolicy(4 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            Volley.newRequestQueue(getContext()).add(request);
+
+
+
+        }
+
+
+
+        return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getDialog().getWindow()
+                .setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+
+    }
+}

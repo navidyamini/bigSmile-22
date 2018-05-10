@@ -18,6 +18,7 @@ public class Constants {
     public final static String NEW_BOOK = "NEW_BOOK";
     public final static String SCAN_BOOK = "SCAN_BOOK";
     public final static String SEARCH_RESULT = "SEARCH_RESULT";
+    public final static String SHOW_BOOK_DETAILS = "SHOW_BOOK_DETAILS";
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
@@ -27,4 +28,6 @@ public class Constants {
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     public static final int MY_PERMISSIONS_REQUEST_WRITE = 2;
     public static final int REQUEST_PERMISSION_SETTING = 3;
+
+    public static final String GEOCODER_API = "AIzaSyCtVzXKSU3b3omQVwvUGQ0RSoGggsityuQ";
 }

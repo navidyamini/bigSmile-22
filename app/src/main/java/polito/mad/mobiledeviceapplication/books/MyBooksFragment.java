@@ -89,12 +89,15 @@ public class MyBooksFragment extends Fragment {
                 case 0:
                     AllBooks allMyBooksFrag = new AllBooks();
                     return allMyBooksFrag;
+
                 case 1:
-                    AvailableBooks myAvailableBooksFrag = new AvailableBooks();
-                    return myAvailableBooksFrag;
-                case 2:
                     LentBooks myLentBooks = new LentBooks();
                     return myLentBooks;
+
+                case 2:
+                    AvailableBooks myAvailableBooksFrag = new AvailableBooks();
+                    return myAvailableBooksFrag;
+
                 default:
                     return null;
             }
