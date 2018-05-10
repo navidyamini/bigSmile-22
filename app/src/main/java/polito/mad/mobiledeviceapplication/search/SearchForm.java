@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
 
 public class SearchForm extends Fragment {
     private Button searchButton;
+    private TextInputEditText author,title,genre,publisher;
 
     public interface FragSearchObserver {
         void notifySearchRequest(Intent intent);
@@ -33,6 +35,11 @@ public class SearchForm extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_search_form, container, false);
 
+        author = (TextInputEditText) rootView.findViewById(R.id.author);
+        title = (TextInputEditText) rootView.findViewById(R.id.title);
+        genre = (TextInputEditText) rootView.findViewById(R.id.genre);
+        publisher = (TextInputEditText) rootView.findViewById(R.id.publisher);
+
         searchButton = (Button) rootView.findViewById(R.id.button_search);
         searchButton.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -42,6 +49,10 @@ public class SearchForm extends Fragment {
                 if (a instanceof SearchForm.FragSearchObserver) {
                     SearchForm.FragSearchObserver observer = (SearchForm.FragSearchObserver) a;
                     Intent intent = new Intent(Constants.SEARCH_RESULT);
+                    intent.putExtra("author",author.getText().toString());
+                    intent.putExtra("title",title.getText().toString());
+                    intent.putExtra("genre",genre.getText().toString());
+                    intent.putExtra("publisher",publisher.getText().toString());
                     observer.notifySearchRequest(intent);
                 }
 

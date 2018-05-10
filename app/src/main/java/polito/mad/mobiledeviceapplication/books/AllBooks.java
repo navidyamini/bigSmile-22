@@ -95,8 +95,8 @@ public class AllBooks extends Fragment {
                     book_cover.setVisibility(View.VISIBLE);
                     field_lay.setVisibility(View.VISIBLE);
 
-                   /* if (((ImageView)view.findViewById(R.id.cover)).getDrawable()!=null)
-                        book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());*/
+                    if (((ImageView)view.findViewById(R.id.cover)).getDrawable()!=null)
+                        book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());
 /*                    else
                         book_cover.setImageResource(R.drawable.no_cover);*/
 
@@ -328,6 +328,7 @@ public class AllBooks extends Fragment {
                         public void onResponse(Bitmap bitmap) {
                             holder.cover.setImageBitmap(bitmap);
                             holder.no_info.setVisibility(View.INVISIBLE);
+                            book_cover.setImageBitmap(bitmap);
 
 
 
@@ -369,9 +370,11 @@ public class AllBooks extends Fragment {
         super.onDestroyView();
 
             if (((MainActivity) getActivity()).mAuth.getCurrentUser() == null) {
-                myDatabase.removeEventListener(postListener_nofirebase);
+                if (postListener_nofirebase!=null)
+                    myDatabase.removeEventListener(postListener_nofirebase);
             } else {
-                myDatabase.removeEventListener(postListener_firebase);
+                if (postListener_firebase!=null)
+                    myDatabase.removeEventListener(postListener_firebase);
             }
 
             if (request != null)

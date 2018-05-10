@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -31,8 +32,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
@@ -57,6 +62,7 @@ import polito.mad.mobiledeviceapplication.search.SearchMap;
 import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
+import polito.mad.mobiledeviceapplication.utils.User;
 
 /**
  * Created by user on 22/04/2018.
@@ -80,8 +86,77 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     @Override
     public void notifySearchRequest(Intent intent) {
         if(Constants.SEARCH_RESULT.equals(intent.getAction())){
+
+
+            if (mDatabase==null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            final String title = intent.getStringExtra("title");
+            final String author = intent.getStringExtra("author");
+            final String genre = intent.getStringExtra("genre");
+            final String publisher = intent.getStringExtra("publisher");
+
+
+
+
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    ArrayList<Book> book_list = new ArrayList();
+                    Bundle b = new Bundle();
+
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                            for (DataSnapshot books : child.child("books").getChildren()) {
+                                Book book_element = books.getValue(Book.class);
+                                if(book_element!=null) {
+                                    if (title.equals("") ||
+                                            genre.equals("") ||
+                                            publisher.equals("") ||
+                                            author.equals("") ||
+                                            book_element.title.equals(title) ||
+                                            book_element.genre.equals(genre) ||
+                                            book_element.publisher.equals(publisher) ||
+                                            book_element.author.equals(author))
+
+                                        book_list.add(book_element);
+                                }
+
+                            }
+
+                            if (!book_list.isEmpty()) {
+                                b.putSerializable("book_list", book_list);
+                                b.putString("address",child.getValue(User.class).address);
+                            }
+                            book_list.clear();
+
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    Log.w("firebase", databaseError.toException());
+
+                }
+            };
+
+            mDatabase.addListenerForSingleValueEvent(postListener);
+
+
+
+
+            SearchMap fragment = new SearchMap();
+
+
             FragmentTransaction transaction = getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, new SearchMap());
+            transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
         }
@@ -302,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
                         if (mAuth.getCurrentUser()!=null){
 
-                            if (mDatabase==null)
+/*                            if (mDatabase==null)
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -317,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                 }
                             });
 
-                        } else {
+                        } else {*/
 
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(getApplicationContext(), LoginSignupActivity.class);

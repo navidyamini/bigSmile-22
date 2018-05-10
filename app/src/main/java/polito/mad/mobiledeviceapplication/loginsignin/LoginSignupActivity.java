@@ -423,7 +423,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
 
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(final PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -439,36 +439,58 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
 
-                            FirebaseUser user = task.getResult().getUser();
+                            final FirebaseUser user = task.getResult().getUser();
 
 
                             if (mDatabase==null)
                                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
-                            User new_user = new User("", "","","","",user.getPhoneNumber(),"","","","");
+                            final User new_user = new User("", "","","","",user.getPhoneNumber(),"","","","");
 
-                            mDatabase.child("users").child(user.getUid()).setValue(new_user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            ValueEventListener eventListener = new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                    if (task.isSuccessful()){
-
-                                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                    if (dataSnapshot.hasChildren()) {
+                                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                                            User user_element = child.getValue(User.class);
+                                            if (user_element.phone.equals(user.getPhoneNumber())) {
+                                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                                return;
+                                            }
+                                        }
                                     }
 
+                                    mDatabase.child("users").child(user.getUid()).setValue(new_user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()){
+
+                                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                           }
+                                        }
+                                    });
                                 }
-                            });
 
 
-                            // ...
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            };
+                            mDatabase.addListenerForSingleValueEvent(eventListener);
+
+
+
                         } else {
-                            // Sign in failed, display a message and update the UI
+
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-
                                 Toast.makeText(getApplicationContext(),getString(R.string.invalid_code),Toast.LENGTH_LONG).show();
 
                             }
