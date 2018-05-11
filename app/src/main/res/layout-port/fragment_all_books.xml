@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0.6"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/back111" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/book_list"
@@ -9,23 +20,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/back4"
         android:scrollbarAlwaysDrawHorizontalTrack="true" />
 
     <RelativeLayout
         android:id="@+id/detail_lay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/book_list"
         android:layout_alignParentStart="true">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.6"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/back3" />
 
         <RelativeLayout
             android:id="@+id/image_lay"

@@ -21,11 +21,11 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.6"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/back3" />
+            app:srcCompat="@drawable/back111" />
 
         <RelativeLayout
             android:id="@+id/image_lay"

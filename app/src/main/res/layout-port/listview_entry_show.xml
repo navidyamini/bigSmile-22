@@ -28,7 +28,7 @@
         android:layout_toRightOf="@+id/icon_entry"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/textColorEntryList"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/description_value"

@@ -18,10 +18,23 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageLayout">
 
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="Insert filter criteria to apply for the search phase"
+                android:textSize="16sp" />
+
             <RelativeLayout
                 android:id="@+id/name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/info"
+                android:layout_marginTop="10dp"
                 android:focusableInTouchMode="false">
 
                 <android.support.design.widget.TextInputLayout
@@ -159,7 +172,7 @@
                         android:layout_alignStart="@+id/genre_text_input_layout"
                         android:fontFamily="@font/roboto_light"
                         android:hint="@string/genre"
-                        android:imeOptions="actionUnspecified|actionNext"
+                        android:imeOptions="actionUnspecified|actionDone"
                         android:inputType="text|textPostalAddress"
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
@@ -178,8 +191,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/genre_layout"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="20dp">
 
 
                 <Button
@@ -191,9 +204,8 @@
                     android:layout_marginStart="30dp"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="@color/colorPrimaryDark"
-                    android:paddingLeft="150dp"
-                    android:paddingRight="10dp"
 
+                    android:fontFamily="@font/roboto_light"
                     android:text="Search" />
 
                 <Button
@@ -205,8 +217,7 @@
                     android:layout_marginEnd="28dp"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="@color/colorPrimaryDark"
-                    android:paddingLeft="150dp"
-                    android:paddingRight="10dp"
+                    android:fontFamily="@font/roboto_light"
                     android:text="Clear" />
             </RelativeLayout>
 

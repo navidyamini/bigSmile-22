@@ -27,6 +27,7 @@ import polito.mad.mobiledeviceapplication.R;
 public class ShowBookDialogFragment extends DialogFragment {
 
     private TextView title,author,publisher,edition_year,genre,book_conditions,extra_tags,isbn;
+    private TextView name_surname;
     private ImageView cover;
     @Nullable
     @Override
@@ -46,18 +47,22 @@ public class ShowBookDialogFragment extends DialogFragment {
 
         cover = (ImageView) v.findViewById(R.id.cover);
 
+        name_surname = (TextView) v.findViewById(R.id.name_surname);
+
 
 
         if (getArguments()!=null){
 
             title.setText(getArguments().getString("title"));
-            author.setText(getArguments().getString("author"));
-            publisher.setText(getArguments().getString("publisher"));
-            edition_year.setText(getArguments().getString("edition_year"));
-            genre.setText(getArguments().getString("genre"));
-            book_conditions.setText(getArguments().getString("book_conditions"));
-            extra_tags.setText(getArguments().getString("extra_tags"));
-            isbn.setText(getArguments().getString("isbn"));
+            author.setText("Author: " + getArguments().getString("author"));
+            publisher.setText("Publisher: " + getArguments().getString("publisher"));
+            edition_year.setText("Edition year: " + getArguments().getString("edition_year"));
+            genre.setText("Genre: " + getArguments().getString("genre"));
+            book_conditions.setText("Conditions: " + getArguments().getString("book_conditions"));
+            extra_tags.setText("Extra info: " +getArguments().getString("extra_tags"));
+            isbn.setText("ISBN: " +getArguments().getString("isbn"));
+
+            name_surname.setText("Owned by: " + getArguments().getString("name") + " " + getArguments().getString("surname"));
 
             ImageRequest request = new ImageRequest(getArguments().getString("image_url"),
                     new Response.Listener<Bitmap>() {

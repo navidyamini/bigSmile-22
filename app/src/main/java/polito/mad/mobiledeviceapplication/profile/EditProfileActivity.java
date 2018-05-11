@@ -108,14 +108,25 @@ public class EditProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_save:
 
-                if (name_edit.getText().length() == 0)
+                if (name_edit.getText().length() == 0) {
                     name_text_layout.setError(getString(R.string.not_empty));
-                else if (surname_edit.getText().length() == 0)
+                    name_text_layout.requestFocus();
+                }
+                else if (surname_edit.getText().length() == 0) {
                     surname_text_layout.setError(getString(R.string.not_empty));
-                else if (address_edit.getText().length() == 0)
+                    surname_text_layout.requestFocus();
+
+                }
+                else if (address_edit.getText().length() == 0) {
                     address_text_layout.setError(getString(R.string.not_empty));
-                else if (zip_edit.getText().length() == 0)
+                    address_text_layout.requestFocus();
+
+                }
+                else if (zip_edit.getText().length() == 0) {
                     zip_text_layout.setError(getString(R.string.not_empty));
+                    zip_text_layout.requestFocus();
+
+                }
                 
                 else{
 

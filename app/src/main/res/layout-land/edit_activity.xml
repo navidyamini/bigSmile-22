@@ -59,7 +59,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -106,7 +106,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -155,7 +155,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -202,7 +202,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -248,7 +248,7 @@
                         android:inputType="text|textMultiLine"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -295,7 +295,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -344,7 +344,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -396,7 +396,7 @@
                         android:singleLine="true"
                         android:textColor="@color/textColorEntryList"
                         android:textColorHint="@color/textColorEntryList"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         app:hintTextAppearance="@android:style/TextAppearance.Medium" />
                 </android.support.design.widget.TextInputLayout>
 

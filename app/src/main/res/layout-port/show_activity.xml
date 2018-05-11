@@ -4,49 +4,21 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_show"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleMarginStart="30dp">
+
+    </android.support.v7.widget.Toolbar>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ListView
-            android:id="@+id/list_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/imageLayout"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="14dp" />
-
-        <RelativeLayout
-            android:id="@+id/waitLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/imageLayout"
-            android:background="#b30097a7"
-            android:visibility="invisible">
-
-            <ProgressBar
-                android:id="@+id/waitProgress"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:indeterminateTint="@android:color/white" />
-
-            <TextView
-                android:id="@+id/waitMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/waitProgress"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="@font/roboto_light"
-                android:text="@string/fetching_data"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/imageLayout"
@@ -93,19 +65,47 @@
                 android:textSize="24sp" />
         </RelativeLayout>
 
+        <ListView
+            android:id="@+id/list_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/imageLayout"
+            android:layout_marginTop="-30dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="14dp" />
+
+        <RelativeLayout
+            android:id="@+id/waitLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/back111"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:id="@+id/waitProgress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminateTint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/waitMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/waitProgress"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="@string/fetching_data"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
 
     </RelativeLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar_show"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleMarginStart="30dp">
-
-    </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>

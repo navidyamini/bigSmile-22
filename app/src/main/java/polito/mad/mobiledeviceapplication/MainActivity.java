@@ -58,6 +58,7 @@ import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.loginsignin.SignupFragment;
 import polito.mad.mobiledeviceapplication.profile.MyProfileFragment;
+import polito.mad.mobiledeviceapplication.profile.ShowProfileActivity;
 import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
 import polito.mad.mobiledeviceapplication.search.SearchMap;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    ArrayList<String> book_list = new ArrayList();
+                    ArrayList<HashMap<String,Object>> book_list = new ArrayList();
                     HashMap<String,Bundle> h = new HashMap<>();
 
                     if (dataSnapshot.hasChildren()) {
@@ -128,15 +129,14 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                                             book_element.publisher.equals(publisher) ||
                                             book_element.author.equals(author))
 
-                                        book_list.add(books.getKey());
+                                        book_list.add((HashMap)book_element.toMap());
                                 }
 
                             }
 
                             if (!book_list.isEmpty()) {
                                 b.putStringArrayList("book_list", (ArrayList)book_list.clone());
-                                b.putString("address",child.getValue(User.class).address);
-                                b.putString("user_id",child.getKey());
+                                b.putSerializable("user",(HashMap)child.getValue(User.class).toMap());
                                 h.put(child.getKey(),b);
                             }
                             b = null;
@@ -365,8 +365,11 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                         return true;
 
                     case R.id.my_profile:
-                        // Handle menu click
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyProfileFragment()).commit();
+
+                        Intent intent = new Intent(getApplicationContext(), ShowProfileActivity.class);
+                        startActivity(intent);
+
+                        //getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyProfileFragment()).commit();
 
                         return true;
                     case R.id.my_books:

@@ -56,6 +56,7 @@ import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.SignupFragment;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
+import polito.mad.mobiledeviceapplication.utils.User;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -69,7 +70,7 @@ public class SearchMap extends Fragment {
     private HashMap<String,Bundle> entries;
     private GoogleMap map;
     private DatabaseReference myDatabase;
-    private ArrayList<Book> book_list;
+    private ArrayList<Bundle> book_list;
     private MarkerAdapter myAdapter;
     private RecyclerView book_view;
     private LinearLayoutManager mLayoutManager;
@@ -87,9 +88,6 @@ public class SearchMap extends Fragment {
         if (b!=null)
               entries = (HashMap<String,Bundle>) b.getSerializable("arg");
 
-
-
-
         book_view = (RecyclerView) v.findViewById(R.id.book_list);
 
         book_list = new ArrayList<>();
@@ -106,12 +104,13 @@ public class SearchMap extends Fragment {
 
                 map = googleMap;
 
-                for (String key : entries.keySet()){
-                    retrieveLatLng(entries.get(key).getString("address"), entries.get(key).getStringArrayList("book_list"));
 
+                for (String key : entries.keySet()){// key is user_id
 
+                    System.out.println("ADDRESS " + ((HashMap)entries.get(key).get("user")).get("address").toString());
+                    System.out.println("BOOK " + ((ArrayList)entries.get(key).get("book_list")));
+                    retrieveLatLng(entries.get(key),key);
                 }
-
 
                 map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
@@ -120,23 +119,68 @@ public class SearchMap extends Fragment {
 
                         book_list.clear();
 
-                        final ArrayList<String> books = (ArrayList<String>) marker.getTag();
-                        System.out.println(books);
+                        final Bundle b = ((Bundle)marker.getTag());
+                        final ArrayList<HashMap<String,Object>> books = (ArrayList) b.getSerializable("book_list");
+                        final String user_id = b.getString("user_id");
+                        final HashMap<String,Object> user_info = (HashMap) b.getSerializable("user");
 
-                        myDatabase = FirebaseDatabase.getInstance().getReference();
 
-                        ValueEventListener eventListener = new ValueEventListener() {
+                        for (HashMap<String,Object> book : books){
+
+                            Bundle b1 = new Bundle();
+
+                            b1.putString("user_id",user_id);
+                            b1.putString("title",book.get("title").toString());
+                            b1.putString("author",book.get("author").toString());
+                            b1.putString("publisher",book.get("publisher").toString());
+                            b1.putString("edition_year",book.get("edition_year").toString());
+                            b1.putString("genre",book.get("genre").toString());
+                            b1.putString("book_conditions",book.get("book_conditions").toString());
+                            b1.putString("extra_tags",book.get("extra_tags").toString());
+                            b1.putString("isbn",book.get("isbn").toString());
+
+                            if (book.get("image_url")!=null)
+                                b1.putString("image_url",book.get("image_url").toString());
+                            b1.putString("name",user_info.get("name").toString());
+                            b1.putString("surname",user_info.get("surname").toString());
+
+                            book_list.add(b1);
+                            b1 = null;
+
+                        }
+
+
+
+                        myAdapter.notifyDataSetChanged();
+
+
+                        /*ValueEventListener eventListener = new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                                Bundle b = new Bundle();
                                 if (dataSnapshot.hasChildren()) {
                                     for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
 
                                         for (DataSnapshot book : child.child("books").getChildren()) {
 
-                                            if (books.contains(book.getKey()))
-                                                book_list.add(book.getValue(Book.class));
+                                            if (books.contains(book.getKey())) {
+                                                b.putString("user_id",user_id);
+                                                b.putString("title",book.getValue(Book.class).title);
+                                                b.putString("author",book.getValue(Book.class).author);
+                                                b.putString("publisher",book.getValue(Book.class).publisher);
+                                                b.putString("edition_year",book.getValue(Book.class).edition_year);
+                                                b.putString("genre",book.getValue(Book.class).genre);
+                                                b.putString("book_conditions",book.getValue(Book.class).book_conditions);
+                                                b.putString("extra_tags",book.getValue(Book.class).extra_tags);
+                                                b.putString("isbn",book.getValue(Book.class).ISBN);
+                                                b.putString("image_url",book.getValue(Book.class).image_url);
+                                                b.putString("name",user_info.get("name").toString());
+                                                b.putString("surname",user_info.get("surname").toString());
 
+
+                                                book_list.add(b);
+                                            }
                                         }
 
 
@@ -157,7 +201,7 @@ public class SearchMap extends Fragment {
                             }
                         };
 
-                        myDatabase.addListenerForSingleValueEvent(eventListener);
+                        myDatabase.addListenerForSingleValueEvent(eventListener);*/
 
 
 
@@ -182,10 +226,9 @@ public class SearchMap extends Fragment {
         return v;
     }
 
-    private void retrieveLatLng(String address, final List<String> books){
+    private void  retrieveLatLng(final Bundle entry, final String user_id){
 
-        System.out.println(address);
-        String url ="https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key="+ Constants.GEOCODER_API;
+        String url ="https://maps.googleapis.com/maps/api/geocode/json?address="+((HashMap)entry.get("user")).get("address").toString()+"&key="+ Constants.GEOCODER_API;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url.replace(" ","+"),
                 new Response.Listener<String>() {
@@ -206,12 +249,16 @@ public class SearchMap extends Fragment {
 
                                 LatLng latLng = new LatLng(lat,lng);
                                 Marker marker = map.addMarker(new MarkerOptions().position(latLng));
-                                marker.setTag(books);
+                                Bundle b = new Bundle();
+                                b.putSerializable("user",(HashMap)entry.get("user"));
+                                b.putStringArrayList("book_list",((ArrayList)entry.get("book_list")));
+                                b.putString("user_id",user_id);
+                                marker.setTag((Bundle)b.clone());
 
 
 
                                 CameraUpdate center= CameraUpdateFactory.newLatLng(latLng);
-                                CameraUpdate zoom=CameraUpdateFactory.zoomTo(6);
+                                CameraUpdate zoom=CameraUpdateFactory.zoomTo(5);
 
                                 map.moveCamera(center);
                                 map.animateCamera(zoom);
@@ -245,7 +292,7 @@ public class SearchMap extends Fragment {
 
     class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.ViewHolder> {
 
-        private ArrayList<Book> mDataset;
+        private ArrayList<Bundle> mDataset;
         private Context context;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -269,7 +316,7 @@ public class SearchMap extends Fragment {
 
 
 
-        public MarkerAdapter(Context context, ArrayList<Book> myDataset) {
+        public MarkerAdapter(Context context, ArrayList<Bundle> myDataset) {
             mDataset = myDataset;
             this.context = context;
         }
@@ -296,21 +343,26 @@ public class SearchMap extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    Bundle b = new Bundle();
-                    b.putString("title",mDataset.get(position).title);
-                    b.putString("author",mDataset.get(position).author);
-                    b.putString("edition_year",mDataset.get(position).edition_year);
-                    b.putString("book_conditions",mDataset.get(position).book_conditions);
-                    b.putString("publisher",mDataset.get(position).publisher);
-                    b.putString("isbn",mDataset.get(position).ISBN);
-                    b.putString("genre",mDataset.get(position).genre);
-                    b.putString("extra_tags",mDataset.get(position).extra_tags);
-                    b.putString("image_url",mDataset.get(position).image_url);
+
+                    //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+                Bundle b = new Bundle();
+                b.putString("title",mDataset.get(position).getString("title"));
+                b.putString("author",mDataset.get(position).getString("author"));
+                b.putString("edition_year",mDataset.get(position).getString("edition_year"));
+                b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
+                b.putString("publisher",mDataset.get(position).getString("publisher"));
+                b.putString("isbn",mDataset.get(position).getString("isbn"));
+                b.putString("genre",mDataset.get(position).getString("genre"));
+                b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
+                b.putString("image_url",mDataset.get(position).getString("image_url"));
+                b.putString("name",mDataset.get(position).getString("name"));
+                b.putString("surname",mDataset.get(position).getString("surname"));
+
 
 
                     ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
-                    showBookDialogFragment.setArguments(b);
-                    showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+                showBookDialogFragment.setArguments(b);
+                showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
 
 
 
@@ -319,11 +371,11 @@ public class SearchMap extends Fragment {
             });
 
 
-            holder.title.setText(mDataset.get(position).title);
-            holder.author.setText(mDataset.get(position).author);
+            holder.title.setText(mDataset.get(position).getString("title"));
+            holder.author.setText(mDataset.get(position).getString("author"));
 
-            if (mDataset.get(position).image_url!=null) {
-                ImageRequest request = new ImageRequest(mDataset.get(position).image_url,
+            if (mDataset.get(position).getString("image_url")!=null) {
+                ImageRequest request = new ImageRequest(mDataset.get(position).getString("image_url"),
                         new Response.Listener<Bitmap>() {
                             @Override
                             public void onResponse(Bitmap bitmap) {
@@ -337,8 +389,8 @@ public class SearchMap extends Fragment {
                             public void onErrorResponse(VolleyError error) {
                                 holder.cover.setImageResource(R.drawable.blank);
                                 holder.no_info.setVisibility(View.VISIBLE);
-                                holder.title.setText(mDataset.get(position).title);
-                                holder.author.setText(mDataset.get(position).author);
+                                holder.title.setText(mDataset.get(position).getString("title"));
+                                holder.author.setText(mDataset.get(position).getString("author"));
                             }
                         });
 
@@ -349,8 +401,8 @@ public class SearchMap extends Fragment {
 
                 holder.cover.setImageResource(R.drawable.blank);
                 holder.no_info.setVisibility(View.VISIBLE);
-                holder.title.setText(mDataset.get(position).title);
-                holder.author.setText(mDataset.get(position).author);
+                holder.title.setText(mDataset.get(position).getString("title"));
+                holder.author.setText(mDataset.get(position).getString("author"));
 
 
             }

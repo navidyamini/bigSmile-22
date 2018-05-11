@@ -113,16 +113,6 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         arrayList = new ArrayList<>();
 
-
-
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         retrieveProfileImage(profileImage);
 
 
@@ -238,6 +228,17 @@ public class ShowProfileActivity extends AppCompatActivity {
             mDatabase.addListenerForSingleValueEvent(postListener);
 
         }
+
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
     }
 
     @Override
