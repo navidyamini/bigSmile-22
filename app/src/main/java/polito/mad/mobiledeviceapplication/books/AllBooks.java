@@ -96,9 +96,7 @@ public class AllBooks extends Fragment {
                     field_lay.setVisibility(View.VISIBLE);
 
                     if (((ImageView)view.findViewById(R.id.cover)).getDrawable()!=null)
-                        book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());
-/*                    else
-                        book_cover.setImageResource(R.drawable.no_cover);*/
+                              book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());
 
                     title.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).title);
                     author.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).author);
@@ -141,7 +139,6 @@ public class AllBooks extends Fragment {
 
                                     books.add(book.getValue(Book.class));
 
-                                    //wait_lay.setVisibility(View.INVISIBLE);
                                 }
 
                                 mAdapter.notifyDataSetChanged();
@@ -159,10 +156,6 @@ public class AllBooks extends Fragment {
                     } else {
 
                         wait_lay.setVisibility(View.INVISIBLE);
-                        //wait_message.setText(getString(R.string.try_again));
-                        //wait_progress.setVisibility(View.INVISIBLE);
-                        //Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();*/
-
 
                     }
 
@@ -263,8 +256,6 @@ public class AllBooks extends Fragment {
 
 
         }
-
-
 
 
         public AllBooksAdapter(Context context, ArrayList<Book> myDataset) {

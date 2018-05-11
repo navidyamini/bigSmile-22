@@ -188,8 +188,8 @@
                 android:id="@+id/button_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
                 android:layout_below="@+id/genre_layout"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="20dp">
@@ -199,26 +199,20 @@
                     android:id="@+id/button_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
+                    android:layout_alignParentStart="false"
                     android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+
+                    android:layout_marginBottom="10dp"
                     android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="@color/colorPrimaryDark"
-
                     android:fontFamily="@font/roboto_light"
                     android:text="Search" />
 
-                <Button
-                    android:id="@+id/button_clear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="28dp"
-                    android:background="@drawable/rounded_button"
-                    android:backgroundTint="@color/colorPrimaryDark"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="Clear" />
             </RelativeLayout>
 
         </RelativeLayout>

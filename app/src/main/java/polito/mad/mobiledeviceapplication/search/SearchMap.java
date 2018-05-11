@@ -31,6 +31,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -247,6 +249,8 @@ public class SearchMap extends Fragment {
                                 double lat = (double)((JSONObject)((JSONObject)((JSONObject)((JSONArray)res.opt("results")).get(0)).opt("geometry")).opt("location")).opt("lat");
                                 double lng = (double)((JSONObject)((JSONObject)((JSONObject)((JSONArray)res.opt("results")).get(0)).opt("geometry")).opt("location")).opt("lng");
 
+                                //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.baseline_person_pin_24);
+
                                 LatLng latLng = new LatLng(lat,lng);
                                 Marker marker = map.addMarker(new MarkerOptions().position(latLng));
                                 Bundle b = new Bundle();
@@ -357,7 +361,6 @@ public class SearchMap extends Fragment {
                 b.putString("image_url",mDataset.get(position).getString("image_url"));
                 b.putString("name",mDataset.get(position).getString("name"));
                 b.putString("surname",mDataset.get(position).getString("surname"));
-
 
 
                     ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();

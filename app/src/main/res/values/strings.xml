@@ -50,7 +50,7 @@
 
     <string name="my_profile">My Profile</string>
     <string name="my_books">My Books</string>
-    <string name="exit">Exit</string>
+    <string name="exit">Log out</string>
     <string name="setting">Setting</string>
     <string name="search">Search</string>
     <string name="open">Open</string>

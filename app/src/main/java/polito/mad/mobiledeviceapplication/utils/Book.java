@@ -20,10 +20,11 @@ public class Book {
     public String genre;
     public String extra_tags;
     public String image_url;
+    public String insert_time;
     public Book() {
     }
 
-    public Book(String ISBN, String title, String author, String publisher, String edition_year, String book_conditions, String genre, String extra_tags, String image_url) {
+    public Book(String ISBN, String title, String author, String publisher, String edition_year, String book_conditions, String genre, String extra_tags, String image_url, String insert_time) {
         this.ISBN = ISBN;
         this.title = title;
         this.author = author;
@@ -33,6 +34,7 @@ public class Book {
         this.genre = genre;
         this.extra_tags = extra_tags;
         this.image_url = image_url;
+        this.insert_time = insert_time;
     }
     @Exclude
     public Map<String, Object> toMap() {
@@ -46,6 +48,7 @@ public class Book {
         result.put("genre", this.genre);
         result.put("extra_tags",this.extra_tags);
         result.put("image_url",this.image_url);
+        result.put("insert_time",this.insert_time);
 
         return result;
     }

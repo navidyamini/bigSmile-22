@@ -22,7 +22,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
  */
 
 public class SearchForm extends Fragment {
-    private Button searchButton,clearButton;
+    private Button searchButton;
     private TextInputEditText author,title,genre,publisher;
 
     public interface FragSearchObserver {
@@ -60,19 +60,6 @@ public class SearchForm extends Fragment {
         }));
 
 
-        clearButton = (Button) rootView.findViewById(R.id.button_clear);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                author.setText("");
-                title.setText("");
-                genre.setText("");
-                publisher.setText("");
-
-                author.requestFocus();
-            }
-        });
 
         return rootView;
     }

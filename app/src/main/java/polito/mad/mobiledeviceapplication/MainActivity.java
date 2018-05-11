@@ -1,8 +1,10 @@
 package polito.mad.mobiledeviceapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -10,7 +12,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -49,6 +53,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
@@ -71,7 +76,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -87,7 +92,76 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     public android.support.v7.widget.Toolbar toolbar;
 
 
+    @Override
+    public void searchBooks(Intent intent) {
 
+        if (Constants.SEARCH_PREFS.equals(intent.getAction())){
+
+            if (mDatabase==null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    ArrayList<HashMap<String, Object>> book_list = new ArrayList();
+                    HashMap<String, Bundle> h = new HashMap<>();
+
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+
+                            Bundle b = new Bundle();
+
+                            for (DataSnapshot books : child.child("books").getChildren()) {
+                                Book book_element = books.getValue(Book.class);
+                                if (book_element != null)
+                                    //if (book_element.genre.equals(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getStringSet("pref_genre",new android.support.v4.util.ArraySet<String>())))
+                                        book_list.add((HashMap) book_element.toMap());
+                                }
+
+
+                            if (!book_list.isEmpty()) {
+                                b.putStringArrayList("book_list", (ArrayList) book_list.clone());
+                                b.putSerializable("user", (HashMap) child.getValue(User.class).toMap());
+                                h.put(child.getKey(), b);
+                            }
+                            b = null;
+                            book_list.clear();
+
+                        }
+
+                        Bundle b1 = new Bundle();
+                        b1.putSerializable("arg", h);
+
+                        HomeFragment f= (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+                        if (f!=null && f.isVisible()) {
+                            f.updatePrefs(b1);
+                        }
+
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                        Log.w("firebase", databaseError.toException());
+
+                    }
+                };
+
+            mDatabase.addListenerForSingleValueEvent(postListener);
+
+
+
+
+            }
+
+    }
 
     @Override
     public void notifySearchRequest(Intent intent) {
@@ -198,8 +272,9 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
             String genre = intent.getStringExtra("genre");
             String extra_tags = intent.getStringExtra("extra_tags");
             String image_url = intent.getStringExtra("image_url");
+            String insert_time = String.valueOf(new Date().getTime());
 
-            Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags, image_url);
+            Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags, image_url,insert_time);
 
             final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
@@ -389,38 +464,50 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                         return true;
                     case R.id.exit:
 
-                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
-                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username","").apply();
-                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password","").apply();
+                        Handler h = new Handler();
+                        h.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.Theme_AppCompat_Light_Dialog);
+                                builder.setMessage("Sei sicuro di voler uscire dall'app?");
+                                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
+                                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username","").apply();
+                                        getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("password","").apply();
 
-                        if (mAuth==null)
-                            mAuth = FirebaseAuth.getInstance();
+                                        if (mAuth==null)
+                                            mAuth = FirebaseAuth.getInstance();
 
-                        if (mAuth.getCurrentUser()!=null){
+                                        if (mAuth.getCurrentUser()!=null){
 
-/*                            if (mDatabase==null)
-                                mDatabase = FirebaseDatabase.getInstance().getReference();
 
-                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                            FirebaseAuth.getInstance().signOut();
+                                            Intent i = new Intent(getApplicationContext(), LoginSignupActivity.class);
+                                            startActivity(i);
+                                            finish();
 
-                                    FirebaseAuth.getInstance().signOut();
-                                    Intent i = new Intent(getApplicationContext(), LoginSignupActivity.class);
-                                    startActivity(i);
-                                    finish();
+                                        }
+                                    }
+                                });
 
-                                }
-                            });
+                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
 
-                        } else {*/
 
-                            FirebaseAuth.getInstance().signOut();
-                            Intent i = new Intent(getApplicationContext(), LoginSignupActivity.class);
-                            startActivity(i);
-                            finish();
+                                builder.create().show();
 
-                        }
+                            }
+                        },400);
+
+
+
+
 
                         return true;
                     default:
@@ -436,6 +523,9 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
         tx.commit();
     }
 
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -448,8 +538,9 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
                 final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
 
-                if (fragment.isVisible() && fragment.isAdded())
-                    ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_retrieve));
+                if (fragment!=null)
+                    if (fragment.isVisible() && fragment.isAdded())
+                        ((TextSwitcher)fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_retrieve));
 
 
 
@@ -490,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
 
                                     }
 
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
                                     Toast.makeText(MainActivity.this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
 
                                     if (fragment.isAdded() && fragment.isVisible()) {
@@ -562,7 +653,11 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     @Override
     public void onBackPressed() {
 
-        moveTaskToBack(true);
+
+        if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getClass().equals(HomeFragment.class))
+            moveTaskToBack(true);
+        else
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
 
     }
 
@@ -570,10 +665,13 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mToggle.onOptionsItemSelected(item)){
             if (mDrawerlayout.isDrawerOpen(Gravity.LEFT))
-                mDrawerlayout.closeDrawer(Gravity.LEFT);
+                if (item.getItemId()!=R.id.exit)
+                    mDrawerlayout.closeDrawer(Gravity.LEFT);
             else
                 mDrawerlayout.openDrawer(Gravity.LEFT);
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
