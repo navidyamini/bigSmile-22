@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements AddBookDialogFrag
                             if (!book_list.isEmpty()) {
                                 b.putStringArrayList("book_list", (ArrayList)book_list.clone());
                                 b.putString("address",child.getValue(User.class).address);
+                                b.putString("user_id",child.getKey());
                                 h.put(child.getKey(),b);
                             }
                             b = null;

@@ -100,13 +100,13 @@ public class AllBooks extends Fragment {
 /*                    else
                         book_cover.setImageResource(R.drawable.no_cover);*/
 
-                    title.setText(mAdapter.mDataset.get(0).title);
-                    author.setText(mAdapter.mDataset.get(0).author);
-                    publisher.setText(mAdapter.mDataset.get(0).publisher);
-                    published_date.setText("Published in: " + mAdapter.mDataset.get(0).edition_year);
-                    book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(0).book_conditions);
-                    extra_tags.setText("Extra tags\n"+ mAdapter.mDataset.get(0).extra_tags);
-                    ISBN.setText("ISBN: " + mAdapter.mDataset.get(0).ISBN);
+                    title.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).title);
+                    author.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).author);
+                    publisher.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).publisher);
+                    published_date.setText("Published in: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).edition_year);
+                    book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).book_conditions);
+                    extra_tags.setText("Extra tags\n"+ mAdapter.mDataset.get(mAdapter.mDataset.size()-1).extra_tags);
+                    ISBN.setText("ISBN: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).ISBN);
 
 
 
@@ -178,7 +178,7 @@ public class AllBooks extends Fragment {
                 }
             };
 
-            myDatabase.addListenerForSingleValueEvent(postListener_nofirebase);
+            myDatabase.addValueEventListener(postListener_nofirebase);
 
 
         } else {
@@ -230,7 +230,7 @@ public class AllBooks extends Fragment {
                 }
             };
 
-            myDatabase.addListenerForSingleValueEvent(postListener_firebase);
+            myDatabase.addValueEventListener(postListener_firebase);
 
         }
 
