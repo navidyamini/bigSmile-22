@@ -115,9 +115,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                             for (DataSnapshot books : child.child("books").getChildren()) {
                                 Book book_element = books.getValue(Book.class);
-                                if (book_element != null)
+                                if (book_element != null) {
                                     //if (book_element.genre.equals(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getStringSet("pref_genre",new android.support.v4.util.ArraySet<String>())))
-                                        book_list.add((HashMap) book_element.toMap());
+                                    HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
+                                    book_map.put("book_id",books.getKey());
+                                    book_list.add(book_map);
+
+                                    }
                                 }
 
 
@@ -131,13 +135,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                         }
 
+
                         Bundle b1 = new Bundle();
                         b1.putSerializable("arg", h);
 
                         HomeFragment f= (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-
                         if (f!=null && f.isVisible()) {
                             f.updatePrefs(b1);
+
                         }
 
 
@@ -201,11 +206,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                             book_element.title.equals(title) ||
                                             book_element.genre.equals(genre) ||
                                             book_element.publisher.equals(publisher) ||
-                                            book_element.author.equals(author))
+                                            book_element.author.equals(author)) {
 
-                                        book_list.add((HashMap)book_element.toMap());
+
+                                        HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
+                                        book_map.put("book_id",books.getKey());
+                                        book_list.add(book_map);
+
+                                    }
                                 }
-
                             }
 
                             if (!book_list.isEmpty()) {
@@ -213,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                 b.putSerializable("user",(HashMap)child.getValue(User.class).toMap());
                                 h.put(child.getKey(),b);
                             }
+
                             b = null;
                             book_list.clear();
 
@@ -228,8 +238,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         transaction.addToBackStack(null);
                         transaction.commit();
 
-
                     } else {
+
                         Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                     }
@@ -246,16 +256,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
             mDatabase.addListenerForSingleValueEvent(postListener);
 
-
-
-
-
         }
     }
 
     @Override
     public void notifyActionBook(final Intent intent) {
-
 
         if (Constants.NEW_BOOK.equals(intent.getAction())) {
 
@@ -330,7 +335,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     }
                 });
             }
-             else {
+
+            else {
 
                 final DatabaseReference insertRef = mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").push();
                 insertRef.setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -377,18 +383,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     }
                 });
 
-
-
-
             }
 
-
-
-
-
-
-
         } else if (Constants.SCAN_BOOK.equals(intent.getAction())) {
+
 
             IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
             scanIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -400,10 +398,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
         }
     }
-
-
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -653,11 +647,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     @Override
     public void onBackPressed() {
 
-
         if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getClass().equals(HomeFragment.class))
             moveTaskToBack(true);
+        else if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentById(R.id.container).getClass().equals(SearchMap.class))
+            getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction().replace(R.id.container,new SearchForm()).commit();
         else
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
+
 
     }
 

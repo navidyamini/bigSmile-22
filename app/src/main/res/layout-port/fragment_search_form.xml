@@ -25,7 +25,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="Insert filter criteria to apply for the search phase"
+                android:text="Inserisci i filtri di ricerca"
                 android:textSize="16sp" />
 
             <RelativeLayout
@@ -212,7 +212,7 @@
                     android:padding="10dp"
                     android:paddingEnd="10dp"
                     android:paddingRight="10dp"
-                    android:text="Search" />
+                    android:text="Cerca" />
 
             </RelativeLayout>
 

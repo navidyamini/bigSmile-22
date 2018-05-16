@@ -1,6 +1,7 @@
 package polito.mad.mobiledeviceapplication.books;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -28,7 +29,7 @@ public class ShowBookDialogFragment extends DialogFragment {
 
     private TextView title,author,publisher,edition_year,genre,book_conditions,extra_tags,isbn;
     private TextView name_surname;
-    private ImageView cover;
+    private ImageView cover, book_conditions_image;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class ShowBookDialogFragment extends DialogFragment {
         isbn = (TextView) v.findViewById(R.id.isbn);
 
         cover = (ImageView) v.findViewById(R.id.cover);
+        book_conditions_image = (ImageView) v.findViewById(R.id.book_condition_image);
 
         name_surname = (TextView) v.findViewById(R.id.name_surname);
 
@@ -54,15 +56,15 @@ public class ShowBookDialogFragment extends DialogFragment {
         if (getArguments()!=null){
 
             title.setText(getArguments().getString("title"));
-            author.setText("Author: " + getArguments().getString("author"));
-            publisher.setText("Publisher: " + getArguments().getString("publisher"));
-            edition_year.setText("Edition year: " + getArguments().getString("edition_year"));
-            genre.setText("Genre: " + getArguments().getString("genre"));
-            book_conditions.setText("Conditions: " + getArguments().getString("book_conditions"));
-            extra_tags.setText("Extra info: " +getArguments().getString("extra_tags"));
+            author.setText("Autore: " + getArguments().getString("author"));
+            publisher.setText("Casa editrice: " + getArguments().getString("publisher"));
+            edition_year.setText("Anno di pubblicazione: " + getArguments().getString("edition_year"));
+            genre.setText("Genere: " + getArguments().getString("genre"));
+            book_conditions.setText("Condizioni: " + getArguments().getString("book_conditions"));
+            extra_tags.setText("Informazioni extra: " +getArguments().getString("extra_tags"));
             isbn.setText("ISBN: " +getArguments().getString("isbn"));
 
-            name_surname.setText("Owned by: " + getArguments().getString("name") + " " + getArguments().getString("surname"));
+            name_surname.setText("Proprietario: " + getArguments().getString("name") + " " + getArguments().getString("surname"));
 
             ImageRequest request = new ImageRequest(getArguments().getString("image_url"),
                     new Response.Listener<Bitmap>() {
@@ -85,6 +87,14 @@ public class ShowBookDialogFragment extends DialogFragment {
             Volley.newRequestQueue(getContext()).add(request);
 
 
+            if (getArguments().getByteArray("book_conditions_image")!=null) {
+
+                byte[] bytes = getArguments().getByteArray("book_conditions_image");
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                book_conditions_image.setImageBitmap(bmp);
+                book_conditions_image.setVisibility(View.VISIBLE);
+
+            }
 
         }
 

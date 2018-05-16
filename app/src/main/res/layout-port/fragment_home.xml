@@ -14,8 +14,8 @@
             <RelativeLayout
                 android:id="@+id/prefs_lay"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
+                android:layout_height="wrap_content"
+                android:elevation="3dp">
 
                 <ImageView
                     android:id="@+id/imageView7"
@@ -35,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/textView4"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
                     android:scrollbarAlwaysDrawHorizontalTrack="true" />
 
@@ -90,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textView5"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
                     android:scrollbarAlwaysDrawHorizontalTrack="true" />
             </RelativeLayout>
@@ -132,7 +130,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/textView6"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
                     android:scrollbarAlwaysDrawHorizontalTrack="true" />
             </RelativeLayout>

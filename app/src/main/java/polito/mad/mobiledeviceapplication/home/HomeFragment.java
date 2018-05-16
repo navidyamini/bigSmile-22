@@ -23,6 +23,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,28 +181,62 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-
                     //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
-                    Bundle b = new Bundle();
-                    b.putString("title",mDataset.get(position).getString("title"));
-                    b.putString("author",mDataset.get(position).getString("author"));
-                    b.putString("edition_year",mDataset.get(position).getString("edition_year"));
-                    b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
-                    b.putString("publisher",mDataset.get(position).getString("publisher"));
-                    b.putString("isbn",mDataset.get(position).getString("isbn"));
-                    b.putString("genre",mDataset.get(position).getString("genre"));
-                    b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
-                    b.putString("image_url",mDataset.get(position).getString("image_url"));
-                    b.putString("name",mDataset.get(position).getString("name"));
-                    b.putString("surname",mDataset.get(position).getString("surname"));
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                    StorageReference storageRef = storage.getReference().child("images").child("books").child(mDataset.get(position).getString("book_id") + ".png");
 
 
-                    ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
-                    showBookDialogFragment.setArguments(b);
-                    showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
 
 
+                            Bundle b = new Bundle();
+                            b.putString("title",mDataset.get(position).getString("title"));
+                            b.putString("author",mDataset.get(position).getString("author"));
+                            b.putString("edition_year",mDataset.get(position).getString("edition_year"));
+                            b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
+                            b.putString("publisher",mDataset.get(position).getString("publisher"));
+                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("genre",mDataset.get(position).getString("genre"));
+                            b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
+                            b.putString("image_url",mDataset.get(position).getString("image_url"));
+                            b.putString("name",mDataset.get(position).getString("name"));
+                            b.putString("surname",mDataset.get(position).getString("surname"));
 
+                            b.putByteArray("book_conditions_image",bytes);
+
+                            ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
+                            showBookDialogFragment.setArguments(b);
+                            showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+
+                            Bundle b = new Bundle();
+                            b.putString("title",mDataset.get(position).getString("title"));
+                            b.putString("author",mDataset.get(position).getString("author"));
+                            b.putString("edition_year",mDataset.get(position).getString("edition_year"));
+                            b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
+                            b.putString("publisher",mDataset.get(position).getString("publisher"));
+                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("genre",mDataset.get(position).getString("genre"));
+                            b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
+                            b.putString("image_url",mDataset.get(position).getString("image_url"));
+                            b.putString("name",mDataset.get(position).getString("name"));
+                            b.putString("surname",mDataset.get(position).getString("surname"));
+
+
+                            ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
+                            showBookDialogFragment.setArguments(b);
+                            showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+                        }
+                    });
 
                 }
             });
@@ -276,6 +314,10 @@ public class HomeFragment extends Fragment {
                 b1.putString("isbn", entry.get("isbn").toString());
                 if (entry.get("image_url") != null)
                     b1.putString("image_url", entry.get("image_url").toString());
+                b1.putString("book_id",entry.get("book_id").toString());
+
+                b1.putString("name",((HashMap) entries.get(key).get("user")).get("name").toString());
+                b1.putString("surname",((HashMap) entries.get(key).get("user")).get("surname").toString());
 
                 books_prefs.add(b1);
                 b1 = null;

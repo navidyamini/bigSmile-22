@@ -81,9 +81,9 @@ public class MailDialogFragment extends DialogFragment {
                         intent.putExtra("password", password.getText().toString());
                         observer.notifyActionLogin(intent);
 
-                    } else if (a instanceof SignupFragment.Frag2Observer && getTag().equals("MailDialogSignup")){
+                    } else if (a instanceof LoginFragment.Frag1Observer && getTag().equals("MailDialogSignup")){
 
-                        SignupFragment.Frag2Observer observer = (SignupFragment.Frag2Observer) a;
+                        LoginFragment.Frag1Observer observer = (LoginFragment.Frag1Observer) a;
                         Intent intent = new Intent(Constants.SIGNUP_EMAIL);
                         intent.putExtra("email", email.getText().toString());
                         intent.putExtra("password", password.getText().toString());

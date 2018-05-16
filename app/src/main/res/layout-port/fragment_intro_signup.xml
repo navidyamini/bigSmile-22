@@ -68,7 +68,7 @@
             android:id="@+id/buttonsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/or"
+            android:layout_below="@+id/explain_log"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:clipToPadding="false"
@@ -142,7 +142,7 @@
             android:text="@string/register" />
 
         <TextView
-            android:id="@+id/or"
+            android:id="@+id/explain_log"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/registerButton"

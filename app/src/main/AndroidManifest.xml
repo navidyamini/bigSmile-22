@@ -23,7 +23,7 @@
 
 
         <activity android:name=".profile.EditProfileActivity"
-         android:windowSoftInputMode="stateVisible|adjustPan">
+         android:windowSoftInputMode="adjustResize">
 
         </activity>
         <activity android:name=".profile.ShowProfileActivity">
@@ -31,7 +31,7 @@
 
         </activity>
 
-        <activity android:name=".loginsignin.LoginSignupActivity" android:windowSoftInputMode="adjustPan">
+        <activity android:name=".loginsignin.LoginSignupActivity" android:windowSoftInputMode="adjustResize">
 
 
 

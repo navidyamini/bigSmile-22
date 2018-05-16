@@ -24,12 +24,16 @@ import polito.mad.mobiledeviceapplication.utils.Constants;
 public class LoginFragment extends Fragment {
 
     private EditText username, password;
-    private Button access_btn, mail_signin, phone_signin;
+    private Button access_btn, mail_signin, phone_signin, mail_signup;
     private TextView signup_txt;
 
     interface Frag1Observer {
         void notifyActionLogin(Intent intent);
+        void notifyActionSignup(Intent intent);
+
     }
+
+
 
 
     @Nullable
@@ -44,6 +48,8 @@ public class LoginFragment extends Fragment {
         access_btn = (Button) rootView.findViewById(R.id.accessButton);
         mail_signin = (Button) rootView.findViewById(R.id.EmailAccessBtn);
         phone_signin = (Button) rootView.findViewById(R.id.PhoneAccessBtn);
+
+        mail_signup = (Button) rootView.findViewById(R.id.EmailRegisterBtn);
 
         signup_txt = (TextView) rootView.findViewById(R.id.signupText);
 
@@ -76,7 +82,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        signup_txt.setOnClickListener(new View.OnClickListener() {
+        /*signup_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -90,7 +96,7 @@ public class LoginFragment extends Fragment {
 
 
             }
-        });
+        });*/
 
         mail_signin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +116,16 @@ public class LoginFragment extends Fragment {
                 DialogFragment phoneDialogFragment = new PhoneDialogFragment();
                 phoneDialogFragment.show(getChildFragmentManager(),"PhoneDialog");
 
+
+            }
+        });
+
+        mail_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DialogFragment mailFragment = new MailDialogFragment();
+                mailFragment.show(getChildFragmentManager(),"MailDialogSignup");
 
             }
         });

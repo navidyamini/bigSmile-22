@@ -14,6 +14,24 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         >
+
+        <TextView
+            android:id="@+id/explaination2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_button"
+            android:elevation="7dp"
+            android:fontFamily="@font/roboto_light"
+            android:padding="6dp"
+            android:text="Clicca i puntatori per ricevere maggiori informazioni sui risultati"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mapView"

@@ -36,11 +36,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,6 +80,7 @@ public class SearchMap extends Fragment {
     private MarkerAdapter myAdapter;
     private RecyclerView book_view;
     private LinearLayoutManager mLayoutManager;
+    private TextView explaination;
 
 
 
@@ -87,8 +92,14 @@ public class SearchMap extends Fragment {
         SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView));
 
         b = getArguments();
-        if (b!=null)
-              entries = (HashMap<String,Bundle>) b.getSerializable("arg");
+        explaination = (TextView) v.findViewById(R.id.explaination);
+
+        if (b!=null) {
+            entries = (HashMap<String, Bundle>) b.getSerializable("arg");
+            if (entries.size() == 0)
+                explaination.setText("Non sono stati trovati risultati legati alla tua ricerca.");
+        }
+
 
         book_view = (RecyclerView) v.findViewById(R.id.book_list);
 
@@ -100,11 +111,14 @@ public class SearchMap extends Fragment {
         book_view.setAdapter(myAdapter);
 
 
+
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
 
                 map = googleMap;
+
+
 
 
                 for (String key : entries.keySet()){// key is user_id
@@ -118,6 +132,7 @@ public class SearchMap extends Fragment {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
 
+                        explaination.setVisibility(View.INVISIBLE);
 
                         book_list.clear();
 
@@ -140,6 +155,7 @@ public class SearchMap extends Fragment {
                             b1.putString("book_conditions",book.get("book_conditions").toString());
                             b1.putString("extra_tags",book.get("extra_tags").toString());
                             b1.putString("isbn",book.get("isbn").toString());
+                            b1.putString("book_id",book.get("book_id").toString());
 
                             if (book.get("image_url")!=null)
                                 b1.putString("image_url",book.get("image_url").toString());
@@ -156,55 +172,6 @@ public class SearchMap extends Fragment {
                         myAdapter.notifyDataSetChanged();
 
 
-                        /*ValueEventListener eventListener = new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                Bundle b = new Bundle();
-                                if (dataSnapshot.hasChildren()) {
-                                    for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
-
-                                        for (DataSnapshot book : child.child("books").getChildren()) {
-
-                                            if (books.contains(book.getKey())) {
-                                                b.putString("user_id",user_id);
-                                                b.putString("title",book.getValue(Book.class).title);
-                                                b.putString("author",book.getValue(Book.class).author);
-                                                b.putString("publisher",book.getValue(Book.class).publisher);
-                                                b.putString("edition_year",book.getValue(Book.class).edition_year);
-                                                b.putString("genre",book.getValue(Book.class).genre);
-                                                b.putString("book_conditions",book.getValue(Book.class).book_conditions);
-                                                b.putString("extra_tags",book.getValue(Book.class).extra_tags);
-                                                b.putString("isbn",book.getValue(Book.class).ISBN);
-                                                b.putString("image_url",book.getValue(Book.class).image_url);
-                                                b.putString("name",user_info.get("name").toString());
-                                                b.putString("surname",user_info.get("surname").toString());
-
-
-                                                book_list.add(b);
-                                            }
-                                        }
-
-
-
-                                    }
-
-                                    myAdapter.notifyDataSetChanged();
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                                Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
-
-                            }
-                        };
-
-                        myDatabase.addListenerForSingleValueEvent(eventListener);*/
-
 
 
                         return false;
@@ -217,6 +184,8 @@ public class SearchMap extends Fragment {
 
                         book_list.clear();
                         myAdapter.notifyDataSetChanged();
+
+                        explaination.setVisibility(View.VISIBLE);
 
                     }
                 });
@@ -348,26 +317,64 @@ public class SearchMap extends Fragment {
                 public void onClick(View v) {
 
 
-                    //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
-                Bundle b = new Bundle();
-                b.putString("title",mDataset.get(position).getString("title"));
-                b.putString("author",mDataset.get(position).getString("author"));
-                b.putString("edition_year",mDataset.get(position).getString("edition_year"));
-                b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
-                b.putString("publisher",mDataset.get(position).getString("publisher"));
-                b.putString("isbn",mDataset.get(position).getString("isbn"));
-                b.putString("genre",mDataset.get(position).getString("genre"));
-                b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
-                b.putString("image_url",mDataset.get(position).getString("image_url"));
-                b.putString("name",mDataset.get(position).getString("name"));
-                b.putString("surname",mDataset.get(position).getString("surname"));
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference().child("images").child("books").child(mDataset.get(position).getString("book_id") + ".png");
 
 
-                    ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
-                showBookDialogFragment.setArguments(b);
-                showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
 
 
+                            //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+                            Bundle b = new Bundle();
+                            b.putString("title",mDataset.get(position).getString("title"));
+                            b.putString("author",mDataset.get(position).getString("author"));
+                            b.putString("edition_year",mDataset.get(position).getString("edition_year"));
+                            b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
+                            b.putString("publisher",mDataset.get(position).getString("publisher"));
+                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("genre",mDataset.get(position).getString("genre"));
+                            b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
+                            b.putString("image_url",mDataset.get(position).getString("image_url"));
+                            b.putString("name",mDataset.get(position).getString("name"));
+                            b.putString("surname",mDataset.get(position).getString("surname"));
+
+                            b.putByteArray("book_conditions_image",bytes);
+
+                            ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
+                            showBookDialogFragment.setArguments(b);
+                            showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+
+                            //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+                            Bundle b = new Bundle();
+                            b.putString("title",mDataset.get(position).getString("title"));
+                            b.putString("author",mDataset.get(position).getString("author"));
+                            b.putString("edition_year",mDataset.get(position).getString("edition_year"));
+                            b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
+                            b.putString("publisher",mDataset.get(position).getString("publisher"));
+                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("genre",mDataset.get(position).getString("genre"));
+                            b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
+                            b.putString("image_url",mDataset.get(position).getString("image_url"));
+                            b.putString("name",mDataset.get(position).getString("name"));
+                            b.putString("surname",mDataset.get(position).getString("surname"));
+
+
+                            ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
+                            showBookDialogFragment.setArguments(b);
+                            showBookDialogFragment.show(getChildFragmentManager(), "ShowBookDialog");
+                        }
+                    });
 
 
                 }
@@ -400,6 +407,8 @@ public class SearchMap extends Fragment {
                 request.setRetryPolicy(new DefaultRetryPolicy(4 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                 Volley.newRequestQueue(context).add(request);
+
+
             }else {
 
                 holder.cover.setImageResource(R.drawable.blank);
@@ -409,6 +418,18 @@ public class SearchMap extends Fragment {
 
 
             }
+
+
+
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+
+            StorageReference storageRef = storage.getReference().child("images").child("books").child(mDataset.get(position).getString("book_id") + ".png");
+
+
+
+
+
 
         }
 

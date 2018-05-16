@@ -2,7 +2,10 @@ package polito.mad.mobiledeviceapplication.books;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,13 +24,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
@@ -46,8 +54,8 @@ public class AllBooks extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private AllBooksAdapter mAdapter;
     private DatabaseReference myDatabase;
-    private ArrayList<Book> books;
-    private ImageView book_cover;
+    private ArrayList<HashMap> books;
+    private ImageView book_cover, book_conditions_image;
     private TextView title,author,ISBN,genre,publisher, published_date,book_conditions, extra_tags;
     private ValueEventListener postListener_nofirebase,postListener_firebase;
     private RelativeLayout field_lay, wait_lay;
@@ -70,6 +78,8 @@ public class AllBooks extends Fragment {
         book_conditions = (TextView) view.findViewById(R.id.conditions);
         extra_tags = (TextView) view.findViewById(R.id.tags);
 
+        book_conditions_image = (ImageView) view.findViewById(R.id.book_conditions_image);
+
         field_lay= (RelativeLayout) view.findViewById(R.id.fields);
         wait_lay = (RelativeLayout) view.findViewById(R.id.wait_lay);
 
@@ -87,9 +97,75 @@ public class AllBooks extends Fragment {
 
         book_list.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
-            public void onChildViewAttachedToWindow(View view) {
+            public void onChildViewAttachedToWindow(final View view) {
 
                 if (book_list.getChildAdapterPosition(view)==0) {
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference().child("images").child("books").child(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("book_id").toString() + ".png");
+
+
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+
+
+                            //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+
+                            book_cover.setVisibility(View.VISIBLE);
+                            field_lay.setVisibility(View.VISIBLE);
+
+                            wait_lay.setVisibility(View.INVISIBLE);
+
+
+                            book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());
+                            title.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("title").toString());
+                            author.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("author").toString());
+                            publisher.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("publisher").toString());
+                            published_date.setText("Published in: "+ mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("edition_year").toString());
+                            ISBN.setText("ISBN: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("isbn").toString());
+                            extra_tags.setText("Extra tags\n"+mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("extra_tags").toString());
+                            book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("book_conditions").toString());
+
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            book_conditions_image.setImageBitmap(bmp);
+                            book_conditions_image.setVisibility(View.VISIBLE);
+
+
+
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+
+                            //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+
+                            book_cover.setVisibility(View.VISIBLE);
+                            field_lay.setVisibility(View.VISIBLE);
+
+                            wait_lay.setVisibility(View.INVISIBLE);
+
+                            book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());
+                            title.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("title").toString());
+                            author.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("author").toString());
+                            publisher.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("publisher").toString());
+                            published_date.setText("Published in: "+ mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("edition_year").toString());
+                            ISBN.setText("ISBN: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("isbn").toString());
+                            extra_tags.setText("Extra tags\n"+mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("extra_tags").toString());
+                            book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("book_conditions").toString());
+
+                            book_conditions_image.setVisibility(View.GONE);
+                        }
+                    });
+
+
+
+
+
 
                     wait_lay.setVisibility(View.INVISIBLE);
                     book_cover.setVisibility(View.VISIBLE);
@@ -98,13 +174,16 @@ public class AllBooks extends Fragment {
                     if (((ImageView)view.findViewById(R.id.cover)).getDrawable()!=null)
                               book_cover.setImageDrawable(((ImageView)view.findViewById(R.id.cover)).getDrawable());
 
-                    title.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).title);
-                    author.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).author);
-                    publisher.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).publisher);
-                    published_date.setText("Published in: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).edition_year);
-                    book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).book_conditions);
-                    extra_tags.setText("Extra tags\n"+ mAdapter.mDataset.get(mAdapter.mDataset.size()-1).extra_tags);
-                    ISBN.setText("ISBN: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).ISBN);
+                    //System.out.println("AAA " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("title").toString());
+                    title.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("title").toString());
+                    author.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("author").toString());
+                    publisher.setText(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("publisher").toString());
+                    published_date.setText("Published in: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("edition_year").toString());
+                    book_conditions.setText("Book conditions\n" + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("book_conditions").toString());
+                    extra_tags.setText("Extra tags\n"+ mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("extra_tags").toString());
+                    ISBN.setText("ISBN: " + mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("isbn").toString());
+
+
 
 
 
@@ -137,8 +216,10 @@ public class AllBooks extends Fragment {
 
                                 for (DataSnapshot book : child.child("books").getChildren()) {
 
-                                    books.add(book.getValue(Book.class));
 
+                                    HashMap<String,Object> book_map = (HashMap<String, Object>) book.getValue(Book.class).toMap();
+                                    book_map.put("book_id",book.getKey());
+                                    books.add(book_map);
                                 }
 
                                 mAdapter.notifyDataSetChanged();
@@ -191,7 +272,9 @@ public class AllBooks extends Fragment {
 
                                 for (DataSnapshot book : child.child("books").getChildren()) {
 
-                                    books.add(book.getValue(Book.class));
+                                    HashMap<String,Object> book_map = (HashMap<String, Object>) book.getValue(Book.class).toMap();
+                                    book_map.put("book_id",book.getKey());
+                                    books.add(book_map);
 
                                     //wait_lay.setVisibility(View.INVISIBLE);
                                 }
@@ -236,7 +319,7 @@ public class AllBooks extends Fragment {
 
     class AllBooksAdapter extends RecyclerView.Adapter<AllBooksAdapter.ViewHolder> {
 
-        private ArrayList<Book> mDataset;
+        private ArrayList<HashMap> mDataset;
         private Context context;
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -258,7 +341,7 @@ public class AllBooks extends Fragment {
         }
 
 
-        public AllBooksAdapter(Context context, ArrayList<Book> myDataset) {
+        public AllBooksAdapter(Context context, ArrayList<HashMap> myDataset) {
             mDataset = myDataset;
             this.context = context;
         }
@@ -285,59 +368,122 @@ public class AllBooks extends Fragment {
             // - replace the contents of the view with that element
 
 
+
+
+
+
+
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
 
-                    book_cover.setVisibility(View.VISIBLE);
-                    field_lay.setVisibility(View.VISIBLE);
-
-                    wait_lay.setVisibility(View.INVISIBLE);
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference().child("images").child("books").child(mDataset.get(position).get("book_id").toString() + ".png");
 
 
-                    book_cover.setImageDrawable(holder.cover.getDrawable());
-                    title.setText(mDataset.get(position).title);
-                    author.setText(mDataset.get(position).author);
-                    publisher.setText(mDataset.get(position).publisher);
-                    published_date.setText("Published in: "+ mDataset.get(position).edition_year);
-                    ISBN.setText("ISBN: " + mDataset.get(position).ISBN);
-                    extra_tags.setText("Extra tags\n"+mDataset.get(position).extra_tags);
-                    book_conditions.setText("Book conditions\n" + mDataset.get(position).book_conditions);
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
 
 
+                            //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+
+                            book_cover.setVisibility(View.VISIBLE);
+                            field_lay.setVisibility(View.VISIBLE);
+
+                            wait_lay.setVisibility(View.INVISIBLE);
+
+
+                            book_cover.setImageDrawable(holder.cover.getDrawable());
+                            title.setText(mDataset.get(position).get("title").toString());
+                            author.setText(mDataset.get(position).get("author").toString());
+                            publisher.setText(mDataset.get(position).get("publisher").toString());
+                            published_date.setText("Published in: "+ mDataset.get(position).get("edition_year").toString());
+                            ISBN.setText("ISBN: " + mDataset.get(position).get("isbn").toString());
+                            extra_tags.setText("Extra tags\n"+mDataset.get(position).get("extra_tags").toString());
+                            book_conditions.setText("Book conditions\n" + mDataset.get(position).get("book_conditions").toString());
+
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            book_conditions_image.setImageBitmap(bmp);
+                            book_conditions_image.setVisibility(View.VISIBLE);
+
+
+
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+
+                            //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+
+                            book_cover.setVisibility(View.VISIBLE);
+                            field_lay.setVisibility(View.VISIBLE);
+
+                            wait_lay.setVisibility(View.INVISIBLE);
+
+                            book_cover.setImageDrawable(holder.cover.getDrawable());
+                            title.setText(mDataset.get(position).get("title").toString());
+                            author.setText(mDataset.get(position).get("author").toString());
+                            publisher.setText(mDataset.get(position).get("publisher").toString());
+                            published_date.setText("Published in: "+ mDataset.get(position).get("edition_year").toString());
+                            ISBN.setText("ISBN: " + mDataset.get(position).get("isbn").toString());
+                            extra_tags.setText("Extra tags\n"+mDataset.get(position).get("extra_tags").toString());
+                            book_conditions.setText("Book conditions\n" + mDataset.get(position).get("book_conditions").toString());
+
+                            book_conditions_image.setVisibility(View.GONE);
+                        }
+                    });
 
                 }
             });
 
-            holder.title.setText(mDataset.get(position).title);
-            holder.author.setText(mDataset.get(position).author);
-
-            request = new ImageRequest(mDataset.get(position).image_url,
-                    new Response.Listener<Bitmap>() {
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            holder.cover.setImageBitmap(bitmap);
-                            holder.no_info.setVisibility(View.INVISIBLE);
-                            book_cover.setImageBitmap(bitmap);
+            holder.title.setText(mDataset.get(position).get("title").toString());
+            holder.author.setText(mDataset.get(position).get("author").toString());
 
 
+            if (mDataset.get(position).get("image_url")!=null) {
+                request = new ImageRequest(mDataset.get(position).get("image_url").toString(),
+                        new Response.Listener<Bitmap>() {
+                            @Override
+                            public void onResponse(Bitmap bitmap) {
+                                holder.cover.setImageBitmap(bitmap);
+                                holder.no_info.setVisibility(View.INVISIBLE);
+                                book_cover.setImageBitmap(bitmap);
 
 
-                        }
-                    },0,0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
-                    new Response.ErrorListener() {
-                        public void onErrorResponse(VolleyError error) {
-                            holder.cover.setImageResource(R.drawable.blank);
-                            holder.no_info.setVisibility(View.VISIBLE);
-                            holder.title.setText(mDataset.get(position).title);
-                            holder.author.setText(mDataset.get(position).author);
-                        }
-                    });
+                            }
+                        }, 0, 0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565,
+                        new Response.ErrorListener() {
+                            public void onErrorResponse(VolleyError error) {
+                                holder.cover.setImageResource(R.drawable.blank);
+                                holder.no_info.setVisibility(View.VISIBLE);
+                                holder.title.setText(mDataset.get(position).get("title").toString());
+                                holder.author.setText(mDataset.get(position).get("author").toString());
+                            }
+                        });
 
-            request.setRetryPolicy(new DefaultRetryPolicy(4 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                request.setRetryPolicy(new DefaultRetryPolicy(4 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-            Volley.newRequestQueue(context).add(request);
+                Volley.newRequestQueue(context).add(request);
+
+            } else {
+
+                holder.cover.setImageResource(R.drawable.blank);
+                holder.no_info.setVisibility(View.VISIBLE);
+                holder.title.setText(mDataset.get(position).get("title").toString());
+                holder.author.setText(mDataset.get(position).get("author").toString());
+
+
+            }
+
+
+
 
 
 

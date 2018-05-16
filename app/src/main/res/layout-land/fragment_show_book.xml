@@ -15,65 +15,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="117dp">
-
-        <TextView
-            android:id="@+id/book_conditions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/genre"
-            android:layout_below="@+id/genre"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/roboto_light"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textColor="@android:color/white" />
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="62dp">
 
         <TextView
             android:id="@+id/extra_tags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/book_conditions"
-            android:layout_below="@+id/book_conditions"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/roboto_light"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textColor="@android:color/white" />
-
-        <TextView
-            android:id="@+id/name_surname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/isbn"
-            android:layout_below="@+id/isbn"
+            android:layout_below="@+id/book_condition_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
             android:text="TextView"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:visibility="visible" />
 
         <TextView
-            android:id="@+id/author"
+            android:id="@+id/publisher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/title"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/roboto_light"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/edition_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/publisher"
-            android:layout_below="@+id/publisher"
+            android:layout_below="@+id/author"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
             android:text="TextView"
@@ -84,8 +51,10 @@
             android:id="@+id/genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/edition_year"
             android:layout_below="@+id/edition_year"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
             android:text="TextView"
@@ -93,23 +62,42 @@
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/publisher"
+            android:id="@+id/book_conditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/author"
-            android:layout_below="@+id/author"
+            android:layout_below="@+id/genre"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
             android:text="TextView"
             android:textAlignment="center"
             android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/isbn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/extra_tags"
             android:layout_below="@+id/extra_tags"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
             android:text="TextView"
@@ -117,16 +105,87 @@
             android:textColor="@android:color/white" />
 
         <TextView
+            android:id="@+id/edition_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/publisher"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/name_surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/isbn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/contact_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name_surname"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="6dp"
+            android:paddingBottom="10dp"
+            android:text="Contatta il proprietario"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/cover"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="29dp"
             android:fontFamily="@font/roboto_light"
             android:text="TextView"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/info_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignTop="@+id/name_surname"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/name_surname"
+            android:background="@android:color/transparent"
+            android:elevation="6dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/baseline_info_white_24" />
+
+        <ImageView
+            android:id="@+id/book_condition_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/book_conditions"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/book_cover" />
     </RelativeLayout>
 
     <ImageView
