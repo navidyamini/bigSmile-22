@@ -1,5 +1,7 @@
 package polito.mad.mobiledeviceapplication.books;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +23,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.search.SearchForm;
+import polito.mad.mobiledeviceapplication.utils.Constants;
 
 /**
  * Created by user on 11/05/2018.
@@ -30,6 +35,11 @@ public class ShowBookDialogFragment extends DialogFragment {
     private TextView title,author,publisher,edition_year,genre,book_conditions,extra_tags,isbn;
     private TextView name_surname;
     private ImageView cover, book_conditions_image;
+    private Button contact_button;
+
+    public interface FragContactObserver {
+        void notifyContactRequest(Intent intent);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +58,9 @@ public class ShowBookDialogFragment extends DialogFragment {
 
         cover = (ImageView) v.findViewById(R.id.cover);
         book_conditions_image = (ImageView) v.findViewById(R.id.book_condition_image);
-
         name_surname = (TextView) v.findViewById(R.id.name_surname);
+
+        contact_button = (Button) v.findViewById(R.id.contact_button);
 
 
 
@@ -98,7 +109,20 @@ public class ShowBookDialogFragment extends DialogFragment {
 
         }
 
+        contact_button.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Activity a=getActivity();
+                if (a instanceof ShowBookDialogFragment.FragContactObserver) {
+                    ShowBookDialogFragment.FragContactObserver observer = (ShowBookDialogFragment.FragContactObserver) a;
+                    Intent intent = new Intent(Constants.Contact_Request);
+                    intent.putExtra("user_id",getArguments().getString("user_id",""));
+                    observer.notifyContactRequest(intent);
+                }
+
+            }
+        }));
 
         return v;
     }

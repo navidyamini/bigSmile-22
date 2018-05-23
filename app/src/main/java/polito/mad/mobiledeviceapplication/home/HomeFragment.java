@@ -205,6 +205,7 @@ public class HomeFragment extends Fragment {
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
                             b.putString("name",mDataset.get(position).getString("name"));
                             b.putString("surname",mDataset.get(position).getString("surname"));
+                            b.putString("user_id",mDataset.get(position).getString("user_id"));
 
                             b.putByteArray("book_conditions_image",bytes);
 
@@ -230,6 +231,7 @@ public class HomeFragment extends Fragment {
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
                             b.putString("name",mDataset.get(position).getString("name"));
                             b.putString("surname",mDataset.get(position).getString("surname"));
+                            b.putString("user_id",mDataset.get(position).getString("user_id"));
 
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();

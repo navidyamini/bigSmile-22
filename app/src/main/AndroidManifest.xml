@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="polito.mad.mobiledeviceapplication">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher_final"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_final"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true"
-        >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCtVzXKSU3b3omQVwvUGQ0RSoGggsityuQ" />
 
-
-        <activity android:name=".profile.EditProfileActivity"
-         android:windowSoftInputMode="adjustResize">
-
-        </activity>
-        <activity android:name=".profile.ShowProfileActivity">
-
-
-        </activity>
-
-        <activity android:name=".loginsignin.LoginSignupActivity" android:windowSoftInputMode="adjustResize">
-
-
-
+        <activity
+            android:name=".profile.EditProfileActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".profile.ShowProfileActivity"></activity>
+        <activity
+            android:name=".loginsignin.LoginSignupActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

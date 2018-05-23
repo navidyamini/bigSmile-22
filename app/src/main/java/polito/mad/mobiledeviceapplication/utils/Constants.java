@@ -34,4 +34,5 @@ public class Constants {
     public static final int REQUEST_PERMISSION_SETTING = 3;
 
     public static final String GEOCODER_API = "AIzaSyCtVzXKSU3b3omQVwvUGQ0RSoGggsityuQ";
+    public static String Contact_Request="Contact_Request" ;
 }

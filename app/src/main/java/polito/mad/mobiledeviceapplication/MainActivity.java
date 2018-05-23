@@ -59,6 +59,7 @@ import java.util.HashMap;
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
+import polito.mad.mobiledeviceapplication.chat.ChatDialogFragment;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.loginsignin.SignupFragment;
@@ -68,6 +69,7 @@ import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
 import polito.mad.mobiledeviceapplication.search.SearchMap;
 import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
+import polito.mad.mobiledeviceapplication.utils.AppConstants;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.User;
@@ -76,7 +78,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -670,4 +672,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
 
+    @Override
+    public void notifyContactRequest(Intent intent) {
+        if (Constants.Contact_Request.equals(intent.getAction())){
+            ((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
+            Intent i = new Intent(getApplicationContext(),ChatActivity.class);
+            i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
+            i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id"));
+            startActivity(i);
+
+        }
+    }
 }
