@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.ArraySet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -22,12 +21,10 @@ import android.widget.Button;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -48,7 +45,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -59,11 +55,10 @@ import java.util.HashMap;
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
-import polito.mad.mobiledeviceapplication.chat.ChatDialogFragment;
+import polito.mad.mobiledeviceapplication.chat.ChatActivity;
+import polito.mad.mobiledeviceapplication.chat.ChatActivityJava;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
-import polito.mad.mobiledeviceapplication.loginsignin.SignupFragment;
-import polito.mad.mobiledeviceapplication.profile.MyProfileFragment;
 import polito.mad.mobiledeviceapplication.profile.ShowProfileActivity;
 import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
@@ -111,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     HashMap<String, Bundle> h = new HashMap<>();
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
 
                             Bundle b = new Bundle();
 
@@ -676,7 +671,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     public void notifyContactRequest(Intent intent) {
         if (Constants.Contact_Request.equals(intent.getAction())){
             ((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
-            Intent i = new Intent(getApplicationContext(),ChatActivity.class);
+            Intent i = new Intent(getApplicationContext(),ChatActivityJava.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
             i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id"));
             startActivity(i);
