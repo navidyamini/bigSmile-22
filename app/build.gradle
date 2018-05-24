@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 27
     defaultConfig {
+        multiDexEnabled true
         applicationId "polito.mad.mobiledeviceapplication"
         minSdkVersion 19
         targetSdkVersion 27
