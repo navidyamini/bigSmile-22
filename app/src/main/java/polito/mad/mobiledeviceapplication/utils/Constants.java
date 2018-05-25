@@ -23,6 +23,7 @@ public class Constants {
     public final static String SEARCH_GENRE = "SEARCH_GENRE";
     public final static String SEARCH_NEWS = "SEARCH_NEWS";
     public final static String ARG_CHAT_ROOMS = "ARG_CHAT_ROOMS";
+    public final static String Chat_Request ="Chat_Request";
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 

@@ -1,5 +1,6 @@
 package polito.mad.mobiledeviceapplication.chat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,7 +47,12 @@ public class InboxFragmentJava extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private String userid;
     private ArrayList<String> chat_user_ids;
+    private ArrayList<String> chat_user_names;
     private InboxAdapter inboxAdapter;
+
+    public interface FragChatObserver {
+        void notifyChatRequest(Intent intent);
+    }
 
     @Nullable
     @Override
@@ -58,11 +64,12 @@ public class InboxFragmentJava extends Fragment {
 
         chat_list = (RecyclerView) rootView.findViewById(R.id.chat_list);
         chat_user_ids = new ArrayList<String>();
+        chat_user_names = new ArrayList<String>();
 
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         chat_list.setLayoutManager(mLayoutManager);
 
-        inboxAdapter= new InboxAdapter(getContext(),chat_user_ids);
+        inboxAdapter= new InboxAdapter(getContext(),chat_user_names);
         Intent intent = getActivity().getIntent();
 
         chat_list.setAdapter(inboxAdapter);
@@ -78,6 +85,8 @@ public class InboxFragmentJava extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String receiverUid = "null";
                         String senderUid = "null";
+                        String receiverName = "null";
+                        String senderName = "null";
                         String key = "null";
                         if (dataSnapshot.hasChildren()) {
                             for (DataSnapshot chat : dataSnapshot.getChildren()) {
@@ -93,16 +102,23 @@ public class InboxFragmentJava extends Fragment {
                                         if (key.equals("senderUid")) {
                                             senderUid = (String) field.getValue();
                                         }
-                                    }
-                                    if (userid.equals(receiverUid)) {
-                                        chat_user_ids.add(senderUid);
-                                    }
-                                    if (userid.equals(senderUid)) {
-                                        chat_user_ids.add(receiverUid);
+                                        if (key.equals("receiver")) {
+                                            receiverName= (String) field.getValue();
+                                        }
+                                        if (key.equals("sender")) {
+                                            senderName = (String) field.getValue();
+                                        }
                                     }
 
                                 }
-
+                                if (userid.equals(receiverUid)) {
+                                    chat_user_ids.add(senderUid);
+                                    chat_user_names.add(senderName);
+                                }
+                                if (userid.equals(senderUid)) {
+                                    chat_user_ids.add(receiverUid);
+                                    chat_user_names.add(receiverName);
+                                }
                             }
                         }
 
@@ -157,7 +173,20 @@ public class InboxFragmentJava extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
             holder.userName.setText(mDataset.get(position));
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Activity a=getActivity();
+                    if (a instanceof InboxFragmentJava.FragChatObserver) {
+                        InboxFragmentJava.FragChatObserver observer = (InboxFragmentJava.FragChatObserver) a;
+                        Intent intent = new Intent(Constants.Chat_Request);
+                        intent.putExtra("user_id_r",chat_user_ids.get(position));
+                        intent.putExtra("username_r",chat_user_names.get(position));
+                        observer.notifyChatRequest(intent);
+                    }
 
+                }
+            });
         }
 
 
@@ -168,10 +197,6 @@ public class InboxFragmentJava extends Fragment {
 
 
     }
-
-
-
-
 
 
 }
