@@ -50,6 +50,7 @@ public class ChatActivityJava extends AppCompatActivity {
     private EditText input;
     private ImageButton send,send_image;
     private Toolbar myToolbar;
+    private Intent i;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,8 +63,7 @@ public class ChatActivityJava extends AppCompatActivity {
         getSupportActionBar().setTitle(getIntent().getStringExtra(AppConstants.USER_USERNAME_R));
 
 
-        final Intent i = getIntent();
-
+        i = getIntent();
 
 
         input = (EditText) findViewById(R.id.send_message);
@@ -159,9 +159,7 @@ public class ChatActivityJava extends AppCompatActivity {
                                     .child(String.valueOf(chat.timestamp))
                                     .setValue(chat);
 
-                            chats.add(chat);
-                            mChatAdapter.notifyDataSetChanged();
-                            chat_list.scrollToPosition(mChatAdapter.mDataset.size()-1);
+                            getMessageFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser().getUid(),i.getStringExtra(AppConstants.USER_ID_R));
 
                         }
                     }
@@ -172,6 +170,9 @@ public class ChatActivityJava extends AppCompatActivity {
                     }
                 });
     }
+
+
+
 
     public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
         final String room_type_1 = senderUid + "_" + receiverUid;
@@ -261,6 +262,7 @@ public class ChatActivityJava extends AppCompatActivity {
                                     });
                         } else {
                             Log.e("EEE", "getMessageFromFirebaseUser: no such room available");
+
                         }
                     }
 
@@ -294,24 +296,6 @@ public class ChatActivityJava extends AppCompatActivity {
 
 
         }
-/*
-        class ViewHolder2 extends RecyclerView.ViewHolder {
-
-            public View mView;
-            public TextView message;
-            public TextView timestamp;
-            public ImageView user_image;
-
-            public ViewHolder2(View v, TextView message, TextView timestamp, ImageView user_image) {
-                super(v);
-                mView = v;
-                this.message = message;
-                this.timestamp = timestamp;
-                this.user_image = user_image;
-            }
-
-        }*/
-
 
 
 
