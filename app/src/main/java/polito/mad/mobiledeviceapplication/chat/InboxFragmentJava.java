@@ -57,12 +57,15 @@ public class InboxFragmentJava extends Fragment {
         ((MainActivity)getActivity()).toolbar.setTitle(R.string.inbox);
 
         chat_list = (RecyclerView) rootView.findViewById(R.id.chat_list);
-        name_inbox = (RelativeLayout) rootView.findViewById(R.id.name_inbox);
         chat_user_ids = new ArrayList<String>();
+
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         chat_list.setLayoutManager(mLayoutManager);
+
         inboxAdapter= new InboxAdapter(getContext(),chat_user_ids);
         Intent intent = getActivity().getIntent();
+
+        chat_list.setAdapter(inboxAdapter);
 
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -89,14 +92,18 @@ public class InboxFragmentJava extends Fragment {
                                 }
                                 if(userid.equals(receiverUid)){
                                     chat_user_ids.add(senderUid);
-                                    inboxAdapter.notifyDataSetChanged();
                                 }
                                 if(userid.equals(senderUid)){
                                     chat_user_ids.add(receiverUid);
-                                    inboxAdapter.notifyDataSetChanged();
                                 }
+
+
+
                             }
                         }
+
+                        inboxAdapter.notifyDataSetChanged();
+
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -106,6 +113,7 @@ public class InboxFragmentJava extends Fragment {
 
         return rootView;
     }
+
     class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
 
         private ArrayList<String> mDataset;
@@ -118,7 +126,7 @@ public class InboxFragmentJava extends Fragment {
             public ViewHolder(View v, TextView name) {
                 super(v);
                 mView = v;
-                this.userName = userName;
+                this.userName = name;
             }
 
 
@@ -130,21 +138,19 @@ public class InboxFragmentJava extends Fragment {
         }
 
         @Override
-        public InboxFragmentJava.InboxAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+            View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_list,parent,false);
+            //TextView ID = v1.findViewById(R.id.ID);
+            TextView name = v1.findViewById(R.id.name_inbox);
 
-
-                    View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_list,parent,false);
-                    //TextView ID = v1.findViewById(R.id.ID);
-                    TextView name = v1.findViewById(R.id.name_inbox);
-
-                    InboxFragmentJava.InboxAdapter.ViewHolder vh = new InboxFragmentJava.InboxAdapter.ViewHolder(v1,name);
-                    return vh;
+            ViewHolder vh = new ViewHolder(v1,name);
+            return vh;
 
         }
 
         @Override
-        public void onBindViewHolder(final InboxFragmentJava.InboxAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
 
             holder.userName.setText(mDataset.get(position));
 

@@ -23,7 +23,7 @@
             android:layout_toStartOf="@+id/send"
             android:drawablePadding="4dp"
             android:hint="Type your message"
-            android:inputType="text"
+            android:inputType="text|textPersonName"
             android:textColor="#616161"
             android:textColorHint="#bdbdbd" />
 

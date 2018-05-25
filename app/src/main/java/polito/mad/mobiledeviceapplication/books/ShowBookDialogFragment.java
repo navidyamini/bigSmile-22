@@ -118,6 +118,7 @@ public class ShowBookDialogFragment extends DialogFragment {
                     ShowBookDialogFragment.FragContactObserver observer = (ShowBookDialogFragment.FragContactObserver) a;
                     Intent intent = new Intent(Constants.Contact_Request);
                     intent.putExtra("user_id",getArguments().getString("user_id",""));
+                    intent.putExtra("user_name_receiver",getArguments().getString("name"));
                     observer.notifyContactRequest(intent);
                 }
 

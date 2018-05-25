@@ -70,11 +70,7 @@ public class ChatActivityJava extends AppCompatActivity {
                     Chat chat = new Chat(i.getStringExtra(AppConstants.USER_NAME_S), i.getStringExtra(AppConstants.USER_NAME_R), FirebaseAuth.getInstance().getCurrentUser().getUid(), i.getStringExtra(AppConstants.USER_ID_R), input.getText().toString(), Calendar.getInstance().getTimeInMillis());
                     sendMessageToFirebaseUser(getApplicationContext(), chat, "");
                     input.setText("");
-                    View view = getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
+
                 }
 
 

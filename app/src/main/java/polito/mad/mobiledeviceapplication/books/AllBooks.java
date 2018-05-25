@@ -26,6 +26,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -210,7 +211,7 @@ public class AllBooks extends Fragment {
                     books.clear();
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                             if (getActivity().getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
 
 
@@ -267,7 +268,7 @@ public class AllBooks extends Fragment {
                     books.clear();
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                             if (((MainActivity)getActivity()).mAuth.getCurrentUser().getUid().equals(child.getKey())) {
 
                                 for (DataSnapshot book : child.child("books").getChildren()) {

@@ -224,7 +224,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                             if (getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
 
                                 User user = child.getValue(User.class);
@@ -286,7 +286,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                             if (mAuth.getCurrentUser().getUid().equals(child.getKey())) {
 
                                 User user = child.getValue(User.class);

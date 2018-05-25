@@ -148,7 +148,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                             User user = child.getValue(User.class);
                             if (user != null) {
                                 if (user.username.equals(intent.getStringExtra("username"))
@@ -280,7 +280,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren())
+                                for (DataSnapshot child : dataSnapshot.child("users").getChildren())
                                 {
                                     User user = child.getValue(User.class);
                                     if (user.username.equals(intent.getStringExtra("username"))
@@ -458,7 +458,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                                     if (dataSnapshot.hasChildren()) {
-                                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                                             User user_element = child.getValue(User.class);
                                             if (user_element.phone.equals(user.getPhoneNumber())) {
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);

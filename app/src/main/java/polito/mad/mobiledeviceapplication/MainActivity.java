@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     HashMap<String,Bundle> h = new HashMap<>();
 
                     if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren().iterator().next().getChildren()) {
+                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
 
                             Bundle b = new Bundle();
 
@@ -440,6 +440,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         //getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyProfileFragment()).commit();
 
                         return true;
+
                     case R.id.my_books:
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyBooksFragment()).commit();
