@@ -1,5 +1,6 @@
 package polito.mad.mobiledeviceapplication.chat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,10 +24,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.utils.Chat;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
@@ -40,6 +45,8 @@ public class InboxFragmentJava extends Fragment {
     private RecyclerView chat_list;
     private LinearLayoutManager mLayoutManager;
     private String userid;
+    private ArrayList<String> chat_user_ids;
+    private InboxAdapter inboxAdapter;
 
     @Nullable
     @Override
@@ -51,14 +58,14 @@ public class InboxFragmentJava extends Fragment {
 
         chat_list = (RecyclerView) rootView.findViewById(R.id.chat_list);
         name_inbox = (RelativeLayout) rootView.findViewById(R.id.name_inbox);
-
+        chat_user_ids = new ArrayList<String>();
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         chat_list.setLayoutManager(mLayoutManager);
-
+        inboxAdapter= new InboxAdapter(getContext(),chat_user_ids);
         Intent intent = getActivity().getIntent();
 
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final ArrayList<String> chat_user_ids = new ArrayList<String>();
+
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.ARG_CHAT_ROOMS);
 
@@ -82,9 +89,11 @@ public class InboxFragmentJava extends Fragment {
                                 }
                                 if(userid.equals(receiverUid)){
                                     chat_user_ids.add(senderUid);
+                                    inboxAdapter.notifyDataSetChanged();
                                 }
                                 if(userid.equals(senderUid)){
                                     chat_user_ids.add(receiverUid);
+                                    inboxAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -97,5 +106,63 @@ public class InboxFragmentJava extends Fragment {
 
         return rootView;
     }
+    class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.ViewHolder> {
+
+        private ArrayList<String> mDataset;
+        private Context context;
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            public View mView;
+            public TextView userName;
+            public ViewHolder(View v, TextView name) {
+                super(v);
+                mView = v;
+                this.userName = userName;
+            }
+
+
+        }
+
+        public InboxAdapter(Context context, ArrayList<String> myDataset) {
+            mDataset = myDataset;
+            this.context = context;
+        }
+
+        @Override
+        public InboxFragmentJava.InboxAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
+
+                    View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_list,parent,false);
+                    //TextView ID = v1.findViewById(R.id.ID);
+                    TextView name = v1.findViewById(R.id.name_inbox);
+
+                    InboxFragmentJava.InboxAdapter.ViewHolder vh = new InboxFragmentJava.InboxAdapter.ViewHolder(v1,name);
+                    return vh;
+
+        }
+
+        @Override
+        public void onBindViewHolder(final InboxFragmentJava.InboxAdapter.ViewHolder holder, final int position) {
+
+            holder.userName.setText(mDataset.get(position));
+
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return mDataset.size();
+        }
+
+
+    }
+
+
+
+
+
 
 }
+
