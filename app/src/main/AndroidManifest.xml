@@ -37,8 +37,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".chat.ChatActivity"></activity>
-        <activity android:name=".chat.ChatActivityJava" android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".chat.ChatActivity" android:windowSoftInputMode="adjustPan"></activity>
+        <service android:name=".services.ChatService"></service>
     </application>
 
 </manifest>

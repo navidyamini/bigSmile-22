@@ -64,6 +64,7 @@
             android:layout_marginLeft="16dp"
             android:background="@android:color/transparent"
             android:tint="@color/colorPrimaryDark"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_image_black_24dp" />
 
     </RelativeLayout>

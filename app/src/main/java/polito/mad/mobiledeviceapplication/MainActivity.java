@@ -1,8 +1,12 @@
 package polito.mad.mobiledeviceapplication;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.RingtoneManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -56,15 +60,14 @@ import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
 import polito.mad.mobiledeviceapplication.chat.ChatActivity;
-import polito.mad.mobiledeviceapplication.chat.ChatActivityJava;
 import polito.mad.mobiledeviceapplication.chat.InboxFragment;
-import polito.mad.mobiledeviceapplication.chat.InboxFragmentJava;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.profile.ShowProfileActivity;
 import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
 import polito.mad.mobiledeviceapplication.search.SearchMap;
+import polito.mad.mobiledeviceapplication.services.ChatService;
 import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
 import polito.mad.mobiledeviceapplication.utils.AppConstants;
 import polito.mad.mobiledeviceapplication.utils.Book;
@@ -75,7 +78,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragmentJava.FragChatObserver {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragment.FragChatObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     @Override
     public void notifyChatRequest(Intent intent) {
         if (Constants.Chat_Request.equals(intent.getAction())){
-            Intent i = new Intent(getApplicationContext(),ChatActivityJava.class);
+            Intent i = new Intent(getApplicationContext(),ChatActivity.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
             i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id_r"));
             i.putExtra(AppConstants.USER_USERNAME_R,intent.getStringExtra("username_r"));
@@ -460,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                     case R.id.inbox:
 
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new InboxFragmentJava()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new InboxFragment()).commit();
 
                         return true;
                     case R.id.search:
@@ -475,6 +478,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         return true;
                     case R.id.exit:
 
+                        stopService(new Intent(getApplicationContext(),ChatService.class));
                         Handler h = new Handler();
                         h.postDelayed(new Runnable() {
                             @Override
@@ -532,6 +536,30 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         tx.replace(R.id.content_frame, new HomeFragment());
         tx.commit();
+
+        startService(new Intent(getApplicationContext(), ChatService.class));
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            CharSequence name = "Message";
+            String description = "Message";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel mChannel = new NotificationChannel("Message", name, importance);
+            mChannel.setDescription(description);
+            mChannel.setSound((RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)),null);
+            mChannel.setVibrationPattern(new long[]{0, 250, 250, 250});
+            //mChannel.set
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(mChannel);
+
+
+        }
+
+
     }
 
 
@@ -694,12 +722,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     public void notifyContactRequest(Intent intent) {
         if (Constants.Contact_Request.equals(intent.getAction())){
             ((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
-            Intent i = new Intent(getApplicationContext(),ChatActivityJava.class);
+            Intent i = new Intent(getApplicationContext(),ChatActivity.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
             i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id_r"));
             i.putExtra(AppConstants.USER_USERNAME_R,intent.getStringExtra("username_r"));
             i.putExtra(AppConstants.USER_USERNAME_S,getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
             startActivity(i);
+
 
         }
     }
