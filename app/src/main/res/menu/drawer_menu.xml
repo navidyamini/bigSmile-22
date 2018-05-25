@@ -17,6 +17,10 @@
         android:title="@string/my_books"
         ></item>
     <item
+        android:id="@+id/inbox"
+        android:icon="@android:drawable/sym_action_chat"
+        android:title="@string/inbox"></item>
+    <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/search"></item>

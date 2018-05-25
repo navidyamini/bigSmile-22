@@ -80,4 +80,6 @@
     <string name="have_account_already">Hai già un account?</string>
     <string name="sign_in">Accedi subito!</string>
 
+    <string name="inbox">Posta in arrivo</string>
+
 </resources>

@@ -57,6 +57,8 @@ import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
 import polito.mad.mobiledeviceapplication.chat.ChatActivity;
 import polito.mad.mobiledeviceapplication.chat.ChatActivityJava;
+import polito.mad.mobiledeviceapplication.chat.InboxFragment;
+import polito.mad.mobiledeviceapplication.chat.InboxFragmentJava;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.profile.ShowProfileActivity;
@@ -441,6 +443,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     case R.id.my_books:
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyBooksFragment()).commit();
+
+                        return true;
+
+                    case R.id.inbox:
+
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new InboxFragmentJava()).commit();
 
                         return true;
                     case R.id.search:

@@ -83,6 +83,7 @@
     <string name="lent_books">Lent books</string>
     <string name="available_books">Available books</string>
     <string name="home">Home</string>
+    <string name="inbox">Inbox</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
