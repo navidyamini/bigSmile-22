@@ -31,8 +31,8 @@ import polito.mad.mobiledeviceapplication.utils.User;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private TextInputLayout name_text_layout, surname_text_layout, email_text_layout, phone_text_layout, bio_text_layout, address_text_layout, zip_text_layout, zone_text_layout;
-    private TextInputEditText name_edit, surname_edit, email_edit, phone_edit, bio_edit, address_edit, zip_edit, zone_edit;
+    private TextInputLayout name_text_layout, surname_text_layout, username_text_layout, email_text_layout, phone_text_layout, bio_text_layout, address_text_layout, zip_text_layout, zone_text_layout;
+    private TextInputEditText name_edit, surname_edit, username_edit, email_edit, phone_edit, bio_edit, address_edit, zip_edit, zone_edit;
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -57,6 +57,7 @@ public class EditProfileActivity extends AppCompatActivity {
         address_text_layout = (TextInputLayout) findViewById(R.id.address_text_input_layout);
         zip_text_layout = (TextInputLayout) findViewById(R.id.zip_text_input_layout);
         zone_text_layout = (TextInputLayout) findViewById(R.id.zone_text_input_layout);
+        username_text_layout = (TextInputLayout) findViewById(R.id.username_text_input_layout);
 
 
         name_edit = (TextInputEditText) findViewById(R.id.name_edit_text);
@@ -67,6 +68,7 @@ public class EditProfileActivity extends AppCompatActivity {
         address_edit = (TextInputEditText) findViewById(R.id.address_edit_text);
         zip_edit = (TextInputEditText) findViewById(R.id.zip_edit_text);
         zone_edit = (TextInputEditText) findViewById(R.id.zone_edit_text);
+        username_edit = (TextInputEditText) findViewById(R.id.username_edit_text);
 
 
 
@@ -126,6 +128,11 @@ public class EditProfileActivity extends AppCompatActivity {
                     zip_text_layout.setError(getString(R.string.not_empty));
                     zip_text_layout.requestFocus();
 
+                } else if (username_edit.getText().length() == 0) {
+
+                    username_text_layout.setError(getString(R.string.not_empty));
+                    username_text_layout.requestFocus();
+
                 }
                 
                 else{
@@ -147,59 +154,31 @@ public class EditProfileActivity extends AppCompatActivity {
                             zip_edit.getText().toString(),
                             zone_edit.getText().toString());
 
-                    if (mAuth.getCurrentUser() == null) {
-                        mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).setValue(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
 
-                                if (task.isSuccessful()) {
-
-                                    Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
-
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
-
-                                } else {
-
-                                    Toast.makeText(getApplicationContext(), getString(R.string.try_again), Toast.LENGTH_LONG).show();
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
 
-                                }
+                            if (task.isSuccessful()) {
+
+                                getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",username_edit.getText().toString()).apply();
+
+                                Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+
+                                Toast.makeText(getApplicationContext(), getString(R.string.try_again), Toast.LENGTH_LONG).show();
+
+                            }
 
                             }
                         });
-
-                    } else {
-
-                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-
-
-                                if (task.isSuccessful()) {
-
-                                    Toast.makeText(getApplicationContext(), getString(R.string.edit_complete), Toast.LENGTH_LONG).show();
-
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
-
-                                } else {
-
-                                    Toast.makeText(getApplicationContext(), getString(R.string.try_again), Toast.LENGTH_LONG).show();
-
-
-                                }
-
-
-                            }
-                        });
-
-
-                    }
 
                 }
 
@@ -218,110 +197,50 @@ public class EditProfileActivity extends AppCompatActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
-        if (mAuth.getCurrentUser() == null) {
-            ValueEventListener postListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
-                            if (getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
-
-                                User user = child.getValue(User.class);
-
-                                if (!user.name.equals(""))
-                                    name_edit.setText(user.name);
-
-                                if (!user.surname.equals(""))
-                                    surname_edit.setText(user.surname);
-
-                                if (!user.email.equals(""))
-                                    email_edit.setText(user.email);
-
-                                if (!user.phone.equals(""))
-                                    phone_edit.setText(user.phone);
-
-                                if (!user.bio.equals(""))
-                                    bio_edit.setText(user.bio);
-
-                                if (!user.address.equals(""))
-                                    address_edit.setText(user.address);
-
-                                if (!user.ZIP.equals(""))
-                                    zip_edit.setText(user.ZIP);
-
-                                if (!user.zone.equals(""))
-                                    zone_edit.setText(user.zone);
 
 
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
+                        if (mAuth.getCurrentUser().getUid().equals(child.getKey())) {
 
-                            }
+                            User user = child.getValue(User.class);
+
+                            name_edit.setText(user.name);
+                            surname_edit.setText(user.surname);
+                            email_edit.setText(user.email);
+                            phone_edit.setText(user.phone);
+                            bio_edit.setText(user.bio);
+                            address_edit.setText(user.address);
+                            zip_edit.setText(user.ZIP);
+                            zone_edit.setText(user.zone);
+                            username_edit.setText(user.username);
 
 
                         }
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-
                     }
 
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
-
-                }
-            };
-
-            mDatabase.addListenerForSingleValueEvent(postListener);
-
-
-        } else {
-
-            ValueEventListener postListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
-                            if (mAuth.getCurrentUser().getUid().equals(child.getKey())) {
-
-                                User user = child.getValue(User.class);
-
-                                name_edit.setText(user.name);
-                                surname_edit.setText(user.surname);
-                                email_edit.setText(user.email);
-                                phone_edit.setText(user.phone);
-                                bio_edit.setText(user.bio);
-                                address_edit.setText(user.address);
-                                zip_edit.setText(user.ZIP);
-                                zone_edit.setText(user.zone);
-
-
-                            }
-                        }
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-
-                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            }
 
-                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            };
+                Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
 
-            mDatabase.addListenerForSingleValueEvent(postListener);
+            }
+        };
 
-        }
+        mDatabase.addListenerForSingleValueEvent(postListener);
+
+
 
         name_edit.setSelection(name_edit.getText().length());
         surname_edit.setSelection(surname_edit.getText().length());
@@ -331,6 +250,7 @@ public class EditProfileActivity extends AppCompatActivity {
         address_edit.setSelection(address_edit.getText().length());
         zip_edit.setSelection(zip_edit.getText().length());
         zone_edit.setSelection(zone_edit.getText().length());
+        username_edit.setSelection(username_edit.getText().length());
 
         bio_edit.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         bio_edit.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -349,6 +269,7 @@ public class EditProfileActivity extends AppCompatActivity {
         outState.putString("address",address_edit.getText().toString());
         outState.putString("zip",zip_edit.getText().toString());
         outState.putString("zone",zone_edit.getText().toString());
+        outState.putString("username",username_edit.getText().toString());
 
         super.onSaveInstanceState(outState);
 

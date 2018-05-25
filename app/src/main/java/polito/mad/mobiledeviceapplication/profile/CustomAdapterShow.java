@@ -79,6 +79,9 @@ class CustomAdapterShow extends BaseAdapter {
             image.setImageResource(R.drawable.ic_location_city_white_24dp);
         if (array.get(i)[1].equals(context.getString(R.string.user_zone)))
             image.setImageResource(R.drawable.ic_streetview_white_24dp);
+        if (array.get(i)[1].equals(context.getString(R.string.username)))
+            image.setImageResource(R.drawable.ic_account_circle_white_24dp);
+
 
 /*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             image.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimaryDark)));

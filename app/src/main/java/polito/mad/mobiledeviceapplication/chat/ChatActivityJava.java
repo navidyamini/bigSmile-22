@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,10 +49,18 @@ public class ChatActivityJava extends AppCompatActivity {
     private SimpleDateFormat mFormat;
     private EditText input;
     private ImageButton send,send_image;
+    private Toolbar myToolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        myToolbar = (Toolbar) findViewById(R.id.toolbar_chat);
+        setSupportActionBar(myToolbar);
+
+        getSupportActionBar().setTitle(getIntent().getStringExtra(AppConstants.USER_USERNAME_R));
+
 
         final Intent i = getIntent();
 
@@ -67,7 +76,7 @@ public class ChatActivityJava extends AppCompatActivity {
 
                 if (!input.getText().toString().equals("")) {
 
-                    Chat chat = new Chat(i.getStringExtra(AppConstants.USER_NAME_S), i.getStringExtra(AppConstants.USER_NAME_R), FirebaseAuth.getInstance().getCurrentUser().getUid(), i.getStringExtra(AppConstants.USER_ID_R), input.getText().toString(), Calendar.getInstance().getTimeInMillis());
+                    Chat chat = new Chat(i.getStringExtra(AppConstants.USER_USERNAME_S), i.getStringExtra(AppConstants.USER_USERNAME_R), FirebaseAuth.getInstance().getCurrentUser().getUid(), i.getStringExtra(AppConstants.USER_ID_R), input.getText().toString(), Calendar.getInstance().getTimeInMillis());
                     sendMessageToFirebaseUser(getApplicationContext(), chat, "");
                     input.setText("");
 
@@ -149,6 +158,11 @@ public class ChatActivityJava extends AppCompatActivity {
                                     .child(room_type_1)
                                     .child(String.valueOf(chat.timestamp))
                                     .setValue(chat);
+
+                            chats.add(chat);
+                            mChatAdapter.notifyDataSetChanged();
+                            chat_list.scrollToPosition(mChatAdapter.mDataset.size()-1);
+
                         }
                     }
 
@@ -269,38 +283,34 @@ public class ChatActivityJava extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             public View mView;
-            public TextView name;
             public TextView message;
             public TextView timestamp;
-            public ViewHolder(View v, TextView name, TextView message, TextView timestamp) {
+            public ViewHolder(View v, TextView message, TextView timestamp) {
                 super(v);
                 mView = v;
-                this.name = name;
                 this.message = message;
                 this.timestamp = timestamp;
             }
 
 
         }
-
+/*
         class ViewHolder2 extends RecyclerView.ViewHolder {
 
             public View mView;
-            public TextView name;
             public TextView message;
             public TextView timestamp;
             public ImageView user_image;
 
-            public ViewHolder2(View v, TextView name, TextView message, TextView timestamp, ImageView user_image) {
+            public ViewHolder2(View v, TextView message, TextView timestamp, ImageView user_image) {
                 super(v);
                 mView = v;
-                this.name = name;
                 this.message = message;
                 this.timestamp = timestamp;
                 this.user_image = user_image;
             }
 
-        }
+        }*/
 
 
 
@@ -328,25 +338,21 @@ public class ChatActivityJava extends AppCompatActivity {
                 case 0:
 
                     View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_my_message,parent,false);
-                    //TextView ID = v1.findViewById(R.id.ID);
-                    TextView name = v1.findViewById(R.id.name);
                     TextView message = v1.findViewById(R.id.message);
                     TextView timestamp = v1.findViewById(R.id.timestamp);
 
 
-                    ViewHolder vh = new ViewHolder(v1,name,message, timestamp);
+                    ViewHolder vh = new ViewHolder(v1,message, timestamp);
                     return vh;
 
                 case 1:
 
                     View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_other_message,parent,false);
-                    //TextView ID2 = v2.findViewById(R.id.ID);
-                    TextView name2 = v2.findViewById(R.id.name);
                     TextView message2 = v2.findViewById(R.id.message);
                     TextView timestamp2 = v2.findViewById(R.id.timestamp);
 
 
-                    ViewHolder vh2 = new ViewHolder(v2,name2,message2, timestamp2);
+                    ViewHolder vh2 = new ViewHolder(v2,message2, timestamp2);
                     return vh2;
 
             }
@@ -357,10 +363,8 @@ public class ChatActivityJava extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-            holder.name.setText(mDataset.get(position).sender);
             holder.timestamp.setText(mFormat.format(new Date(mDataset.get(position).timestamp)));
             holder.message.setText(mDataset.get(position).message);
-
 
 
         }

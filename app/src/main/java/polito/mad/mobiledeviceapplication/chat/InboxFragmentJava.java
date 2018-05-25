@@ -81,23 +81,27 @@ public class InboxFragmentJava extends Fragment {
                         String key = "null";
                         if (dataSnapshot.hasChildren()) {
                             for (DataSnapshot chat : dataSnapshot.getChildren()) {
-                                for (DataSnapshot message : chat.getChildren().iterator().next().getChildren()) {
-                                    key = message.getKey();
-                                    if(key.equals( "receiverUid")){
-                                        receiverUid = (String) message.getValue();
-                                    }
-                                    if(key.equals("senderUid")){
-                                        senderUid = (String) message.getValue();
-                                    }
-                                }
-                                if(userid.equals(receiverUid)){
-                                    chat_user_ids.add(senderUid);
-                                }
-                                if(userid.equals(senderUid)){
-                                    chat_user_ids.add(receiverUid);
-                                }
 
+                                for (DataSnapshot message : chat.getChildren()) {
 
+                                    for (DataSnapshot field : message.getChildren()) {
+                                        key = field.getKey();
+
+                                        if (key.equals("receiverUid")) {
+                                            receiverUid = (String) field.getValue();
+                                        }
+                                        if (key.equals("senderUid")) {
+                                            senderUid = (String) field.getValue();
+                                        }
+                                    }
+                                    if (userid.equals(receiverUid)) {
+                                        chat_user_ids.add(senderUid);
+                                    }
+                                    if (userid.equals(senderUid)) {
+                                        chat_user_ids.add(receiverUid);
+                                    }
+
+                                }
 
                             }
                         }

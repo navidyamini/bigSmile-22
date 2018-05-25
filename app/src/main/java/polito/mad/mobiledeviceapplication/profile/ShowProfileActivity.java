@@ -121,113 +121,58 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         wait_lay.setVisibility(View.VISIBLE);
 
-        if (mAuth.getCurrentUser()==null) {
-            ValueEventListener postListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
-                            if (getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
-
-                                User user = child.getValue(User.class);
-
-                                arrayList.add(new String[]{user.name, getString(R.string.user_name)});
-                                arrayList.add(new String[]{user.surname, getString(R.string.user_surname)});
-                                arrayList.add(new String[]{user.email, getString(R.string.user_email)});
-                                arrayList.add(new String[]{user.phone, getString(R.string.user_PhoneNumber)});
-                                arrayList.add(new String[]{user.bio, getString(R.string.user_ShortBio)});
-                                arrayList.add(new String[]{user.address, getString(R.string.user_address)});
-                                arrayList.add(new String[]{user.ZIP, getString(R.string.user_zipCode)});
-                                arrayList.add(new String[]{user.zone, getString(R.string.user_zone)});
-
-                                listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
-
-                                wait_lay.setVisibility(View.INVISIBLE);
 
 
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            }
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
+                        if (mAuth.getCurrentUser().getUid().equals(child.getKey())) {
+
+                            User user = child.getValue(User.class);
+
+                            arrayList.add(new String[]{user.name, getString(R.string.user_name)});
+                            arrayList.add(new String[]{user.surname, getString(R.string.user_surname)});
+                            arrayList.add(new String[]{user.username, getString(R.string.username)});
+                            arrayList.add(new String[]{user.email, getString(R.string.user_email)});
+                            arrayList.add(new String[]{user.phone, getString(R.string.user_PhoneNumber)});
+                            arrayList.add(new String[]{user.bio, getString(R.string.user_ShortBio)});
+                            arrayList.add(new String[]{user.address, getString(R.string.user_address)});
+                            arrayList.add(new String[]{user.ZIP, getString(R.string.user_zipCode)});
+                            arrayList.add(new String[]{user.zone, getString(R.string.user_zone)});
+
+                            listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
+
+                            wait_lay.setVisibility(View.INVISIBLE);
 
 
                         }
-
-                    } else {
-
-                        wait_lay.setVisibility(View.VISIBLE);
-                        wait_message.setText(getString(R.string.try_again));
-                        wait_progress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-
-
                     }
 
+                } else {
 
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
-
-                }
-            };
-
-            mDatabase.addListenerForSingleValueEvent(postListener);
-
-
-        } else {
-
-            ValueEventListener postListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
-                            if (mAuth.getCurrentUser().getUid().equals(child.getKey())) {
-
-                                User user = child.getValue(User.class);
-
-                                arrayList.add(new String[]{user.name, getString(R.string.user_name)});
-                                arrayList.add(new String[]{user.surname, getString(R.string.user_surname)});
-                                arrayList.add(new String[]{user.email, getString(R.string.user_email)});
-                                arrayList.add(new String[]{user.phone, getString(R.string.user_PhoneNumber)});
-                                arrayList.add(new String[]{user.bio, getString(R.string.user_ShortBio)});
-                                arrayList.add(new String[]{user.address, getString(R.string.user_address)});
-                                arrayList.add(new String[]{user.ZIP, getString(R.string.user_zipCode)});
-                                arrayList.add(new String[]{user.zone, getString(R.string.user_zone)});
-
-                                listView.setAdapter(new CustomAdapterShow(getApplicationContext(), arrayList));
-
-                                wait_lay.setVisibility(View.INVISIBLE);
-
-
-                            }
-                        }
-
-                    } else {
-
-                        wait_lay.setVisibility(View.VISIBLE);
-                        wait_message.setText(getString(R.string.try_again));
-                        wait_progress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
-
-                    }
+                    wait_lay.setVisibility(View.VISIBLE);
+                    wait_message.setText(getString(R.string.try_again));
+                    wait_progress.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
 
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            }
 
-                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            };
+                Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
 
-            mDatabase.addListenerForSingleValueEvent(postListener);
+            }
+        };
 
-        }
+        mDatabase.addListenerForSingleValueEvent(postListener);
+
+
 
 
 

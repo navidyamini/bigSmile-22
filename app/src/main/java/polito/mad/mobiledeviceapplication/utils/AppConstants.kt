@@ -5,4 +5,6 @@ object AppConstants {
     const val USER_ID_S = "user_receiver_s"
     const val USER_NAME_R = "user_name_r"
     const val USER_ID_R = "user_receiver_r"
+    const val USER_USERNAME_S = "user_username_s"
+    const val USER_USERNAME_R = "user_username_r"
 }

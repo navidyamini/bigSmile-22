@@ -655,8 +655,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
         if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getClass().equals(HomeFragment.class))
             moveTaskToBack(true);
-        else if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentById(R.id.container).getClass().equals(SearchMap.class))
-            getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction().replace(R.id.container,new SearchForm()).commit();
+        
+        else if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentById(R.id.container)!=null){
+            if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentById(R.id.container).getClass().equals(SearchMap.class))
+                getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction().replace(R.id.container,new SearchForm()).commit();
+        }
         else
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
 
@@ -682,7 +685,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             ((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
             Intent i = new Intent(getApplicationContext(),ChatActivityJava.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
-            i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id"));
+            i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id_r"));
+            i.putExtra(AppConstants.USER_USERNAME_R,intent.getStringExtra("username_r"));
+            i.putExtra(AppConstants.USER_USERNAME_S,getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
             startActivity(i);
 
         }
