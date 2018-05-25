@@ -75,7 +75,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragmentJava.FragChatObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -90,6 +90,17 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     private NavigationView navigation;
     public android.support.v7.widget.Toolbar toolbar;
 
+    @Override
+    public void notifyChatRequest(Intent intent) {
+        if (Constants.Chat_Request.equals(intent.getAction())){
+            Intent i = new Intent(getApplicationContext(),ChatActivityJava.class);
+            i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
+            i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id_r"));
+            i.putExtra(AppConstants.USER_USERNAME_R,intent.getStringExtra("username_r"));
+            i.putExtra(AppConstants.USER_USERNAME_S,getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
+            startActivity(i);
+        }
+    }
 
     @Override
     public void searchBooks(Intent intent) {
