@@ -39,7 +39,7 @@ class ChatService : android.app.Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 
-        getMessageFromAllFirebaseUsers(FirebaseAuth.getInstance().currentUser!!.uid)
+        FirebaseAuth.getInstance().currentUser?.uid?.let { getMessageFromAllFirebaseUsers(it) }
 
 
         return Service.START_STICKY

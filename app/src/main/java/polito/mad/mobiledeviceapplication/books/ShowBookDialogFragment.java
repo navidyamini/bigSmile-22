@@ -1,6 +1,8 @@
 package polito.mad.mobiledeviceapplication.books;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,13 +10,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.Calendar;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
@@ -36,13 +42,14 @@ public class ShowBookDialogFragment extends DialogFragment {
     private TextView name_surname;
     private ImageView cover, book_conditions_image;
     private Button contact_button;
+    private Button borrow_request;
 
     public interface FragContactObserver {
         void notifyContactRequest(Intent intent);
     }
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_show_book, container, false);
 
 
@@ -61,6 +68,8 @@ public class ShowBookDialogFragment extends DialogFragment {
         name_surname = (TextView) v.findViewById(R.id.name_surname);
 
         contact_button = (Button) v.findViewById(R.id.contact_button);
+
+        borrow_request = (Button) v.findViewById(R.id.borrow_button);
 
 
 
@@ -124,6 +133,81 @@ public class ShowBookDialogFragment extends DialogFragment {
 
             }
         }));
+
+        borrow_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mbuilder = new AlertDialog.Builder(getContext());
+                View v = inflater.inflate(R.layout.borrow_request,container,false);
+                final EditText startDate = v.findViewById(R.id.startDateEditText);
+                final EditText endDate = v.findViewById(R.id.endDateEditText);
+
+                startDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DatePickerDialog picker;
+                        //DatePickerDialog date = new DatePickerDialog(getContext());
+                        final Calendar cldr = Calendar.getInstance();
+                        int day = cldr.get(Calendar.DAY_OF_MONTH);
+                        int month = cldr.get(Calendar.MONTH);
+                        int year = cldr.get(Calendar.YEAR);
+                        // date picker dialog
+                        picker = new DatePickerDialog(getContext(), R.style.DialogTheme,
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                        dismiss();
+                                    }
+                                }, year, month, day);
+                        picker.show();
+
+                    }
+                });
+                endDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DatePickerDialog picker1;
+                        //DatePickerDialog date = new DatePickerDialog(getContext());
+                        final Calendar cldr = Calendar.getInstance();
+
+                        int day = cldr.get(Calendar.DAY_OF_MONTH);
+                        int month = cldr.get(Calendar.MONTH);
+                        int year = cldr.get(Calendar.YEAR);
+                        System.out.println(getContext());
+                        // date picker dialog
+                        picker1 = new DatePickerDialog(view.getContext(), R.style.DialogTheme,
+
+                                new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                        endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                        dismiss();
+                                    }
+                                }, year, month, day);
+                        picker1.show();
+
+                    }
+                });
+
+                mbuilder.setView(v);
+                mbuilder.setCancelable(false);
+                mbuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        //TODO make request
+                    }
+                });
+                mbuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                mbuilder.create().show();
+            }
+        });
 
         return v;
     }

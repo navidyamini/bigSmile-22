@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/startDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="30dp"
+        android:text="Start Date"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/startDateEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/startDateTextView"
+        android:layout_alignBottom="@+id/startDateTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_toEndOf="@+id/startDateTextView"
+        android:ems="10"
+        android:hint="Tap to insert start date"
+        android:inputType="date"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/endDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/startDateTextView"
+        android:layout_below="@+id/startDateEditText"
+        android:layout_marginTop="30dp"
+        android:text="End Date"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/endDateEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/endDateTextView"
+        android:layout_alignBottom="@+id/endDateTextView"
+        android:layout_alignEnd="@+id/startDateEditText"
+        android:layout_alignStart="@+id/startDateEditText"
+        android:ems="10"
+        android:hint="Tap to insert end date"
+        android:inputType="date"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="12sp" />
+</RelativeLayout>

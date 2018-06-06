@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Rate Your Experience"
+        android:textSize="20sp" />
+
+        <RatingBar
+            android:id="@+id/ratingBarUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView8"
+            android:layout_below="@+id/textView7"
+            android:numStars="5"
+            android:rating="2.0"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:stepSize="1.0" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/otherUserName"
+            android:layout_alignBottom="@+id/otherUserName"
+            android:layout_alignStart="@+id/ratingBarUser"
+            android:text="Comment about:"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/userComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/ratingBarUser"
+            android:layout_below="@+id/ratingBarUser"
+            android:ems="10"
+            android:hint="Comment"
+            android:inputType="textPersonName" />
+
+        <RatingBar
+            android:id="@+id/ratingBarBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView8"
+            android:layout_below="@+id/textView10"
+            android:numStars="5"
+            android:rating="2.0"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:stepSize="1.0" />
+
+        <TextView
+            android:id="@+id/otherUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView8"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@+id/textView7"
+            android:text="TextView"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/bookName"
+            android:layout_alignBottom="@+id/bookName"
+            android:layout_alignStart="@+id/ratingBarBook"
+            android:layout_marginTop="30dp"
+            android:text="Comment about:"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/bookName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userComment"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="50dp"
+            android:layout_toEndOf="@+id/textView7"
+            android:text="TextView"
+            android:textSize="12dp" />
+
+        <EditText
+            android:id="@+id/bookComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView10"
+            android:layout_below="@+id/ratingBarBook"
+            android:ems="10"
+            android:hint="Comment"
+            android:inputType="textPersonName" />
+    </RelativeLayout>
+
+
+</ScrollView>
+</RelativeLayout>
