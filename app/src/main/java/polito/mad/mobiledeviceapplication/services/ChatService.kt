@@ -32,6 +32,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants
 class ChatService : android.app.Service() {
 
     private var sender: String? = null
+    private var show_not: Boolean? = false
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -64,31 +65,40 @@ class ChatService : android.app.Service() {
                     chats.ref.addChildEventListener(object : ChildEventListener {
                         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
 
+                            show_not = false;
                             for (child in dataSnapshot.children) {
+
 
                                 if (child.key == "sender")
                                     sender = child.value as String?
 
+                                if (child.key == "receiverUid")
+                                    if (child.value == FirebaseAuth.getInstance().currentUser?.uid)
+                                        show_not = true
+
 
                             }
 
+                            if (show_not == true) {
 
-                            var bitmap = BitmapFactory.decodeResource(applicationContext.resources, R.drawable.ic_email_white_24dp)
-                            bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
+                                var bitmap = BitmapFactory.decodeResource(applicationContext.resources, R.drawable.ic_email_white_24dp)
+                                bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 
-                            val builder = NotificationCompat.Builder(applicationContext, "Message")
-                                    .setContentTitle(sender)
-                                    .setContentText("A new message arrived!")
-                                    .setStyle(NotificationCompat.BigTextStyle().bigText("A new messages arrived!"))
-                                    .setSmallIcon(R.drawable.ic_email_white_24dp)
-                                    .setAutoCancel(true)
-                                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                                    .setVibrate(longArrayOf(0, 250, 250, 250))
+                                val builder = NotificationCompat.Builder(applicationContext, "Message")
+                                        .setContentTitle(sender)
+                                        .setContentText("A new message arrived!")
+                                        .setStyle(NotificationCompat.BigTextStyle().bigText("A new messages arrived!"))
+                                        .setSmallIcon(R.drawable.ic_email_white_24dp)
+                                        .setAutoCancel(true)
+                                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                        .setVibrate(longArrayOf(0, 250, 250, 250))
 
-                            val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-                            notificationManager.notify(30, builder.build())
-                            println("NOTIFICATION")
+                                notificationManager.notify(30, builder.build())
+                                println("NOTIFICATION")
+
+                            }
 
                         }
 
