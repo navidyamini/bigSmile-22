@@ -69,7 +69,7 @@ class ChatActivity : AppCompatActivity() {
         send!!.setOnClickListener {
             if (input!!.text.toString() != "") {
 
-                val chat = Chat(i!!.getStringExtra(AppConstants.USER_USERNAME_S), i!!.getStringExtra(AppConstants.USER_USERNAME_R), FirebaseAuth.getInstance().currentUser!!.uid, i!!.getStringExtra(AppConstants.USER_ID_R), input!!.text.toString(), Calendar.getInstance().timeInMillis)
+                val chat = Chat(i!!.getStringExtra(AppConstants.USER_USERNAME_S), i!!.getStringExtra(AppConstants.USER_USERNAME_R), FirebaseAuth.getInstance().currentUser!!.uid, i!!.getStringExtra(AppConstants.USER_ID_R), input!!.text.toString(),"NEW" ,Calendar.getInstance().timeInMillis)
                 sendMessageToFirebaseUser(applicationContext, chat, "")
                 input!!.setText("")
 
@@ -175,6 +175,32 @@ class ChatActivity : AppCompatActivity() {
                                             val chat = dataSnapshot.getValue(Chat::class.java)
                                             if (chat != null) {
                                                 chats?.add(chat)
+                                                if (receiverUid != FirebaseAuth.getInstance().currentUser!!.uid) {
+                                                    val map = HashMap<String, Any>()
+                                                    map.set("flag", "OLD")
+                                                    //chat.toMap().set("flag", "OLD")
+                                                    System.out.println(map)
+                                                    for (chat in dataSnapshot.children) {
+
+                                                        //for (message in chat.children) {
+
+                                                            //for (field in message.children) {
+                                                                if (chat.key == "flag") {
+                                                                    FirebaseDatabase.getInstance()
+                                                                            .reference
+                                                                            .child(Constants.ARG_CHAT_ROOMS)
+                                                                            .child(room_type_2)
+                                                                            .updateChildren(map)
+
+                                                                }
+
+
+                                                           // }
+
+                                                        //}
+                                                    }
+
+                                                }
                                             }
 
                                             mChatAdapter?.notifyDataSetChanged()
@@ -209,6 +235,33 @@ class ChatActivity : AppCompatActivity() {
                                             // Chat message is retreived.
                                             val chat = dataSnapshot.getValue(Chat::class.java)
                                             chats!!.add(chat!!)
+                                            if (receiverUid != FirebaseAuth.getInstance().currentUser!!.uid ) {
+                                                val map = HashMap<String,Any>()
+                                                map.set("flag","OLD")
+                                                //chat.toMap().set("flag", "OLD")
+
+                                                System.out.println(map)
+                                                for (chat in dataSnapshot.children) {
+
+                                                    //for (message in chat.children) {
+
+                                                        //for (field in message.children) {
+                                                            if(chat.key =="flag"){
+                                                                FirebaseDatabase.getInstance()
+                                                                        .reference
+                                                                        .child(Constants.ARG_CHAT_ROOMS)
+                                                                        .child(room_type_2)
+                                                                        .updateChildren(map)
+
+                                                            }
+
+
+                                                        //}
+
+                                                   // }
+                                                }
+
+                                            }
                                             mChatAdapter!!.notifyDataSetChanged()
                                             chat_list!!.scrollToPosition(mChatAdapter!!.mDataset.size - 1)
 
