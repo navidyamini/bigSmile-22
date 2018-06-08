@@ -37,7 +37,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:focusedByDefault="false"
-            android:hint="Type your message"
+            android:hint="@string/Type_message"
             android:inputType="text|textPersonName"
             android:textColor="#616161"
             android:textColorHint="#bdbdbd" />

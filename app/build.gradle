@@ -63,7 +63,6 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
-
     //groupie
     implementation 'com.xwray:groupie:2.0.3'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'

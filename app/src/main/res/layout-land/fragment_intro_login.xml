@@ -173,7 +173,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/roboto_light"
-            android:text="Effettua il login per iniziare a condivdere i tuoi libri, visualizzare le proposte offerte da altri utenti e iniziare lo scambio"
+            android:text="@string/first_page_message"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="16sp" />

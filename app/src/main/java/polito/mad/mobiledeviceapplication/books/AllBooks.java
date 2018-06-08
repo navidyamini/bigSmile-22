@@ -61,6 +61,7 @@ public class AllBooks extends Fragment {
     private ValueEventListener postListener_nofirebase,postListener_firebase;
     private RelativeLayout field_lay, wait_lay;
     private ImageRequest request;
+    public String currentBookId;
 
 
     @Nullable
@@ -105,6 +106,8 @@ public class AllBooks extends Fragment {
 
                 if (book_list.getChildAdapterPosition(view)==0) {
 
+                    currentBookId= mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("book_id").toString();
+                    System.out.println(currentBookId);
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference storageRef = storage.getReference().child("images").child("books").child(mAdapter.mDataset.get(mAdapter.mDataset.size()-1).get("book_id").toString() + ".png");
 
@@ -325,6 +328,8 @@ public class AllBooks extends Fragment {
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference storageRef = storage.getReference().child("images").child("books").child(mDataset.get(position).get("book_id").toString() + ".png");
 
+                    currentBookId = mDataset.get(position).get("book_id").toString();
+                    System.out.println(currentBookId);
 
                     final long ONE_MEGABYTE = 1024 * 1024;
                     storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -424,14 +429,6 @@ public class AllBooks extends Fragment {
 
 
             }
-
-
-
-
-
-
-
-
 
         }
 

@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="30dp"
-        android:text="Start Date"
+        android:text="@string/start_date"
         android:textSize="12sp" />
 
     <EditText
@@ -26,7 +26,7 @@
         android:layout_marginRight="16dp"
         android:layout_toEndOf="@+id/startDateTextView"
         android:ems="10"
-        android:hint="Tap to insert start date"
+        android:hint="@string/tap_start_date"
         android:inputType="date"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="12sp" />
@@ -38,7 +38,7 @@
         android:layout_alignStart="@+id/startDateTextView"
         android:layout_below="@+id/startDateEditText"
         android:layout_marginTop="30dp"
-        android:text="End Date"
+        android:text="@string/end_date"
         android:textSize="12sp" />
 
     <EditText
@@ -50,7 +50,7 @@
         android:layout_alignEnd="@+id/startDateEditText"
         android:layout_alignStart="@+id/startDateEditText"
         android:ems="10"
-        android:hint="Tap to insert end date"
+        android:hint="@string/tap_end_date"
         android:inputType="date"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="12sp" />

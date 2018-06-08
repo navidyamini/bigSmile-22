@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:fontFamily="@font/roboto_regular"
-        android:text="There are no reservations"
+        android:text="@string/no_reservation"
         android:textSize="18sp"
         android:visibility="invisible" />
 

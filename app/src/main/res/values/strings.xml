@@ -84,6 +84,8 @@
     <string name="available_books">Available books</string>
     <string name="home">Home</string>
     <string name="inbox">Inbox</string>
+    <string name="edit_book">Edit Book</string>
+    <string name="book_not_found">Book not found</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -91,5 +93,22 @@
     <string name="requests_text">My requests</string>
     <string name="outgoing_requests">Outgoing requests</string>
     <string name="incoming_requests">Incoming requests</string>
+    <string name="Type_message">Type your message</string>
+
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="tap_start_date">Tap to insert start date</string>
+    <string name="tap_end_date">Tap to insert end date</string>
+
+    <string name="all_availabe_book">All books available</string>
+    <string name="Favorite_category">Favorite category</string>
+    <string name="new_books">New Books</string>
+
+    <string name="no_reservation">There is no reservation request.</string>
+
+    <string name="first_page_message">Log in to start sharing your books, view proposals offered by other users and start the exchange</string>
+
+    <string name="Outgoing_requests">Outgoing requests</string>
+    <string name="Incoming_requests">Incoming requests</string>
 </resources>
 

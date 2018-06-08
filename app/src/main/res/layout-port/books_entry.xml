@@ -42,7 +42,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
-            android:text="Author"
+            android:text="@string/author"
             android:textSize="10sp" />
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/roboto_light"
-            android:text="Title"
+            android:text="@string/title"
             android:textSize="14sp" />
     </RelativeLayout>
 </RelativeLayout>

@@ -13,7 +13,7 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Edit profile"
+        app:title="@string/edit_profile"
         app:titleMarginStart="30dp">
 
     </android.support.v7.widget.Toolbar>
