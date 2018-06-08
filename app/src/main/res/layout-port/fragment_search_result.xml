@@ -41,7 +41,7 @@
         android:elevation="7dp"
         android:fontFamily="@font/roboto_light"
         android:padding="6dp"
-        android:text="Clicca i puntatori per ricevere maggiori informazioni sui risultati"
+        android:text="@string/point_informtion"
         android:textAlignment="center"
         android:textSize="12sp" />
 

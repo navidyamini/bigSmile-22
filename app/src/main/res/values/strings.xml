@@ -95,8 +95,8 @@
     <string name="incoming_requests">Incoming requests</string>
     <string name="Type_message">Type your message</string>
 
-    <string name="start_date">Start date</string>
-    <string name="end_date">End date</string>
+    <string name="start_date">Start date:</string>
+    <string name="end_date">End date:</string>
     <string name="tap_start_date">Tap to insert start date</string>
     <string name="tap_end_date">Tap to insert end date</string>
 
@@ -108,7 +108,13 @@
 
     <string name="first_page_message">Log in to start sharing your books, view proposals offered by other users and start the exchange</string>
 
-    <string name="Outgoing_requests">Outgoing requests</string>
-    <string name="Incoming_requests">Incoming requests</string>
+    <string name="search_filter">Enter search filters</string>
+
+    <string name="point_informtion">Click the pointers to receive more information about the results</string>
+
+    <string name ="comments">Comments</string>
+    <string name="cancel">Cancel</string>
+    <string name="operations">Operations</string>
+    <string name="status">Status:</string>
 </resources>
 

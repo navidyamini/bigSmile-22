@@ -23,7 +23,7 @@
             android:layout_below="@+id/end_txt"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Status:"
+            android:text="@string/status"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -63,7 +63,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:text="Operations"
+                android:text="@string/operations"
                 android:textColor="@color/colorPrimaryDark" />
 
             <Button
@@ -74,7 +74,7 @@
                 android:layout_toEndOf="@+id/operation_btn"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textColor="@android:color/holo_red_dark" />
         </LinearLayout>
 
@@ -112,7 +112,7 @@
             android:layout_below="@+id/requester_name"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
-            android:text="Start date:"
+            android:text="@string/start_date"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 
@@ -124,7 +124,7 @@
             android:layout_below="@+id/start_txt"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_light"
-            android:text="End date:"
+            android:text="@string/end_date"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 

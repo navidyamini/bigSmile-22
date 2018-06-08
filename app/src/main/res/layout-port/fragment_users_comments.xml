@@ -60,5 +60,5 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/commentsListView"
         android:layout_below="@+id/userRating"
-        android:text="Comments" />
+        android:text="@string/comments" />
 </RelativeLayout>
