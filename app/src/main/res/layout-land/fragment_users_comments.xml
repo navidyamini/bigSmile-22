@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/userProfileImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+    <TextView
+        android:id="@+id/userNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/userRating"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_toEndOf="@+id/userProfileImage"
+        android:text="UserName" />
+
+    <RatingBar
+        android:id="@+id/userRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/userProfileImage"
+        android:layout_below="@+id/userProfileImage"
+        android:layout_centerInParent="false"
+        android:layout_gravity="right"
+        android:numStars="5"
+        android:rating="2.0"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:stepSize="1.0" />
+
+    <ListView
+        android:id="@+id/commentsListView"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/userProfileImage"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_toEndOf="@+id/userRating"
+        android:paddingBottom="16dp" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/userMapView"
+        android:layout_width="240dp"
+        android:layout_height="145dp"
+        android:layout_alignStart="@+id/userRating"
+        android:layout_below="@+id/userRating" />
+</RelativeLayout>

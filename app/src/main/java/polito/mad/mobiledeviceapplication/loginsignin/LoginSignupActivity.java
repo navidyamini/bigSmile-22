@@ -399,7 +399,7 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
         }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser!=null) {
+        if (currentUser!=null ) {
             //ALREADY LOGGED
             //System.out.println("User " + currentUser.getPhoneNumber());
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
