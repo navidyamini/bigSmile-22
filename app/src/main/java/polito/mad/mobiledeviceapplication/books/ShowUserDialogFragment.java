@@ -90,28 +90,12 @@ public class ShowUserDialogFragment extends DialogFragment {
 
     }
 
-    @Override
-    public void onStart() {
-        SupportMapFragment mapFragment = ((SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.userMapView));
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-
-                map = googleMap;
-
-
-            }
-        });
-
-        super.onStart();
-    }
-
     public void retrieveUserInformation(User user, float rating, ArrayList<Comment> comments){
 
         username.setText(user.username);
         user_rating.setRating(rating);
         comment_list.setAdapter(new MyCommentAdapter(getContext(),comments));
-        retrieveLatLng(user.address);
+        //retrieveLatLng(user.address);
 
 
     }

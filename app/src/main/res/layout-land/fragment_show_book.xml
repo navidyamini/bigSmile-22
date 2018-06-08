@@ -14,16 +14,27 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp">
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/cover"
+        android:id="@+id/scrollView2">
 
         <RelativeLayout
+            android:id="@+id/info_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="62dp">
+
+            <ListView
+                android:id="@+id/comment_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/name_surname"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/extra_tags"
@@ -141,10 +152,26 @@
                 android:textSize="18sp" />
 
             <Button
+                android:id="@+id/borrow_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="false"
+                android:layout_alignStart="@+id/scrollView2"
+                android:layout_below="@+id/contact_button"
+                android:layout_marginStart="72dp"
+                android:background="@drawable/rounded_button"
+                android:fontFamily="@font/roboto_medium"
+                android:padding="6dp"
+                android:paddingBottom="10dp"
+                android:text="Borrow request"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16sp" />
+
+            <Button
                 android:id="@+id/contact_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/name_surname"
+                android:layout_below="@+id/comment_list"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="20dp"
@@ -153,24 +180,6 @@
                 android:padding="6dp"
                 android:paddingBottom="10dp"
                 android:text="Contatta il proprietario"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/borrow_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/contact_button"
-                android:layout_alignParentStart="false"
-                android:layout_below="@+id/contact_button"
-                android:layout_alignStart="@+id/contact_button"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/rounded_button"
-                android:fontFamily="@font/roboto_medium"
-                android:padding="6dp"
-                android:paddingBottom="10dp"
-                android:text="Borrow request"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp" />
 
@@ -189,17 +198,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="24sp" />
 
-            <ImageButton
-                android:id="@+id/info_button"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_above="@+id/contact_button"
-                android:layout_toEndOf="@+id/name_surname"
-                android:background="@android:color/transparent"
-                android:elevation="6dp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/baseline_info_white_24" />
-
             <ImageView
                 android:id="@+id/book_condition_image"
                 android:layout_width="100dp"
@@ -210,6 +208,16 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 app:srcCompat="@drawable/book_cover" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignEnd="@+id/name_surname"
+                android:layout_alignTop="@+id/name_surname"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/baseline_info_white_24" />
         </RelativeLayout>
     </ScrollView>
 
