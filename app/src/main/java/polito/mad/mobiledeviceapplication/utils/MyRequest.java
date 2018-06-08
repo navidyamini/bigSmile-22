@@ -42,11 +42,13 @@ public class MyRequest {
 
     public enum STATUS{
 
-        WAIT,
-        SENT,
-        ACCEPTED,
+        WAIT, //1
+        SENT, //3
+        ACCEPTED, //2
         REJECTED,
-        ENDED
+        ENDED, //6
+        RECEIVED, //4
+        SENT_BACK //5
 
 
     }

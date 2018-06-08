@@ -151,7 +151,7 @@ public class IncomingRequests extends Fragment {
                             @Override
                             public void onClick(View v) {
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.AppTheme);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
                                 builder.setCancelable(true);
                                 builder.setTitle("Delete book request");
                                 builder.setMessage("Are you sure you want to reject this reservation? The borrower will be notified about your decision");
@@ -208,7 +208,7 @@ public class IncomingRequests extends Fragment {
                             }
                         });
 
-                    } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT.toString())){
+                    } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT_BACK.toString())){
 
 
                         holder.operation_btn.setText("Finalize the lending");
@@ -216,7 +216,7 @@ public class IncomingRequests extends Fragment {
                             @Override
                             public void onClick(View v) {
 
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
                                 builder.setCancelable(false);
                                 builder.setTitle("Lending finalization");
                                 builder.setMessage("Have you received your book back from the borrower?");
@@ -235,7 +235,7 @@ public class IncomingRequests extends Fragment {
                                             observer.endRequest(intent);
                                         }
 
-                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
                                         View v = getLayoutInflater().inflate(R.layout.rating,null);
                                         builder1.setView(v);
                                         builder1.setCancelable(false);
@@ -302,7 +302,7 @@ public class IncomingRequests extends Fragment {
                             @Override
                             public void onClick(View v) {
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.AppTheme);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
                                 builder.setCancelable(true);
                                 builder.setTitle("Delete book request");
                                 builder.setMessage("Are you sure you want to reject this reservation? The borrower will be notified about your decision");
@@ -354,84 +354,72 @@ public class IncomingRequests extends Fragment {
                                     observer.startLending(intent);
                                 }
 
-
-
                             }
                         });
 
+                    } else {
 
-                    } /*else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.ASK_BACK.toString())) {
-
-                        holder.operation_btn.setText("Contact the borrower");
+                        holder.operation_btn.setText("More info about the book");
                         holder.operation_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
-                                Intent intent = new Intent(getContext(), ChatActivity.class);
-                                intent.putExtra(AppConstants.USER_USERNAME_R,((MyRequest)mDataset.get(position).get("request")).requester_id.toString());
-                                getActivity().startActivity(intent);
-                            }
+
+                                if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT.toString())) {
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                                    builder.setCancelable(false);
+                                    builder.setTitle("Book status: SENT");
+                                    builder.setMessage("The book has been sent to the borrower but it has not been received or it has not been notified by him/her");
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    builder.create().show();
+
+                                } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.RECEIVED.toString())) {
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                                    builder.setCancelable(false);
+                                    builder.setTitle("Book status: RECEIVED");
+                                    builder.setMessage("The book has been received correctly by the borrower");
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    builder.create().show();
+
+                                }
+
+                                }
                         });
 
-                        holder.cancel_btn.setText("Retire the book regaining");
+                        holder.cancel_btn.setText("Contact the borrower");
+                        holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
-                                String req_id = mDataset.get(position).get("request_id").toString();
 
                                 Activity a = getActivity();
 
                                 if (a instanceof RequestsFragment.RequestObserver) {
                                     RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
-                                    Intent intent = new Intent(Constants.START_LENDING);
-                                    intent.putExtra("request_id",req_id);
-                                    observer.startLending(intent);
+                                    Intent intent = new Intent(Constants.CHAT_REQUEST);
+                                    intent.putExtra("user_id_r",((MyRequest)mDataset.get(position).get("request")).requester_id.toString());
+                                    observer.contactBorrower(intent);
                                 }
+
 
                             }
                         });
 
 
-                    }*/
-
-
-                    /*holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Cancel reservation");
-                            builder.setMessage("Are you sure you want to delete this reservation?");
-                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    String req_id = mDataset.get(position).get("request_id").toString();
-
-                                    Activity a = getActivity();
-
-                                    if (a instanceof RequestsFragment.RequestObserver) {
-                                        RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
-                                        Intent intent = new Intent(Constants.DELETE_REQUEST);
-                                        intent.putExtra("request_id",req_id);
-                                        observer.deleteRequest(intent);
-                                    }
-
-
-                                }
-                            });
-                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            builder.create().show();
-                        }
-                    });*/
-
+                    }
                     holder.info_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -471,11 +459,6 @@ public class IncomingRequests extends Fragment {
 
 
         myRequestsAdapter.notifyDataSetChanged();
-
-
-
-
-
 
         if (this.requests.size()==0)
             empty_txt.setVisibility(View.VISIBLE);

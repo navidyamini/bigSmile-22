@@ -33,6 +33,8 @@ public class Constants {
     public final static String ACCEPT_REQUEST ="ACCEPT_REQUEST";
     public final static String START_LENDING ="START_LENDING";
     public final static String END_REQUEST ="END_REQUEST";
+    public final static String RECEIVED_REQUEST ="RECEIVED_REQUEST";
+    public final static String SENTBACK_REQUEST ="SENTBACK_REQUEST";
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 

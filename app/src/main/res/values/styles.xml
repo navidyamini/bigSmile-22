@@ -56,12 +56,14 @@
 
     </style>
 
-    <style name="DialogTheme">
+    <style name="DialogTheme" parent="Base.Theme.AppCompat.Dialog">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/textColorEntryList</item>
         <item name="android:colorForeground">@color/textColorEntryList</item>
         <item name="textColorAlertDialogListItem">@color/textColorEntryList</item>
     </style>
+
+
 
 </resources>

@@ -99,6 +99,96 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     private NavigationView navigation;
     public android.support.v7.widget.Toolbar toolbar;
 
+
+    @Override
+    public void sentbackRequest(Intent intent) {
+
+        if (Constants.SENTBACK_REQUEST.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot request : book.child("requests").getChildren()){
+
+                            if (request.getKey().equals(req_id)){
+
+                                HashMap<String,Object> map = (HashMap<String, Object>) request.getValue(MyRequest.class).toMap();
+                                map.put("status",MyRequest.STATUS.SENT_BACK);
+                                request.getRef().updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        searchRequests(new Intent(Constants.SEARCH_OUTGOING_REQUESTS));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
+
+        }
+
+    }
+
+    @Override
+    public void receivedRequest(Intent intent) {
+
+        if (Constants.RECEIVED_REQUEST.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot request : book.child("requests").getChildren()){
+
+                            if (request.getKey().equals(req_id)){
+
+                                HashMap<String,Object> map = (HashMap<String, Object>) request.getValue(MyRequest.class).toMap();
+                                map.put("status",MyRequest.STATUS.RECEIVED);
+                                request.getRef().updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        searchRequests(new Intent(Constants.SEARCH_OUTGOING_REQUESTS));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+    }
+
     @Override
     public void contactBorrower(Intent intent) {
 
@@ -244,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                                         if (fragment!=null && fragment.isVisible()){
 
+                                            searchRequests(new Intent(Constants.SEARCH_INCOMING_REQUESTS));
                                             searchRequests(new Intent(Constants.SEARCH_OUTGOING_REQUESTS));
 
                                         }
@@ -284,13 +375,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                     MyRequest r = request.getValue(MyRequest.class);
                                     HashMap<String,Object> map = (HashMap)r.toMap();
                                     map.put("status",MyRequest.STATUS.REJECTED.toString());
-                                    request.getRef().updateChildren(r.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    request.getRef().updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             RequestsFragment fragment = (RequestsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
 
                                             if (fragment!=null && fragment.isVisible()) {
                                                 searchRequests(new Intent(Constants.SEARCH_INCOMING_REQUESTS));
+                                                searchRequests(new Intent(Constants.SEARCH_OUTGOING_REQUESTS));
                                             }
                                         }
                                     });
@@ -379,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                         map.put("book_name",book.getValue(Book.class).title);
                                         map.put("username",user.getValue(User.class).username);
                                         map.put("request_id",request.getKey());
-
+                                        map.put("owner_id",user.getKey());
                                         list.add(map);
                                     }
                                 }
@@ -842,7 +934,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
         navigation = (NavigationView) findViewById(R.id.drawer_navigation);
-        ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
+        ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + " " + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {

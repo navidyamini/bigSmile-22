@@ -17,6 +17,6 @@
         android:fontFamily="@font/roboto_medium"
         android:text="Welcome User Name"
         android:textColor="@android:color/white"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
 </RelativeLayout>

@@ -129,8 +129,8 @@ public class OutgoingRequests extends Fragment {
 
             holder.owner_name.setText(mDataset.get(position).get("username").toString());
             holder.book_name.setText(mDataset.get(position).get("book_name").toString());
-            holder.start_date.setText(((MyRequest)mDataset.get(position).get("request")).start_date);
-            holder.end_date.setText(((MyRequest)mDataset.get(position).get("request")).end_date);
+            holder.start_date.setText(((MyRequest) mDataset.get(position).get("request")).start_date);
+            holder.end_date.setText(((MyRequest) mDataset.get(position).get("request")).end_date);
             holder.status.setText(((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString());
             holder.info_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,63 +139,336 @@ public class OutgoingRequests extends Fragment {
                 }
             });
 
-            if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.WAIT.toString())){
+            if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT.toString())) {
+
+
+                holder.cancel_btn.setText("Contact the borrower");
+                holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        Activity a = getActivity();
+
+                        if (a instanceof RequestsFragment.RequestObserver) {
+                            RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                            Intent intent = new Intent(Constants.CHAT_REQUEST);
+                            intent.putExtra("user_id_r", mDataset.get(position).get("owner_id").toString());
+                            observer.contactBorrower(intent);
+                        }
+
+
+                    }
+                });
+
+
+                holder.operation_btn.setText("Confirm the reception of the book");
+                holder.operation_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String req_id = mDataset.get(position).get("request_id").toString();
+
+                        Activity a = getActivity();
+
+                        if (a instanceof RequestsFragment.RequestObserver) {
+                            RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                            Intent intent = new Intent(Constants.RECEIVED_REQUEST);
+                            intent.putExtra("request_id", req_id);
+                            observer.receivedRequest(intent);
+                        }
+
+
+                    }
+                });
+
+            } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.RECEIVED.toString())) {
+
+
+                holder.operation_btn.setText("Finalize the lending");
+                holder.operation_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                        builder.setCancelable(false);
+                        builder.setTitle("Finalize borrowing");
+                        builder.setMessage("Have you sent the book back to the owner?");
+                        builder.setPositiveButton("Yes, I have", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String req_id = mDataset.get(position).get("request_id").toString();
+
+                                Activity a = getActivity();
+
+                                if (a instanceof RequestsFragment.RequestObserver) {
+                                    RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                                    Intent intent = new Intent(Constants.SENTBACK_REQUEST);
+                                    intent.putExtra("request_id", req_id);
+                                    observer.sentbackRequest(intent);
+                                }
+
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                                View v = getLayoutInflater().inflate(R.layout.rating, null);
+                                builder1.setView(v);
+                                builder1.setCancelable(false);
+                                builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+
+                                builder1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                builder1.create().show();
+
+                            }
+                        });
+                        builder.setNegativeButton("No, not yet", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.create().show();
+
+
+                    }
+                });
+
+                holder.cancel_btn.setText("Contact the borrower");
+                holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        Activity a = getActivity();
+
+                        if (a instanceof RequestsFragment.RequestObserver) {
+                            RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                            Intent intent = new Intent(Constants.CHAT_REQUEST);
+                            intent.putExtra("user_id_r", mDataset.get(position).get("owner_id").toString());
+                            observer.contactBorrower(intent);
+                        }
+
+
+                    }
+                });
+
+
+            } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.ACCEPTED.toString())) {
+
+                holder.operation_btn.setText("More info about the book");
+                holder.operation_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                        builder.setCancelable(false);
+                        builder.setTitle("Book status: ACCEPTED");
+                        builder.setMessage("Your request has been accepted by the owner and he will soon send the book to you");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.create().show();
+
+                    }
+
+
+                });
+
+
+                holder.cancel_btn.setText("REFUSE REQUEST");
+                holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                        builder.setCancelable(true);
+                        builder.setTitle("Delete book request");
+                        builder.setMessage("Are you sure you want to cancel this reservation? The owner will be notified about your decision");
+                        builder.setPositiveButton("OK, delete it", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String req_id = mDataset.get(position).get("request_id").toString();
+
+                                Activity a = getActivity();
+
+                                if (a instanceof RequestsFragment.RequestObserver) {
+                                    RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                                    Intent intent = new Intent(Constants.REJECT_REQUEST);
+                                    intent.putExtra("request_id", req_id);
+                                    observer.deleteRequest(intent);
+                                }
+
+
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.create().show();
+
+
+                    }
+                });
+
+            } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.WAIT.toString())) {
 
 
 
-            } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT.toString())){
+                holder.operation_btn.setText("More info about the book");
+                holder.operation_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.ACCEPTED.toString())){
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                        builder.setCancelable(false);
+                        builder.setTitle("Book status: WAIT");
+                        builder.setMessage("Your request has been taken into account by the owner. You will be notified about his/her decision.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.create().show();
+
+                    }
+
+
+                });
+
+
+                holder.cancel_btn.setText("REFUSE REQUEST");
+                holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                        builder.setCancelable(true);
+                        builder.setTitle("Delete book request");
+                        builder.setMessage("Are you sure you want to cancel this reservation? The owner will be notified about your decision");
+                        builder.setPositiveButton("OK, delete it", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String req_id = mDataset.get(position).get("request_id").toString();
+
+                                Activity a = getActivity();
+
+                                if (a instanceof RequestsFragment.RequestObserver) {
+                                    RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                                    Intent intent = new Intent(Constants.REJECT_REQUEST);
+                                    intent.putExtra("request_id", req_id);
+                                    observer.deleteRequest(intent);
+                                }
+
+
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.create().show();
+
+
+                    }
+                });
+
+
+
+            } else {
+
+                holder.operation_btn.setText("More info about the book");
+                holder.operation_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.ACCEPTED.toString())) {
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                            builder.setCancelable(false);
+                            builder.setTitle("Book status: ACCEPTED");
+                            builder.setMessage("Your request has been accepted by the owner and he will soon send the book to you");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            builder.create().show();
+
+                        } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT_BACK.toString())) {
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
+                            builder.setCancelable(false);
+                            builder.setTitle("Book status: SENTBACK");
+                            builder.setMessage("The book you have sent hasn't been received by the owner yet");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            builder.create().show();
+
+
+                        }
+
+                        }
+                });
+
+                holder.cancel_btn.setText("Contact the borrower");
+                holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        Activity a = getActivity();
+
+                        if (a instanceof RequestsFragment.RequestObserver) {
+                            RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                            Intent intent = new Intent(Constants.CHAT_REQUEST);
+                            intent.putExtra("user_id_r", mDataset.get(position).get("owner_id").toString());
+                            observer.contactBorrower(intent);
+                        }
+
+
+                    }
+                });
+
 
             }
-
-
-            holder.operation_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
-            holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Cancel reservation");
-                    builder.setMessage("Are you sure you want to delete this reservation?");
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            String req_id = mDataset.get(position).get("request_id").toString();
-
-                            Activity a = getActivity();
-
-                            if (a instanceof RequestsFragment.RequestObserver) {
-                                RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
-                                Intent intent = new Intent(Constants.DELETE_REQUEST);
-                                intent.putExtra("request_id",req_id);
-                                observer.deleteRequest(intent);
-                            }
-
-
-                        }
-                    });
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    builder.create().show();
-                }
-            });
-
-
         }
-
 
         @Override
         public int getItemCount() {

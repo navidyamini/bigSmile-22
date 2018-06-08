@@ -42,6 +42,8 @@ public class RequestsFragment extends Fragment {
         void startLending(Intent intent);
         void endRequest(Intent intent);
         void contactBorrower(Intent intent);
+        void receivedRequest(Intent intent);
+        void sentbackRequest(Intent intent);
 
     }
 
