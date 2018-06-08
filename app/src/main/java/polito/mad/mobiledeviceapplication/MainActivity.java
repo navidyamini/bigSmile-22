@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -63,6 +64,7 @@ import java.util.HashMap;
 import polito.mad.mobiledeviceapplication.books.AddBookDialogFragment;
 import polito.mad.mobiledeviceapplication.books.MyBooksFragment;
 import polito.mad.mobiledeviceapplication.books.ShowBookDialogFragment;
+import polito.mad.mobiledeviceapplication.books.ShowUserDialogFragment;
 import polito.mad.mobiledeviceapplication.chat.ChatActivity;
 import polito.mad.mobiledeviceapplication.chat.InboxFragment;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
@@ -76,6 +78,7 @@ import polito.mad.mobiledeviceapplication.services.ChatService;
 import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
 import polito.mad.mobiledeviceapplication.utils.AppConstants;
 import polito.mad.mobiledeviceapplication.utils.Book;
+import polito.mad.mobiledeviceapplication.utils.Comment;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.MyRequest;
 import polito.mad.mobiledeviceapplication.utils.User;
@@ -84,7 +87,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragment.FragChatObserver, RequestsFragment.RequestObserver {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragment.FragChatObserver, RequestsFragment.RequestObserver, ShowUserDialogFragment.FragUserObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -101,16 +104,140 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
 
     @Override
+    public void getUserInformation(Intent intent) {
+
+        if (Constants.GET_USER_INFO.equals(intent.getAction())){
+
+            final String user_id = intent.getStringExtra("user_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    final User user = dataSnapshot.getValue(User.class);
+                    double final_rating = 0;
+                    int count = 0;
+                    ArrayList<Comment> comments = new ArrayList<>();
+                    for (DataSnapshot comment : dataSnapshot.child("comments").getChildren()){
+
+                        if (!comment.child("message").toString().equals("")) {
+                            comments.add(comment.getValue(Comment.class));
+                            final_rating = final_rating + Float.parseFloat(comment.child("rate").getValue().toString());
+                            count++;
+                        }
+
+
+                    }
+                    float avg_rating = 0;
+                    if (count>0) {
+                        avg_rating = (float) final_rating / count;
+                    }
+                    ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                            getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
+
+                    if (fragment!=null && fragment.isVisible()) {
+
+                        fragment.retrieveUserInformation(user,avg_rating,comments);
+
+                    }
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+    }
+
+    @Override
+    public void rateRequest(Intent intent) {
+
+        if (Constants.RATE_REQUEST_BORROWER.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+            final String other_user = intent.getStringExtra("user_id");
+            final String book_id = intent.getStringExtra("book_id");
+
+
+            final String book_comment = intent.getStringExtra("book_comment");
+            final String user_comment = intent.getStringExtra("user_comment");
+
+            final Float book_rating = intent.getFloatExtra("book_rating",0f);
+            final Float user_rating = intent.getFloatExtra("user_rating",0f);
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            Comment mUserComment = new Comment(user_comment,user_rating,mAuth.getCurrentUser().getUid());
+
+            mDatabase.child("users").child(other_user).child("comments").push().setValue(mUserComment).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    Comment mBookComment = new Comment(book_comment,book_rating,mAuth.getCurrentUser().getUid());
+                    mDatabase.child("users").child(other_user).child("books").child(book_id).child("comments").push().setValue(mBookComment).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            Toast.makeText(getApplicationContext(),"Feedback correctly inserted",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+
+                }
+            });
+
+
+
+
+        } else if (Constants.RATE_REQUEST_OWNER.equals(intent.getAction())){
+
+
+            final String req_id = intent.getStringExtra("request_id");
+            final String other_user = intent.getStringExtra("user_id");
+
+            final String user_comment = intent.getStringExtra("user_comment");
+
+            final Float user_rating = intent.getFloatExtra("user_rating",0f);
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            Comment mUserComment = new Comment(user_comment,user_rating,mAuth.getCurrentUser().getUid());
+
+            mDatabase.child("users").child(other_user).child("comments").push().setValue(mUserComment).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(getApplicationContext(),"Feedback correctly inserted",Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+
+    }
+
+    @Override
     public void sentbackRequest(Intent intent) {
 
         if (Constants.SENTBACK_REQUEST.equals(intent.getAction())){
 
             final String req_id = intent.getStringExtra("request_id");
-
+            final String other_user = intent.getStringExtra("username");
             if (mDatabase == null)
                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase.child("users").child(other_user).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -152,11 +279,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         if (Constants.RECEIVED_REQUEST.equals(intent.getAction())){
 
             final String req_id = intent.getStringExtra("request_id");
-
+            final String other_user = intent.getStringExtra("username");
             if (mDatabase == null)
                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase.child("users").child(other_user).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -356,17 +483,18 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
 
             final String req_id = intent.getStringExtra("request_id");
+            String other_user = intent.getStringExtra("username");
+            if (other_user==null)
+                other_user = mAuth.getCurrentUser().getUid();
 
             if (mDatabase == null)
                 mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase.child("users").child(other_user).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot user : dataSnapshot.getChildren()){
-
-                        for (DataSnapshot book : user.child("books").getChildren()){
+                        for (DataSnapshot book : dataSnapshot.getChildren()){
 
                             for (DataSnapshot request : book.child("requests").getChildren()){
 
@@ -390,7 +518,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                             }
                         }
                     }
-                }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -468,6 +595,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                         HashMap<String,Object> map = new HashMap<>();
 
                                         map.put("request",r);
+                                        map.put("book_id",book.getKey());
                                         map.put("book_name",book.getValue(Book.class).title);
                                         map.put("username",user.getValue(User.class).username);
                                         map.put("request_id",request.getKey());
@@ -513,8 +641,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                                 if (request.getValue(MyRequest.class).requester_id!=null) {
 
-                                    if (request.getValue(MyRequest.class).requester_id.equals(mAuth.getCurrentUser().getUid()) &&
-                                            !(request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.REJECTED.name()) ||
+                                    if (!(request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.REJECTED.name()) ||
                                             request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.ENDED.name()))){
 
 
@@ -523,6 +650,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                         HashMap<String,Object> map = new HashMap<>();
 
                                         map.put("request",r);
+                                        map.put("book_id",book.getKey());
                                         map.put("book_name",book.getValue(Book.class).title);
                                         map.put("request_id",request.getKey());
 
@@ -580,7 +708,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         for (DataSnapshot request : dataSnapshot.getChildren()) {
 
                             System.out.println("R "+ request.getValue(MyRequest.class).requester_id);
-                            if (request.getValue(MyRequest.class).requester_id.equals(r.requester_id) && !request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.ENDED.name())) {
+                            if (request.getValue(MyRequest.class).requester_id.equals(r.requester_id) && !(request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.ENDED.name())||request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.REJECTED.name()))) {
                                 request_found = true;
                             }
                         }
@@ -638,6 +766,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                     ArrayList<HashMap<String, Object>> book_list = new ArrayList();
                     HashMap<String, Bundle> h = new HashMap<>();
+                    ArrayList<HashMap<String, Object>> comments = new ArrayList<>();
 
                     if (dataSnapshot.hasChildren()) {
                         for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
@@ -645,15 +774,26 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                             Bundle b = new Bundle();
 
                             for (DataSnapshot books : child.child("books").getChildren()) {
+
+
+                                for (DataSnapshot comment : books.child("comments").getChildren()) {
+
+
+                                    comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
+                                }
                                 Book book_element = books.getValue(Book.class);
+
                                 if (book_element != null) {
                                     //if (book_element.genre.equals(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getStringSet("pref_genre",new android.support.v4.util.ArraySet<String>())))
                                     HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
-                                    book_map.put("book_id",books.getKey());
+                                    book_map.put("book_id", books.getKey());
+                                    book_map.put("comments",comments.clone());
                                     book_list.add(book_map);
 
-                                    }
+                                    comments.clear();
                                 }
+
+                            }
 
 
                             if (!book_list.isEmpty()) {
@@ -721,7 +861,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                     ArrayList<HashMap<String,Object>> book_list = new ArrayList();
                     HashMap<String,Bundle> h = new HashMap<>();
-
+                    ArrayList<HashMap<String,Object>> comments = new ArrayList<>();
                     if (dataSnapshot.hasChildren()) {
                         for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
 
@@ -739,9 +879,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                             book_element.publisher.equals(publisher) ||
                                             book_element.author.equals(author)) {
 
+                                        comments.clone();
+                                        for (DataSnapshot comment : books.child("comments").getChildren()) {
+                                            comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
+                                        }
 
                                         HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
                                         book_map.put("book_id",books.getKey());
+                                        book_map.put("comments",comments.clone());
                                         book_list.add(book_map);
 
                                     }

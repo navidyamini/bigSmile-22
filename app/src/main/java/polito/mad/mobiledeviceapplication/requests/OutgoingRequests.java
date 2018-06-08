@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -176,6 +178,7 @@ public class OutgoingRequests extends Fragment {
                             RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
                             Intent intent = new Intent(Constants.RECEIVED_REQUEST);
                             intent.putExtra("request_id", req_id);
+                            intent.putExtra("username",mDataset.get(position).get("owner_id").toString());
                             observer.receivedRequest(intent);
                         }
 
@@ -199,7 +202,9 @@ public class OutgoingRequests extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                String req_id = mDataset.get(position).get("request_id").toString();
+                                final String req_id = mDataset.get(position).get("request_id").toString();
+                                final String owner_id = mDataset.get(position).get("owner_id").toString();
+                                final String book_id = mDataset.get(position).get("book_id").toString();
 
                                 Activity a = getActivity();
 
@@ -207,16 +212,44 @@ public class OutgoingRequests extends Fragment {
                                     RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
                                     Intent intent = new Intent(Constants.SENTBACK_REQUEST);
                                     intent.putExtra("request_id", req_id);
+                                    intent.putExtra("username",mDataset.get(position).get("owner_id").toString());
                                     observer.sentbackRequest(intent);
                                 }
 
                                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
-                                View v = getLayoutInflater().inflate(R.layout.rating, null);
+                                final View v = getLayoutInflater().inflate(R.layout.rating, null);
+                                ((TextView)v.findViewById(R.id.otherUserName)).setText(mDataset.get(position).get("username").toString());
+                                ((TextView)v.findViewById(R.id.bookName)).setText(mDataset.get(position).get("book_name").toString());
+
                                 builder1.setView(v);
                                 builder1.setCancelable(false);
                                 builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+
+                                        RatingBar userRating = v.findViewById(R.id.ratingBarUser);
+                                        RatingBar bookRating = v.findViewById(R.id.ratingBarBook);
+
+                                        EditText userComment = v.findViewById(R.id.userComment);
+                                        EditText bookComment = v.findViewById(R.id.bookComment);
+
+
+                                        Activity a = getActivity();
+
+                                        if (a instanceof RequestsFragment.RequestObserver) {
+                                            RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                                            Intent intent = new Intent(Constants.RATE_REQUEST_BORROWER);
+                                            intent.putExtra("request_id", req_id);
+                                            intent.putExtra("user_id",owner_id);
+                                            intent.putExtra("book_id",book_id);
+                                            intent.putExtra("user_rating",userRating.getRating());
+                                            intent.putExtra("book_rating",bookRating.getRating());
+                                            intent.putExtra("user_comment",userComment.getText().toString());
+                                            intent.putExtra("book_comment",bookComment.getText().toString());
+                                            observer.rateRequest(intent);
+                                        }
+
+
 
                                     }
                                 });
@@ -314,6 +347,7 @@ public class OutgoingRequests extends Fragment {
                                     RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
                                     Intent intent = new Intent(Constants.REJECT_REQUEST);
                                     intent.putExtra("request_id", req_id);
+                                    intent.putExtra("username", mDataset.get(position).get("owner_id").toString());
                                     observer.deleteRequest(intent);
                                 }
 
@@ -383,6 +417,7 @@ public class OutgoingRequests extends Fragment {
                                     RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
                                     Intent intent = new Intent(Constants.REJECT_REQUEST);
                                     intent.putExtra("request_id", req_id);
+                                    intent.putExtra("username",mDataset.get(position).get("owner_id").toString());
                                     observer.deleteRequest(intent);
                                 }
 

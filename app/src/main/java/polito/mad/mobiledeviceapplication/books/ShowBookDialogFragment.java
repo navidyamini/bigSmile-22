@@ -2,10 +2,12 @@ package polito.mad.mobiledeviceapplication.books;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -14,12 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
@@ -41,6 +51,8 @@ public class ShowBookDialogFragment extends DialogFragment {
     private ImageView cover, book_conditions_image;
     private Button contact_button;
     private Button borrow_request;
+    private ListView comment_list;
+    private ImageButton user_btn;
 
     public interface FragContactObserver {
         void notifyContactRequest(Intent intent);
@@ -70,6 +82,9 @@ public class ShowBookDialogFragment extends DialogFragment {
 
         borrow_request = (Button) v.findViewById(R.id.borrow_button);
 
+        comment_list = (ListView) v.findViewById(R.id.comment_list);
+
+        user_btn = (ImageButton) v.findViewById(R.id.info_button);
 
 
         if (getArguments()!=null){
@@ -84,6 +99,9 @@ public class ShowBookDialogFragment extends DialogFragment {
             isbn.setText("ISBN: " +getArguments().getString("isbn"));
 
             name_surname.setText("Proprietario: " + getArguments().getString("name") + " " + getArguments().getString("surname"));
+
+            comment_list.setAdapter(new MyCommentAdapter(getContext(),(ArrayList)getArguments().getSerializable("comments")));
+
 
             ImageRequest request = new ImageRequest(getArguments().getString("image_url"),
                     new Response.Listener<Bitmap>() {
@@ -114,6 +132,9 @@ public class ShowBookDialogFragment extends DialogFragment {
                 book_conditions_image.setVisibility(View.VISIBLE);
 
             }
+
+
+
 
         }
 
@@ -222,6 +243,25 @@ public class ShowBookDialogFragment extends DialogFragment {
             }
         });
 
+
+        user_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Bundle b = new Bundle();
+                b.putString("user_id",getArguments().getString("user_id",""));
+
+                ShowUserDialogFragment showUserDialogFragment = new ShowUserDialogFragment();
+                showUserDialogFragment.setArguments(b);
+                showUserDialogFragment.show(getChildFragmentManager(), "ShowUserDialog");
+
+
+
+            }
+        });
+
+
         return v;
     }
 
@@ -233,4 +273,54 @@ public class ShowBookDialogFragment extends DialogFragment {
 
 
     }
+
+
+    class MyCommentAdapter extends BaseAdapter{
+
+        private ArrayList<HashMap> mDataset;
+        private Context context;
+
+        public MyCommentAdapter(Context context,ArrayList<HashMap> mDataset) {
+            this.mDataset = mDataset;
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return mDataset.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mDataset.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView==null)
+            {
+                convertView=LayoutInflater.from(context).inflate(R.layout.item_comments, null);
+            }
+
+            TextView userComment = (TextView) convertView.findViewById(R.id.userComment);
+            RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
+            TextView username = (TextView) convertView.findViewById(R.id.userNameText);
+            ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
+
+            ratingBar.setEnabled(false);
+            userComment.setText(mDataset.get(position).get("message").toString());
+            ratingBar.setRating(Float.parseFloat(mDataset.get(position).get("rate").toString()));
+            username.setText("User " + position);
+
+
+            return convertView;
+        }
+    }
+
+
 }

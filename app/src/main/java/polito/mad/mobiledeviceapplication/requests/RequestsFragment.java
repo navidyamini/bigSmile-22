@@ -44,7 +44,7 @@ public class RequestsFragment extends Fragment {
         void contactBorrower(Intent intent);
         void receivedRequest(Intent intent);
         void sentbackRequest(Intent intent);
-
+        void rateRequest(Intent intent);
     }
 
     @Nullable

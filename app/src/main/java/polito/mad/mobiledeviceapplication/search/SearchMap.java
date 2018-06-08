@@ -340,6 +340,7 @@ public class SearchMap extends Fragment {
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
                             b.putString("name",mDataset.get(position).getString("name"));
                             b.putString("surname",mDataset.get(position).getString("surname"));
+                            b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
 
                             b.putByteArray("book_conditions_image",bytes);
 
@@ -368,6 +369,7 @@ public class SearchMap extends Fragment {
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
                             b.putString("name",mDataset.get(position).getString("name"));
                             b.putString("surname",mDataset.get(position).getString("surname"));
+                            b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
 
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();

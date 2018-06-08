@@ -126,8 +126,6 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
     }
 
-
-
     class HomeBookAdapter extends RecyclerView.Adapter<HomeBookAdapter.ViewHolder> {
 
         private ArrayList<Bundle> mDataset;
@@ -150,9 +148,6 @@ public class HomeFragment extends Fragment {
 
 
         }
-
-
-
 
         public HomeBookAdapter(Context context, ArrayList<Bundle> myDataset) {
             mDataset = myDataset;
@@ -207,6 +202,7 @@ public class HomeFragment extends Fragment {
                             b.putString("surname",mDataset.get(position).getString("surname"));
                             b.putString("user_id",mDataset.get(position).getString("user_id"));
                             b.putString("book_id",mDataset.get(position).getString("book_id"));
+                            b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
 
                             b.putByteArray("book_conditions_image",bytes);
 
@@ -234,6 +230,7 @@ public class HomeFragment extends Fragment {
                             b.putString("surname",mDataset.get(position).getString("surname"));
                             b.putString("user_id",mDataset.get(position).getString("user_id"));
                             b.putString("book_id",mDataset.get(position).getString("book_id"));
+                            b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
 
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
@@ -323,6 +320,7 @@ public class HomeFragment extends Fragment {
                 b1.putString("name",((HashMap) entries.get(key).get("user")).get("name").toString());
                 b1.putString("surname",((HashMap) entries.get(key).get("user")).get("surname").toString());
 
+                b1.putSerializable("comments",((ArrayList)entry.get("comments")));
                 books_prefs.add(b1);
                 b1 = null;
             }

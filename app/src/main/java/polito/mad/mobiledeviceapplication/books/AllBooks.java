@@ -86,6 +86,7 @@ public class AllBooks extends Fragment {
 
 
 
+
         book_list = (RecyclerView) view.findViewById(R.id.book_list);
         book_list.setHasFixedSize(true);
 
@@ -95,6 +96,8 @@ public class AllBooks extends Fragment {
         books = new ArrayList<>();
         mAdapter = new AllBooksAdapter(getContext(),books);
         book_list.setAdapter(mAdapter);
+
+
 
         book_list.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
@@ -203,60 +206,6 @@ public class AllBooks extends Fragment {
 
         myDatabase = FirebaseDatabase.getInstance().getReference();
 
-        if (((MainActivity)getActivity()).mAuth.getCurrentUser()==null) {
-            postListener_nofirebase = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    books.clear();
-
-                    if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
-                            if (getActivity().getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "").equals(child.getKey())) {
-
-
-                                for (DataSnapshot book : child.child("books").getChildren()) {
-
-
-                                    HashMap<String,Object> book_map = (HashMap<String, Object>) book.getValue(Book.class).toMap();
-                                    book_map.put("book_id",book.getKey());
-                                    books.add(book_map);
-                                }
-
-                                mAdapter.notifyDataSetChanged();
-                                wait_lay.setVisibility(View.INVISIBLE);
-
-
-
-
-
-                            }
-
-
-                        }
-
-                    } else {
-
-                        wait_lay.setVisibility(View.INVISIBLE);
-
-                    }
-
-
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
-
-                }
-            };
-
-            myDatabase.addValueEventListener(postListener_nofirebase);
-
-
-        } else {
 
             postListener_firebase= new ValueEventListener() {
                 @Override
@@ -309,7 +258,7 @@ public class AllBooks extends Fragment {
 
             myDatabase.addValueEventListener(postListener_firebase);
 
-        }
+
 
 
 
@@ -367,13 +316,6 @@ public class AllBooks extends Fragment {
         public void onBindViewHolder(final AllBooksAdapter.ViewHolder holder, final int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-
-
-
-
-
-
-
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -5,9 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Rating;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -29,13 +30,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
-import polito.mad.mobiledeviceapplication.chat.ChatActivity;
-import polito.mad.mobiledeviceapplication.utils.AppConstants;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.MyRequest;
 import polito.mad.mobiledeviceapplication.utils.User;
+
+import static android.support.constraint.ConstraintSet.GONE;
 
 /**
  * Created by user on 07/06/2018.
@@ -131,7 +131,7 @@ public class IncomingRequests extends Fragment {
         public void onBindViewHolder(final MyRequestsAdapter.ViewHolder holder, final int position) {
 
 
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
             mDatabase.child("users").child(((MyRequest)mDataset.get(position).get("request")).requester_id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -224,7 +224,10 @@ public class IncomingRequests extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        String req_id = mDataset.get(position).get("request_id").toString();
+                                        final String req_id = mDataset.get(position).get("request_id").toString();
+                                        final String other_user_id = ((MyRequest)mDataset.get(position).get("request")).requester_id.toString();
+                                        final String book_id = mDataset.get(position).get("book_id").toString();
+
 
                                         Activity a = getActivity();
 
@@ -236,12 +239,42 @@ public class IncomingRequests extends Fragment {
                                         }
 
                                         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
-                                        View v = getLayoutInflater().inflate(R.layout.rating,null);
+                                        final View v = getLayoutInflater().inflate(R.layout.rating,null);
+                                        ((TextView)v.findViewById(R.id.otherUserName)).setText(dataSnapshot.getValue(User.class).username);
+                                        ((TextView)v.findViewById(R.id.bookName)).setVisibility(View.GONE);
+                                        ((EditText)v.findViewById(R.id.bookComment)).setVisibility(View.GONE);
+                                        ((TextView)v.findViewById(R.id.textView10)).setVisibility(View.GONE);
+                                        ((RatingBar)v.findViewById(R.id.ratingBarBook)).setVisibility(View.GONE);
+
+
+
                                         builder1.setView(v);
                                         builder1.setCancelable(false);
                                         builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
+
+                                                RatingBar userRating = v.findViewById(R.id.ratingBarUser);
+
+                                                EditText userComment = v.findViewById(R.id.userComment);
+
+
+                                                Activity a = getActivity();
+
+                                                if (a instanceof RequestsFragment.RequestObserver) {
+                                                    RequestsFragment.RequestObserver observer = (RequestsFragment.RequestObserver) a;
+                                                    Intent intent = new Intent(Constants.RATE_REQUEST_OWNER);
+                                                    intent.putExtra("request_id", req_id);
+                                                    intent.putExtra("user_id",other_user_id);
+                                                    intent.putExtra("user_rating",userRating.getRating());
+                                                    intent.putExtra("user_comment",userComment.getText().toString());
+                                                    observer.rateRequest(intent);
+                                                }
+
+
+
+
+
 
                                             }
                                         });
