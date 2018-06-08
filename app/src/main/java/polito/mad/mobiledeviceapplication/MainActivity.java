@@ -1,7 +1,9 @@
 package polito.mad.mobiledeviceapplication;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +40,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,6 +68,7 @@ import polito.mad.mobiledeviceapplication.chat.InboxFragment;
 import polito.mad.mobiledeviceapplication.home.HomeFragment;
 import polito.mad.mobiledeviceapplication.loginsignin.LoginSignupActivity;
 import polito.mad.mobiledeviceapplication.profile.ShowProfileActivity;
+import polito.mad.mobiledeviceapplication.requests.RequestsFragment;
 import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
 import polito.mad.mobiledeviceapplication.search.SearchMap;
@@ -72,13 +77,14 @@ import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
 import polito.mad.mobiledeviceapplication.utils.AppConstants;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
+import polito.mad.mobiledeviceapplication.utils.MyRequest;
 import polito.mad.mobiledeviceapplication.utils.User;
 
 /**
  * Created by user on 22/04/2018.
  */
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragment.FragChatObserver {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeObserver,AddBookDialogFragment.FragBookObserver,SearchForm.FragSearchObserver, ShowBookDialogFragment.FragContactObserver, InboxFragment.FragChatObserver, RequestsFragment.RequestObserver {
 
     public FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -94,8 +100,428 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     public android.support.v7.widget.Toolbar toolbar;
 
     @Override
+    public void contactBorrower(Intent intent) {
+
+        if (Constants.CHAT_REQUEST.equals(intent.getAction())){
+
+            final String user_id = intent.getStringExtra("user_id_r");
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                    Intent i = new Intent(getApplicationContext(),ChatActivity.class);
+                    i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    i.putExtra(AppConstants.USER_ID_R,user_id);
+                    i.putExtra(AppConstants.USER_USERNAME_R,dataSnapshot.getValue(User.class).username);
+                    i.putExtra(AppConstants.USER_USERNAME_S,getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
+                    startActivity(i);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+    }
+
+    @Override
+    public void endRequest(Intent intent) {
+
+        if (Constants.END_REQUEST.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot request : book.child("requests").getChildren()){
+
+                            if (request.getKey().equals(req_id)){
+
+                                HashMap<String,Object> map = (HashMap<String, Object>) request.getValue(MyRequest.class).toMap();
+                                map.put("status",MyRequest.STATUS.ENDED);
+                                request.getRef().updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        searchRequests(new Intent(Constants.SEARCH_INCOMING_REQUESTS));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+        }
+
+    }
+
+    @Override
+    public void startLending(Intent intent) {
+
+        if (Constants.START_LENDING.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot request : book.child("requests").getChildren()){
+
+                            if (request.getKey().equals(req_id)){
+
+                                HashMap<String,Object> map = (HashMap<String, Object>) request.getValue(MyRequest.class).toMap();
+                                map.put("status",MyRequest.STATUS.SENT);
+                                request.getRef().updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        searchRequests(new Intent(Constants.SEARCH_INCOMING_REQUESTS));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public void deleteRequest(Intent intent) {
+
+        if (Constants.DELETE_REQUEST.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot request : book.child("requests").getChildren()){
+
+                            if (request.getKey().equals(req_id)) {
+                                request.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        RequestsFragment fragment = (RequestsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+                                        if (fragment!=null && fragment.isVisible()){
+
+                                            searchRequests(new Intent(Constants.SEARCH_OUTGOING_REQUESTS));
+
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        } else if (Constants.REJECT_REQUEST.equals(intent.getAction())){
+
+
+            final String req_id = intent.getStringExtra("request_id");
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot user : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot book : user.child("books").getChildren()){
+
+                            for (DataSnapshot request : book.child("requests").getChildren()){
+
+                                if (request.getKey().equals(req_id)){
+
+                                    MyRequest r = request.getValue(MyRequest.class);
+                                    HashMap<String,Object> map = (HashMap)r.toMap();
+                                    map.put("status",MyRequest.STATUS.REJECTED.toString());
+                                    request.getRef().updateChildren(r.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            RequestsFragment fragment = (RequestsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+                                            if (fragment!=null && fragment.isVisible()) {
+                                                searchRequests(new Intent(Constants.SEARCH_INCOMING_REQUESTS));
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void acceptRequest(Intent intent) {
+
+        if (Constants.ACCEPT_REQUEST.equals(intent.getAction())){
+
+            final String req_id = intent.getStringExtra("request_id");
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot request : book.child("requests").getChildren()){
+
+                            if (request.getKey().equals(req_id)){
+
+                                HashMap<String,Object> map = (HashMap<String, Object>) request.getValue(MyRequest.class).toMap();
+                                map.put("status",MyRequest.STATUS.ACCEPTED);
+                                request.getRef().updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        searchRequests(new Intent(Constants.SEARCH_INCOMING_REQUESTS));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void searchRequests(Intent intent) {
+
+        if (Constants.SEARCH_OUTGOING_REQUESTS.equals(intent.getAction())){
+
+            final ArrayList<HashMap> list = new ArrayList<>();
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot user : dataSnapshot.getChildren()){
+
+                        for (DataSnapshot book : user.child("books").getChildren()){
+
+                            for (DataSnapshot request : book.child("requests").getChildren()){
+
+                                if (request.getValue(MyRequest.class).requester_id!=null) {
+                                    if (request.getValue(MyRequest.class).requester_id.equals(mAuth.getCurrentUser().getUid()) &&
+                                            !(request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.REJECTED.name()) ||
+                                            request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.ENDED.name()))) {
+
+
+                                        MyRequest r = (request.getValue(MyRequest.class));
+                                        HashMap<String,Object> map = new HashMap<>();
+
+                                        map.put("request",r);
+                                        map.put("book_name",book.getValue(Book.class).title);
+                                        map.put("username",user.getValue(User.class).username);
+                                        map.put("request_id",request.getKey());
+
+                                        list.add(map);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    RequestsFragment f= (RequestsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                    if (f!=null && f.isVisible()) {
+                        f.sendOutgoingData(list);
+
+                    }
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+        } else if (Constants.SEARCH_INCOMING_REQUESTS.equals(intent.getAction())){
+
+            final ArrayList<HashMap> list = new ArrayList<>();
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot book : dataSnapshot.getChildren()){
+
+                            for (DataSnapshot request : book.child("requests").getChildren()){
+
+                                if (request.getValue(MyRequest.class).requester_id!=null) {
+
+                                    if (request.getValue(MyRequest.class).requester_id.equals(mAuth.getCurrentUser().getUid()) &&
+                                            !(request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.REJECTED.name()) ||
+                                            request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.ENDED.name()))){
+
+
+                                        MyRequest r = (request.getValue(MyRequest.class));
+
+                                        HashMap<String,Object> map = new HashMap<>();
+
+                                        map.put("request",r);
+                                        map.put("book_name",book.getValue(Book.class).title);
+                                        map.put("request_id",request.getKey());
+
+
+                                        list.add(map);
+                                    }
+                                }
+                            }
+                        }
+
+
+                    RequestsFragment f= (RequestsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                    if (f!=null && f.isVisible()) {
+                        f.setIncomingData(list);
+
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+    }
+
+
+
+    @Override
+    public void notifyBorrowRequest(Intent intent) {
+
+        if (Constants.BORROW_REQUEST.equals(intent.getAction())){
+
+            if (mDatabase==null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            final MyRequest r = new MyRequest(intent.getStringExtra("start_date"),intent.getStringExtra("end_date"),intent.getStringExtra("comments"), mAuth.getCurrentUser().getUid(),MyRequest.STATUS.WAIT.name());
+
+
+            final DatabaseReference insertRef = mDatabase.
+                    child("users").
+                    child(intent.getStringExtra("user_id_r")).
+                    child("books").
+                    child(intent.getStringExtra("book_id")).child("requests");
+
+            insertRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        boolean request_found = false;
+                        for (DataSnapshot request : dataSnapshot.getChildren()) {
+
+                            System.out.println("R "+ request.getValue(MyRequest.class).requester_id);
+                            if (request.getValue(MyRequest.class).requester_id.equals(r.requester_id) && !request.getValue(MyRequest.class).status.equals(MyRequest.STATUS.ENDED.name())) {
+                                request_found = true;
+                            }
+                        }
+                        if (!request_found) {
+                            insertRef.push().setValue(r).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    System.out.println("Inserted requests");
+                                }
+                            });
+
+                        }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
+        }
+
+
+    }
+
+    @Override
     public void notifyChatRequest(Intent intent) {
-        if (Constants.Chat_Request.equals(intent.getAction())){
+        if (Constants.CHAT_REQUEST.equals(intent.getAction())){
             Intent i = new Intent(getApplicationContext(),ChatActivity.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
             i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id_r"));
@@ -301,102 +727,85 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                 fragment.setFormEnabled(false);
             }
 
-            if (mAuth.getCurrentUser() == null) {
 
-                final DatabaseReference insertRef = mDatabase.child("users").child(getSharedPreferences(Constants.PREFERENCE_FILE, MODE_PRIVATE).getString("UID", "")).child("books").push();
-                insertRef.setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
 
-                        if (task.isSuccessful()) {
-                            System.out.println("BOOK INSERTED");
-                            if (fragment.isAdded() && fragment.isVisible()) {
-                                fragment.dismiss();
-                                Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
+            final DatabaseReference insertRef = mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").push();
+            insertRef.setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                    if (task.isSuccessful()) {
+
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").child(insertRef.getKey()).child("requests").addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                                if (dataSnapshot!=null)
+                                    dataSnapshot.getValue(MyRequest.class);
+
                             }
 
-                            if (intent.hasExtra("book_bitmap")) {
-                                Bitmap bitmap = intent.getParcelableExtra("book_bitmap");
-                                StorageReference storageRef = firebaseStorage.getReference().child("images").child("books").child(insertRef.getKey() + ".png");
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                byte[] data = baos.toByteArray();
-
-                                UploadTask uploadTask = storageRef.putBytes(data);
-                                uploadTask.addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-
-                                        System.out.println("EXCEPTION " + exception);
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                        System.out.println("Book image inserted into Cloud Storage");
-
-                                    }
-                                });
-                            }
                             }
 
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        System.out.println("BOOK INSERTED");
                         if (fragment.isAdded() && fragment.isVisible()) {
-                            fragment.setFormEnabled(true);
-                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
+                            fragment.dismiss();
+                            Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
+
+                        }
+
+                        if (intent.hasExtra("book_bitmap")) {
+                            Bitmap bitmap = intent.getParcelableExtra("book_bitmap");
+                            StorageReference storageRef = firebaseStorage.getReference().child("images").child("books").child(insertRef.getKey() + ".png");
+
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+
+                            UploadTask uploadTask = storageRef.putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+
+                                    System.out.println("EXCEPTION " + exception);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    System.out.println("Book image inserted into Cloud Storage");
+                                }
+                            });
                         }
                     }
-                });
-            }
 
-            else {
-
-                final DatabaseReference insertRef = mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").push();
-                insertRef.setValue(book).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()) {
-                            System.out.println("BOOK INSERTED");
-                            if (fragment.isAdded() && fragment.isVisible()) {
-                                fragment.dismiss();
-                                Toast.makeText(getApplicationContext(),getString(R.string.insert_complete),Toast.LENGTH_LONG).show();
-
-                            }
-
-                            if (intent.hasExtra("book_bitmap")) {
-                                Bitmap bitmap = intent.getParcelableExtra("book_bitmap");
-                                StorageReference storageRef = firebaseStorage.getReference().child("images").child("books").child(insertRef.getKey() + ".png");
-
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                byte[] data = baos.toByteArray();
-
-                                UploadTask uploadTask = storageRef.putBytes(data);
-                                uploadTask.addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-
-                                        System.out.println("EXCEPTION " + exception);
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                        System.out.println("Book image inserted into Cloud Storage");
-                                    }
-                                });
-                            }
-                        }
-
-                        if (fragment.isVisible() && fragment.isAdded()) {
-                            fragment.setFormEnabled(true);
-                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
-                        }
+                    if (fragment.isVisible() && fragment.isAdded()) {
+                        fragment.setFormEnabled(true);
+                        ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
                     }
-                });
+                }
+            });
 
-            }
+
 
         } else if (Constants.SCAN_BOOK.equals(intent.getAction())) {
 
@@ -474,6 +883,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     case R.id.setting:
 
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SettingsFragment()).commit();
+
+                        return true;
+
+                    case R.id.requests:
+
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new RequestsFragment()).commit();
 
                         return true;
                     case R.id.exit:
@@ -560,7 +975,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         }
 
 
+        initializeRequestsListener();
+
+
     }
+
 
 
 
@@ -705,6 +1124,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mToggle.onOptionsItemSelected(item)){
@@ -720,7 +1140,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
     @Override
     public void notifyContactRequest(Intent intent) {
-        if (Constants.Contact_Request.equals(intent.getAction())){
+        if (Constants.CONTACT_REQUEST.equals(intent.getAction())){
             ((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
             Intent i = new Intent(getApplicationContext(),ChatActivity.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -731,5 +1151,123 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
 
         }
+    }
+
+
+    private void initializeRequestsListener(){
+
+        if (mDatabase==null)
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot book : dataSnapshot.getChildren()){
+
+
+                        book.child("requests").getRef().addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                                if (dataSnapshot.getValue(MyRequest.class).status.equals(MyRequest.STATUS.WAIT)) {
+
+                                    String other_user = dataSnapshot.getValue(MyRequest.class).requester_id;
+
+                                    if (mDatabase == null)
+                                        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+                                    mDatabase.child("users").child(other_user).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            System.out.println("ADDED REQUEST BY " + dataSnapshot.getValue(User.class).username);
+
+
+                                            Notification notification = new NotificationCompat.Builder(getApplicationContext(), "Message")
+                                                    .setSmallIcon(R.drawable.ic_email_white_24dp)
+                                                    .setContentTitle("Book sharing")
+                                                    .setContentText("You have received a new book request from " + dataSnapshot.getValue(User.class).username)
+                                                    .setAutoCancel(true)
+                                                    .setStyle(new NotificationCompat.BigTextStyle().bigText("You have received a new book request"))
+                                                    .build();
+
+                                            NotificationManager mNotificationManager =
+                                                    (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                                            mNotificationManager.notify(1, notification);
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                System.out.println("MODIFIED REQUEST");
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+
+                                String other_user = dataSnapshot.getValue(MyRequest.class).requester_id;
+
+                                if (mDatabase==null)
+                                    mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+                                mDatabase.child("users").child(other_user).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        System.out.println("CHILD REMOVED BY " + dataSnapshot.getValue(User.class).username);
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

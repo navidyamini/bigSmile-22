@@ -23,7 +23,16 @@ public class Constants {
     public final static String SEARCH_GENRE = "SEARCH_GENRE";
     public final static String SEARCH_NEWS = "SEARCH_NEWS";
     public final static String ARG_CHAT_ROOMS = "ARG_CHAT_ROOMS";
-    public final static String Chat_Request ="Chat_Request";
+    public final static String CHAT_REQUEST ="CHAT_REQUEST";
+    public final static String BORROW_REQUEST ="BORROW_REQUEST";
+    public final static String SEARCH_OUTGOING_REQUESTS ="SEARCH_OUTGOING_REQUESTS";
+    public final static String SEARCH_INCOMING_REQUESTS ="SEARCH_INCOMING_REQUESTS";
+
+    public final static String DELETE_REQUEST ="DELETE_REQUESTS";
+    public final static String REJECT_REQUEST ="REJECT_REQUEST";
+    public final static String ACCEPT_REQUEST ="ACCEPT_REQUEST";
+    public final static String START_LENDING ="START_LENDING";
+    public final static String END_REQUEST ="END_REQUEST";
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
@@ -35,5 +44,5 @@ public class Constants {
     public static final int REQUEST_PERMISSION_SETTING = 3;
 
     public static final String GEOCODER_API = "AIzaSyCtVzXKSU3b3omQVwvUGQ0RSoGggsityuQ";
-    public static String Contact_Request="Contact_Request" ;
+    public static final String CONTACT_REQUEST ="CONTACT_REQUEST" ;
 }

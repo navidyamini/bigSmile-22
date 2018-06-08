@@ -22,4 +22,5 @@ public class Chat {
         this.message = message;
         this.timestamp = timestamp;
     }
+
 }

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:elevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="20dp"
+        android:background="#005f8f"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/status_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/end_txt"
+            android:layout_below="@+id/end_txt"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Status:"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/status_txt"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/status_txt"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/book_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Lord of the rings"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/status_txt"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/operation_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:text="Operations"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/operation_btn"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:text="Cancel"
+                android:textColor="@android:color/holo_red_dark" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/requester_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/book_name"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="Navid Yamini"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/info_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/requester_name"
+            android:layout_alignTop="@+id/requester_name"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/requester_name"
+            android:background="@android:color/transparent"
+            android:elevation="3dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/baseline_info_white_24" />
+
+        <TextView
+            android:id="@+id/start_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/requester_name"
+            android:layout_below="@+id/requester_name"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="Start date:"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/end_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/start_txt"
+            android:layout_below="@+id/start_txt"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="End date:"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/start_txt"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/start_txt"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/end_txt"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/end_txt"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/book_name"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/book_cover" />
+    </RelativeLayout>
+</RelativeLayout>

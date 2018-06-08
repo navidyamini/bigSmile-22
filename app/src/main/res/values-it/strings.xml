@@ -81,5 +81,8 @@
     <string name="sign_in">Accedi subito!</string>
 
     <string name="inbox">Posta in arrivo</string>
+    <string name="requests_text">Le mie prenotazioni</string>
+    <string name="incoming_requests">Richieste in arrivo</string>
+    <string name="outgoing_requests">Richieste effettuate</string>
 
 </resources>

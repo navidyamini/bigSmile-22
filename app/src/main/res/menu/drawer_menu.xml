@@ -17,6 +17,12 @@
         android:title="@string/my_books"
         ></item>
     <item
+        android:id="@+id/requests"
+        android:icon="@drawable/ic_email_white_24dp"
+        android:title="@string/requests_text"></item>
+
+
+    <item
         android:id="@+id/inbox"
         android:icon="@android:drawable/sym_action_chat"
         android:title="@string/inbox"></item>
@@ -28,6 +34,10 @@
         android:id="@+id/setting"
         android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/setting"></item>
+
+
+
+
 
     <item
         android:id="@+id/exit"

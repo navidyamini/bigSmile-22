@@ -14,12 +14,12 @@ import polito.mad.mobiledeviceapplication.R;
  * Created by user on 12/05/2018.
  */
 
-public class ShowOwnerInfoDialogFragment extends DialogFragment {
+public class ShowUserDialogFragment extends DialogFragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_show_book, container, false);
+        View v = inflater.inflate(R.layout.fragment_show_user, container, false);
 
         return v;
 

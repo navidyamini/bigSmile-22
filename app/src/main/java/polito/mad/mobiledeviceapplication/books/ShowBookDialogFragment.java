@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -29,7 +28,6 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
 import polito.mad.mobiledeviceapplication.R;
-import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 
 /**
@@ -46,6 +44,7 @@ public class ShowBookDialogFragment extends DialogFragment {
 
     public interface FragContactObserver {
         void notifyContactRequest(Intent intent);
+        void notifyBorrowRequest(Intent intent);
     }
     @Nullable
     @Override
@@ -125,7 +124,7 @@ public class ShowBookDialogFragment extends DialogFragment {
                 Activity a=getActivity();
                 if (a instanceof ShowBookDialogFragment.FragContactObserver) {
                     ShowBookDialogFragment.FragContactObserver observer = (ShowBookDialogFragment.FragContactObserver) a;
-                    Intent intent = new Intent(Constants.Contact_Request);
+                    Intent intent = new Intent(Constants.CONTACT_REQUEST);
                     intent.putExtra("user_id_r",getArguments().getString("user_id",""));
                     intent.putExtra("username_r",getArguments().getString("name"));
                     observer.notifyContactRequest(intent);
@@ -192,9 +191,23 @@ public class ShowBookDialogFragment extends DialogFragment {
 
                 mbuilder.setView(v);
                 mbuilder.setCancelable(false);
+                final Activity a=getActivity();
+
                 mbuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if (a instanceof ShowBookDialogFragment.FragContactObserver) {
+                            ShowBookDialogFragment.FragContactObserver observer = (ShowBookDialogFragment.FragContactObserver) a;
+                            Intent intent = new Intent(Constants.BORROW_REQUEST);
+                            intent.putExtra("user_id_r",getArguments().getString("user_id",""));
+                            //intent.putExtra("username_r",getArguments().getString("name"));
+                            intent.putExtra("start_date",startDate.getText().toString());
+                            intent.putExtra("end_date",endDate.getText().toString());
+                            intent.putExtra("book_id",getArguments().getString("book_id"));
+                            observer.notifyBorrowRequest(intent);
+                        }
+
 
                         //TODO make request
                     }

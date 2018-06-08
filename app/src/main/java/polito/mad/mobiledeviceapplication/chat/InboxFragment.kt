@@ -142,7 +142,7 @@ class InboxFragment : Fragment() {
                 val a = activity
                 if (a is InboxFragment.FragChatObserver) {
                     val observer = a as InboxFragment.FragChatObserver?
-                    val intent = Intent(Constants.Chat_Request)
+                    val intent = Intent(Constants.CHAT_REQUEST)
                     intent.putExtra("user_id_r", chat_user_ids!![position])
                     intent.putExtra("username_r", chat_user_names!![position])
                     observer!!.notifyChatRequest(intent)
