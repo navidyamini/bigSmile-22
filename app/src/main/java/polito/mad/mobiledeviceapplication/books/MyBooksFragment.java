@@ -67,13 +67,13 @@ public class MyBooksFragment extends Fragment {
         edit_book.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(((FragAdapter)pager.getAdapter()).getFragment(0) != null){
+                /*if(((FragAdapter)pager.getAdapter()).getFragment(0) != null){
                     Intent intent = new Intent(getContext(), EditBookActivity.class);
                     AllBooks fragmentEdit =(AllBooks)((FragAdapter)pager.getAdapter()).getFragment(0);
                     intent.putExtra("book_id",fragmentEdit.currentBookId);
                     startActivity(intent);
 
-                }
+                }*/
 
             }
         });

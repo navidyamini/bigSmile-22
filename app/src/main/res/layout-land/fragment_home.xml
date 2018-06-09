@@ -3,6 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/book_list_prefs"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0.8"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/back111" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,18 +28,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/book_list_prefs"
-                    android:layout_alignParentBottom="false"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:alpha="0.8"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/back111" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/book_list_prefs"
@@ -58,7 +58,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/news_lay"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imageView8"
@@ -100,7 +101,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/prefs_lay"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imageView10"

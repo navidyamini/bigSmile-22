@@ -156,6 +156,7 @@
             android:layout_alignTop="@+id/book_name"
             android:layout_marginRight="10dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/book_cover" />
     </RelativeLayout>
 </RelativeLayout>

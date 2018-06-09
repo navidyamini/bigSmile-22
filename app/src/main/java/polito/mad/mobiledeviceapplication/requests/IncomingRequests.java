@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.books.ShowUserDialogFragment;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.MyRequest;
 import polito.mad.mobiledeviceapplication.utils.User;
@@ -453,9 +454,19 @@ public class IncomingRequests extends Fragment {
 
 
                     }
+
+                    holder.info_btn.setVisibility(View.INVISIBLE);
                     holder.info_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+/*
+                            Bundle b = new Bundle();
+                            b.putString("user_id",((MyRequest)mDataset.get(position).get("request")).requester_id.toString());
+
+                            ShowUserDialogFragment showUserDialogFragment = new ShowUserDialogFragment();
+                            showUserDialogFragment.setArguments(b);
+                            showUserDialogFragment.show(getChildFragmentManager(), "ShowUserDialog");
+*/
 
                         }
                     });

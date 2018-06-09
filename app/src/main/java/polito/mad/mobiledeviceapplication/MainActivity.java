@@ -135,13 +135,26 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     if (count>0) {
                         avg_rating = (float) final_rating / count;
                     }
-                    ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
-                            getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
 
-                    if (fragment!=null && fragment.isVisible()) {
+                    if ((ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                            getChildFragmentManager().findFragmentByTag("ShowBookDialog")!=null) {
+                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                                getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
 
-                        fragment.retrieveUserInformation(user,avg_rating,comments);
+                        if (fragment != null && fragment.isVisible()) {
 
+                            fragment.retrieveUserInformation(user, avg_rating, comments);
+
+                        }
+                    } else {
+
+                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowUserDialog");
+
+                        if (fragment!=null && fragment.isVisible()) {
+
+                            fragment.retrieveUserInformation(user,avg_rating,comments);
+
+                        }
                     }
 
 
@@ -771,39 +784,41 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     if (dataSnapshot.hasChildren()) {
                         for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
 
-                            Bundle b = new Bundle();
+                            if (!child.getKey().equals(mAuth.getCurrentUser().getUid())) {
+                                Bundle b = new Bundle();
 
-                            for (DataSnapshot books : child.child("books").getChildren()) {
-
-
-                                for (DataSnapshot comment : books.child("comments").getChildren()) {
+                                for (DataSnapshot books : child.child("books").getChildren()) {
 
 
-                                    comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
+                                    for (DataSnapshot comment : books.child("comments").getChildren()) {
+
+
+                                        comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
+                                    }
+                                    Book book_element = books.getValue(Book.class);
+
+                                    if (book_element != null) {
+                                        //if (book_element.genre.equals(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getStringSet("pref_genre",new android.support.v4.util.ArraySet<String>())))
+                                        HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
+                                        book_map.put("book_id", books.getKey());
+                                        book_map.put("comments", comments.clone());
+                                        book_list.add(book_map);
+
+                                        comments.clear();
+                                    }
+
                                 }
-                                Book book_element = books.getValue(Book.class);
 
-                                if (book_element != null) {
-                                    //if (book_element.genre.equals(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getStringSet("pref_genre",new android.support.v4.util.ArraySet<String>())))
-                                    HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
-                                    book_map.put("book_id", books.getKey());
-                                    book_map.put("comments",comments.clone());
-                                    book_list.add(book_map);
 
-                                    comments.clear();
+                                if (!book_list.isEmpty()) {
+                                    b.putStringArrayList("book_list", (ArrayList) book_list.clone());
+                                    b.putSerializable("user", (HashMap) child.getValue(User.class).toMap());
+                                    h.put(child.getKey(), b);
                                 }
+                                b = null;
+                                book_list.clear();
 
                             }
-
-
-                            if (!book_list.isEmpty()) {
-                                b.putStringArrayList("book_list", (ArrayList) book_list.clone());
-                                b.putSerializable("user", (HashMap) child.getValue(User.class).toMap());
-                                h.put(child.getKey(), b);
-                            }
-                            b = null;
-                            book_list.clear();
-
                         }
 
 

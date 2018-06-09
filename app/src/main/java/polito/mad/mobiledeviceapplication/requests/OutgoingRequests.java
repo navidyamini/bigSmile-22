@@ -135,9 +135,12 @@ public class OutgoingRequests extends Fragment {
             holder.start_date.setText(((MyRequest) mDataset.get(position).get("request")).start_date);
             holder.end_date.setText(((MyRequest) mDataset.get(position).get("request")).end_date);
             holder.status.setText(((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString());
+
+            holder.info_btn.setVisibility(View.INVISIBLE);
             holder.info_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+/*
 
                     Bundle b = new Bundle();
                     b.putString("user_id",mDataset.get(position).get("owner_id").toString());
@@ -145,6 +148,7 @@ public class OutgoingRequests extends Fragment {
                     ShowUserDialogFragment showUserDialogFragment = new ShowUserDialogFragment();
                     showUserDialogFragment.setArguments(b);
                     showUserDialogFragment.show(getChildFragmentManager(), "ShowUserDialog");
+*/
 
 
                 }

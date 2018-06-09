@@ -119,6 +119,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+
     }
 
     @Override
@@ -292,6 +294,9 @@ public class HomeFragment extends Fragment {
 
     public void updatePrefs(Bundle b){
 
+        books_prefs.clear();
+        myAdapterPref.notifyDataSetChanged();
+
         HashMap<String,Bundle> entries = (HashMap<String,Bundle>) b.getSerializable("arg");
 
 
@@ -326,14 +331,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-
-
-
-
         myAdapterPref.notifyDataSetChanged();
-
-
-
 
     }
 
