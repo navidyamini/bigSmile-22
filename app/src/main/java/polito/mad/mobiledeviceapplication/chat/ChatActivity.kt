@@ -48,6 +48,7 @@ class ChatActivity : AppCompatActivity() {
     private var send_image: ImageButton? = null
     private var myToolbar: Toolbar? = null
     private var i: Intent? = null
+    private var userid: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +70,7 @@ class ChatActivity : AppCompatActivity() {
         send!!.setOnClickListener {
             if (input!!.text.toString() != "") {
 
-                val chat = Chat(i!!.getStringExtra(AppConstants.USER_USERNAME_S), i!!.getStringExtra(AppConstants.USER_USERNAME_R), FirebaseAuth.getInstance().currentUser!!.uid, i!!.getStringExtra(AppConstants.USER_ID_R), input!!.text.toString(), Calendar.getInstance().timeInMillis)
+                val chat = Chat(i!!.getStringExtra(AppConstants.USER_USERNAME_S), i!!.getStringExtra(AppConstants.USER_USERNAME_R), FirebaseAuth.getInstance().currentUser!!.uid, i!!.getStringExtra(AppConstants.USER_ID_R), input!!.text.toString(), Calendar.getInstance().timeInMillis,"new")
                 sendMessageToFirebaseUser(applicationContext, chat, "")
                 input!!.setText("")
 
@@ -93,7 +94,7 @@ class ChatActivity : AppCompatActivity() {
         getMessageFromFirebaseUser(FirebaseAuth.getInstance().currentUser!!.uid, i!!.getStringExtra(AppConstants.USER_ID_R))
 
         mFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-
+        userid = FirebaseAuth.getInstance().currentUser!!.uid
     }
 
     override fun onDestroy() {
@@ -207,6 +208,7 @@ class ChatActivity : AppCompatActivity() {
                                         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                                             // Chat message is retreived.
                                             val chat = dataSnapshot.getValue(Chat::class.java)
+
                                             chats!!.add(chat!!)
                                             mChatAdapter!!.notifyDataSetChanged()
                                             chat_list!!.scrollToPosition(mChatAdapter!!.mDataset.size - 1)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chat_lay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,13 +13,30 @@
         android:id="@+id/name_inbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="17dp"
+        android:layout_toEndOf="@+id/otherUserImage"
         android:fontFamily="@font/roboto_light"
         android:text="Name"
         android:textSize="18sp" />
+
+    <ImageView
+
+        android:id="@+id/otherUserImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+    <ImageView
+        android:id="@+id/unreadMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"
+        android:paddingRight="16dp"
+        app:srcCompat="@android:drawable/ic_notification_overlay" />
 
 </RelativeLayout>
