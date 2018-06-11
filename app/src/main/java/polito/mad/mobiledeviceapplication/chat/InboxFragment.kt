@@ -193,7 +193,8 @@ class InboxFragment : Fragment() {
                     intent.putExtra("user_id_r", chat_user_ids!![position])
                     intent.putExtra("username_r", chat_user_names!![position])
                     observer!!.notifyChatRequest(intent)
-
+                    unreadMessage.visibility = View.INVISIBLE
+/*
                     val databaseReference = FirebaseDatabase.getInstance().reference.child(Constants.ARG_CHAT_ROOMS)
                     databaseReference.addListenerForSingleValueEvent(
                             object : ValueEventListener {
@@ -252,7 +253,7 @@ class InboxFragment : Fragment() {
                                 override fun onCancelled(databaseError: DatabaseError) {
                                     //handle databaseError
                                 }
-                            })
+                            })*/
 
 
                 }

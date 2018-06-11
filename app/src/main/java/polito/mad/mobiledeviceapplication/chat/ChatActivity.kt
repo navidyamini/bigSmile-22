@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.item_chat_list.*
 
 import java.text.SimpleDateFormat
 import java.util.ArrayList
@@ -289,6 +290,63 @@ class ChatActivity : AppCompatActivity() {
 
             holder.timestamp.text = mFormat!!.format(Date(mDataset[position].timestamp))
             holder.message.text = mDataset[position].message
+
+            val databaseReference = FirebaseDatabase.getInstance().reference.child(Constants.ARG_CHAT_ROOMS)
+            databaseReference.addListenerForSingleValueEvent(
+                    object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            var key = "null"
+                            var receiverUid = "null"
+                            var flag="null"
+                            if (dataSnapshot.hasChildren()) {
+                                for (chat in dataSnapshot.children) {
+
+                                    for (message in chat.children) {
+
+                                        for (field in message.children) {
+                                            key = field.key
+
+                                            if (key == "flag") {
+                                                flag= field.value as String
+
+                                            }
+
+                                            if (key == "receiverUid") {
+                                                receiverUid = field.value as String
+
+                                                if(flag=="old"){
+                                                    receiverUid="null"
+                                                }
+                                            }
+                                            if(flag == "new" && receiverUid==userid){
+                                               // unreadMessage.visibility = View.INVISIBLE
+                                                for (field in message.children) {
+                                                    key = field.key
+
+                                                    if (key == "flag") {
+                                                        flag= field.value as String
+
+                                                        if(field.value == "new") {
+                                                            field.ref.setValue("old")
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            //handle databaseError
+                        }
+                    })
 
 
         }
