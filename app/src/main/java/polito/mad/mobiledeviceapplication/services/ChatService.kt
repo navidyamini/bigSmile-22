@@ -32,6 +32,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants
 class ChatService : android.app.Service() {
 
     private var sender: String? = null
+    private var flag: String? = null
     private var show_not: Boolean? = false
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -65,15 +66,17 @@ class ChatService : android.app.Service() {
                     chats.ref.addChildEventListener(object : ChildEventListener {
                         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
 
-                            show_not = false;
+                            show_not = false
                             for (child in dataSnapshot.children) {
 
+                                if(child.key == "flag")
+                                    flag = child.value as String?
 
                                 if (child.key == "sender")
                                     sender = child.value as String?
 
                                 if (child.key == "receiverUid")
-                                    if (child.value == FirebaseAuth.getInstance().currentUser?.uid)
+                                    if (child.value == FirebaseAuth.getInstance().currentUser?.uid && flag=="new")
                                         show_not = true
 
 
