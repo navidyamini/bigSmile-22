@@ -73,7 +73,7 @@
                 android:layout_marginTop="58dp"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Title"
+                android:text="@string/title"
                 android:textColor="@android:color/darker_gray" />
 
             <EditText
@@ -88,7 +88,7 @@
                 android:layout_marginRight="13dp"
                 android:ems="10"
                 android:inputType="date"
-                android:text="Deadline"
+                android:text="@string/end_date"
                 android:textColor="@android:color/darker_gray" />
 
 

@@ -116,5 +116,9 @@
     <string name="cancel">Cancel</string>
     <string name="operations">Operations</string>
     <string name="status">Status:</string>
+
+    <string name="rate_experience">Rate Your Experience</string>
+    <string name="comment">Comment about:</string>
+    <string name="comment2">Comment</string>
 </resources>
 

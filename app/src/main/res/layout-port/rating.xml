@@ -20,7 +20,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Rate Your Experience"
+                android:text="@string/rate_experience"
                 android:textSize="20sp" />
 
             <RatingBar
@@ -42,7 +42,7 @@
                 android:layout_alignBaseline="@+id/otherUserName"
                 android:layout_alignBottom="@+id/otherUserName"
                 android:layout_alignStart="@+id/ratingBarUser"
-                android:text="Comment about:"
+                android:text="@string/comment"
                 android:textSize="12sp" />
 
             <EditText
@@ -52,7 +52,7 @@
                 android:layout_alignStart="@+id/ratingBarUser"
                 android:layout_below="@+id/ratingBarUser"
                 android:ems="10"
-                android:hint="Comment"
+                android:hint="@string/comment2"
                 android:inputType="textPersonName"
                 android:textColor="@color/textColorEntryList" />
 
@@ -88,7 +88,7 @@
                 android:layout_alignBottom="@+id/bookName"
                 android:layout_alignStart="@+id/ratingBarBook"
                 android:layout_marginTop="30dp"
-                android:text="Comment about:"
+                android:text="@string/comment"
                 android:textSize="12dp" />
 
             <TextView

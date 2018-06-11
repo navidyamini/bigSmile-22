@@ -110,4 +110,8 @@
     <string name="cancel">Annulla</string>
     <string name="operations">operazioni</string>
     <string name="status">Stato:</string>
+
+    <string name="rate_experience">vota la tua esperienza</string>
+    <string name="comment">Commento su:</string>
+    <string name="comment2">Commento</string>
 </resources>

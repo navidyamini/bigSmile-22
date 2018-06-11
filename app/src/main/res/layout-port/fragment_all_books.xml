@@ -90,7 +90,7 @@
                         android:layout_below="@+id/tags"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/roboto_light"
-                        android:text="Book conditions"
+                        android:text="@string/book_conditions"
                         android:textColor="@android:color/white" />
 
                     <TextView
