@@ -211,7 +211,7 @@
                     android:background="@drawable/rounded_button"
                     android:backgroundTint="@color/colorPrimaryDark"
                     android:fontFamily="@font/roboto_light"
-                    android:text="Cerca" />
+                    android:text="@string/search" />
 
             </RelativeLayout>
 

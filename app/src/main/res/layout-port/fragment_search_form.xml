@@ -212,7 +212,7 @@
                     android:padding="10dp"
                     android:paddingEnd="10dp"
                     android:paddingRight="10dp"
-                    android:text="Cerca" />
+                    android:text="@string/search" />
 
             </RelativeLayout>
 
