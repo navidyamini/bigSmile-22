@@ -97,7 +97,7 @@ public class SearchMap extends Fragment {
         if (b!=null) {
             entries = (HashMap<String, Bundle>) b.getSerializable("arg");
             if (entries.size() == 0)
-                explaination.setText("Non sono stati trovati risultati legati alla tua ricerca.");
+                explaination.setText(R.string.search_not_found);
         }
 
 

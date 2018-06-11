@@ -115,5 +115,18 @@
     <string name="comment">Commento su:</string>
     <string name="comment2">Commento</string>
 
+    <string name="search_not_found">Non sono stati trovati risultati legati alla tua ricerca."</string>
+
+    <string name="new_message">Un nuovo messaggio è arrivato!</string>
+    <string name="feedback">Feedback inserito correttamente</string>
+
+    <string name="exit_q">Sei sicuro di voler uscire dall\'app?</string>
+    <string name="yes">Si</string>
+
+    <string name="insert_manually">"Non è possibile recuperare i dati automaticamente da questo libro. Si prega di inserire le informazioni manualmente "</string>
+    <string name="received_request">Hai ricevuto una nuova richiesta di libri da </string>
+
+    <string name="book_request">Hai ricevuto una nuova richiesta di libri. </string>
+
 
 </resources>

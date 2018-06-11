@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         @Override
                         public void onSuccess(Void aVoid) {
 
-                            Toast.makeText(getApplicationContext(),"Feedback correctly inserted",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),R.string.feedback,Toast.LENGTH_LONG).show();
 
                         }
                     });
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             mDatabase.child("users").child(other_user).child("comments").push().setValue(mUserComment).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(getApplicationContext(),"Feedback correctly inserted",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),R.string.feedback,Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -1151,8 +1151,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                             @Override
                             public void run() {
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.Theme_AppCompat_Light_Dialog);
-                                builder.setMessage("Sei sicuro di voler uscire dall'app?");
-                                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                builder.setMessage(R.string.exit_q);
+                                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("UID","").apply();
@@ -1241,7 +1241,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
-                Toast.makeText(this, "It is not possible to retrieve data automatically from this book. Please insert its information manually", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.insert_manually, Toast.LENGTH_LONG).show();
             } else {
 
                 final String isbn = result.getContents();
@@ -1440,10 +1440,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                                             Notification notification = new NotificationCompat.Builder(getApplicationContext(), "Message")
                                                     .setSmallIcon(R.drawable.ic_email_white_24dp)
-                                                    .setContentTitle("Book sharing")
-                                                    .setContentText("You have received a new book request from " + dataSnapshot.getValue(User.class).username)
+                                                    .setContentTitle(getString(R.string.app_name))
+                                                    .setContentText(R.string.received_request + dataSnapshot.getValue(User.class).username)
                                                     .setAutoCancel(true)
-                                                    .setStyle(new NotificationCompat.BigTextStyle().bigText("You have received a new book request"))
+                                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.book_request)))
                                                     .build();
 
                                             NotificationManager mNotificationManager =

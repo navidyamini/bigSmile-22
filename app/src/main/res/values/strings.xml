@@ -120,5 +120,20 @@
     <string name="rate_experience">Rate Your Experience</string>
     <string name="comment">Comment about:</string>
     <string name="comment2">Comment</string>
+
+    <string name="search_not_found">Nothing founded for this search."</string>
+
+    <string name="new_message">A new message arrived!</string>
+
+    <string name="feedback">Feedback correctly inserted</string>
+
+    <string name="exit_q">Are you sure you want to leave the app?</string>
+
+    <string name="yes">Yes</string>
+
+    <string name="insert_manually">It is not possible to retrieve data automatically from this book. Please insert its information manually.</string>
+    <string name="received_request">You have received a new book request from </string>
+
+    <string name="book_request">You have received a new book request. </string>
 </resources>
 
