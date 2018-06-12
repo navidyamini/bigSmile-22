@@ -1369,9 +1369,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         else if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentById(R.id.container)!=null){
             if (getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentById(R.id.container).getClass().equals(SearchMap.class))
                 getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().beginTransaction().replace(R.id.container,new SearchForm()).commit();
+            else
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
         }
-        else
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
+            else
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new HomeFragment()).commit();
 
 
     }

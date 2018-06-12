@@ -89,8 +89,8 @@ class ChatService : android.app.Service() {
 
                                 val builder = NotificationCompat.Builder(applicationContext, "Message")
                                         .setContentTitle(sender)
-                                        .setContentText(R.string.new_message.toString())
-                                        .setStyle(NotificationCompat.BigTextStyle().bigText(R.string.new_message.toString()))
+                                        .setContentText(getString(R.string.new_message))
+                                        .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.new_message)))
                                         .setSmallIcon(R.drawable.ic_email_white_24dp)
                                         .setAutoCancel(true)
                                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
