@@ -126,7 +126,7 @@ class InboxFragment : Fragment() {
 
     internal inner class InboxAdapter(private val context: Context, private val mDataset: ArrayList<String>) : RecyclerView.Adapter<InboxAdapter.ViewHolder>() {
 
-        inner class ViewHolder(var mView: View, var userName: TextView) : RecyclerView.ViewHolder(mView)
+        inner class ViewHolder(var mView: View, var userName: TextView, val unreadMessage:ImageView ) : RecyclerView.ViewHolder(mView)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             //val unreadMessage: ImageView?= null
@@ -136,12 +136,13 @@ class InboxFragment : Fragment() {
 
             val unreadMessage = v1.findViewById<ImageView>(R.id.unreadMessage)
             val databaseReference = FirebaseDatabase.getInstance().reference.child(Constants.ARG_CHAT_ROOMS)
-
+/*
             databaseReference.addListenerForSingleValueEvent(
                     object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             var key = "null"
                             var receiverUid = "null"
+                            var sender = "null"
                             var flag="null"
                             if (dataSnapshot.hasChildren()) {
                                 for (chat in dataSnapshot.children) {
@@ -154,14 +155,18 @@ class InboxFragment : Fragment() {
                                             if (key == "flag") {
                                                 flag= field.value as String
                                             }
+                                            if(key == "sender"){
+                                                sender = field.value as String
+                                            }
                                             if (key == "receiverUid") {
                                                 receiverUid = field.value as String
 
                                                 if(flag=="old"){
                                                     receiverUid="null"
+                                                    sender = "null"
                                                 }
                                             }
-                                            if(flag == "new" && receiverUid==userid){
+                                            if(flag == "new" && receiverUid==userid && sender!="null"){
                                                 unreadMessage.visibility = View.VISIBLE
                                             }
 
@@ -177,14 +182,62 @@ class InboxFragment : Fragment() {
                         override fun onCancelled(databaseError: DatabaseError) {
                             //handle databaseError
                         }
-                    })
+                    })*/
 
-            return ViewHolder(v1, name)
+            return ViewHolder(v1, name, unreadMessage)
 
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.userName.text = mDataset[position]
+            val databaseReference = FirebaseDatabase.getInstance().reference.child(Constants.ARG_CHAT_ROOMS)
+            databaseReference.addListenerForSingleValueEvent(
+                    object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            var key = "null"
+                            var receiverUid = "null"
+                            var sender = "null"
+                            var flag="null"
+                            if (dataSnapshot.hasChildren()) {
+                                for (chat in dataSnapshot.children) {
+
+                                    for (message in chat.children) {
+
+                                        for (field in message.children) {
+                                            key = field.key
+
+                                            if (key == "flag") {
+                                                flag= field.value as String
+                                            }
+                                            if(key == "sender"){
+                                                sender = field.value as String
+                                            }
+                                            if (key == "receiverUid") {
+                                                receiverUid = field.value as String
+
+                                                if(flag=="old"){
+                                                    receiverUid="null"
+                                                    sender = "null"
+                                                }
+                                            }
+                                            if(flag == "new" && receiverUid==userid && sender== holder.userName.text){
+                                                holder.unreadMessage.visibility = View.VISIBLE
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            //handle databaseError
+                        }
+                    })
+            //holder.userName.text = mDataset[position]
             holder.mView.setOnClickListener {
                 val a = activity
                 if (a is InboxFragment.FragChatObserver) {
@@ -193,7 +246,7 @@ class InboxFragment : Fragment() {
                     intent.putExtra("user_id_r", chat_user_ids!![position])
                     intent.putExtra("username_r", chat_user_names!![position])
                     observer!!.notifyChatRequest(intent)
-                    unreadMessage.visibility = View.INVISIBLE
+                    holder.unreadMessage.visibility = View.INVISIBLE
 /*
                     val databaseReference = FirebaseDatabase.getInstance().reference.child(Constants.ARG_CHAT_ROOMS)
                     databaseReference.addListenerForSingleValueEvent(

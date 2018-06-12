@@ -298,6 +298,7 @@ class ChatActivity : AppCompatActivity() {
                             var key = "null"
                             var receiverUid = "null"
                             var flag="null"
+                            var sender = "null"
                             if (dataSnapshot.hasChildren()) {
                                 for (chat in dataSnapshot.children) {
 
@@ -310,15 +311,19 @@ class ChatActivity : AppCompatActivity() {
                                                 flag= field.value as String
 
                                             }
+                                            if(key == "sender"){
+                                                sender = field.value as String
+                                            }
 
                                             if (key == "receiverUid") {
                                                 receiverUid = field.value as String
 
                                                 if(flag=="old"){
                                                     receiverUid="null"
+                                                    sender = "null"
                                                 }
                                             }
-                                            if(flag == "new" && receiverUid==userid){
+                                            if(flag == "new" && receiverUid==userid && sender ==intent.getStringExtra(AppConstants.USER_USERNAME_R)){
                                                // unreadMessage.visibility = View.INVISIBLE
                                                 for (field in message.children) {
                                                     key = field.key
