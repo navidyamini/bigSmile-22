@@ -40,16 +40,15 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/drawer_navigation"
-        app:headerLayout="@layout/drawer_header"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        app:itemTextColor="@color/colorPrimaryDark"
-        app:itemIconTint="@color/colorPrimaryDark"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium"
-        app:menu="@menu/drawer_menu"
         android:layout_gravity="start"
-        >
+        android:background="@color/fui_bgGoogle"
+        app:headerLayout="@layout/drawer_header"
+        app:hintTextAppearance="@android:style/TextAppearance.Medium"
+        app:itemIconTint="@color/colorPrimaryDark"
+        app:itemTextColor="@color/colorPrimaryDark"
+        app:menu="@menu/drawer_menu">
 
     </android.support.design.widget.NavigationView>
 

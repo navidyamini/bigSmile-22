@@ -113,7 +113,7 @@ class ChatService : android.app.Service() {
 
                         }
 
-                        override fun onChildMoved(dataSnapshot: DataSnapshot, s: String) {
+                        override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
 
                         }
 
