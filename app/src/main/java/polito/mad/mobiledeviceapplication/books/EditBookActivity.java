@@ -5,7 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -36,6 +39,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,6 +51,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
@@ -146,7 +156,6 @@ public class EditBookActivity extends AppCompatActivity {
         deleteImageBook.setVisibility(View.INVISIBLE);
 
 
-        book_image = (ImageView) findViewById(R.id.bookImage);
 
         retrieveBookInformation();
 
@@ -157,8 +166,6 @@ public class EditBookActivity extends AppCompatActivity {
 
         System.out.println(getIntent().getStringExtra("book_id"));
         final String userID = mAuth.getCurrentUser().getUid();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("images").child("books").child(getIntent().getStringExtra("book_id"));
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child(userID).child("books").child(getIntent().getStringExtra("book_id")).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -173,6 +180,33 @@ public class EditBookActivity extends AppCompatActivity {
                 edition_year.setText(book.edition_year);
                 genre.setText(book.genre);
                 extra_tags.setText(book.extra_tags);
+
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                StorageReference storageRef = storage.getReference().child("images").child("books").child(getIntent().getStringExtra("book_id"));
+
+                final long ONE_MEGABYTE = 1024 * 1024;
+                storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        book_image.setImageBitmap(bmp);
+
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+
+                        //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
+
+                    }
+                });
+
+
+
             }
 
             @Override
@@ -180,6 +214,9 @@ public class EditBookActivity extends AppCompatActivity {
                 Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
             }
         });
+
+
+
 
     }
     private void showPictureDialog() {
@@ -228,4 +265,138 @@ public class EditBookActivity extends AppCompatActivity {
 
 
     }
+
+    public String saveImage(Bitmap myBitmap) {
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        File wallpaperDirectory = null;
+
+        if (mAuth==null)
+            mAuth = FirebaseAuth.getInstance();
+
+        wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid());
+
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
+
+        try {
+            File f = new File(wallpaperDirectory, "book.jpg");
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            MediaScannerConnection.scanFile(this,
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            fo.close();
+            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+
+            return f.getAbsolutePath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return "";
+    }
+
+    public void deleteImage(){
+
+        File wallpaperDirectory = null;
+
+        if (mAuth==null)
+            mAuth = FirebaseAuth.getInstance();
+
+        wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+mAuth.getCurrentUser().getUid());
+
+
+
+        File fdelete = new File(wallpaperDirectory.getAbsolutePath(),"book.jpg");
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                System.out.println("file Deleted :" + fdelete.getAbsolutePath());
+            } else {
+                System.out.println("file not Deleted :" + fdelete.getAbsolutePath());
+            }
+        }
+
+
+
+    }
+
+    private boolean checkISBN(){
+
+        if (isbn.getText().length()==0) {
+            isbn_layout.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            isbn_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkTitle(){
+
+        if (title.getText().length()==0) {
+            title_layout.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            title_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkAuthor(){
+
+        if (author.getText().length()==0) {
+            author_layout.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            author_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkPublisher(){
+
+        if (publisher.getText().length()==0) {
+            publisher_layout.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            publisher_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+    private boolean checkEditionYear(){
+
+
+        if (edition_year.getText().length()==0) {
+            edition_year_layout.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            edition_year_layout.setErrorEnabled(false);
+            return true;
+        }
+
+
+    }
+    private boolean checkGenre(){
+
+        if (genre.getText().length()==0) {
+            genre_layout.setError(getString(R.string.not_empty));
+            return false;
+        }
+        else {
+            genre_layout.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+
+
 }

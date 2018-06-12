@@ -24,6 +24,7 @@
             android:layout_below="@+id/signupLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
             android:clipToPadding="false"
             android:padding="10dp">
 

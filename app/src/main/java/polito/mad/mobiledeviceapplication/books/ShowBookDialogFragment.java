@@ -11,6 +11,7 @@ import android.media.Rating;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.utils.Comment;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 
 /**
@@ -96,11 +98,16 @@ public class ShowBookDialogFragment extends DialogFragment {
             genre.setText("Genere: " + getArguments().getString("genre"));
             book_conditions.setText("Condizioni: " + getArguments().getString("book_conditions"));
             extra_tags.setText("Informazioni extra: " +getArguments().getString("extra_tags"));
-            isbn.setText("ISBN: " +getArguments().getString("isbn"));
+            isbn.setText("ISBN: " +getArguments().getString("ISBN"));
 
             name_surname.setText("Proprietario: " + getArguments().getString("name") + " " + getArguments().getString("surname"));
 
-            comment_list.setAdapter(new MyCommentAdapter(getContext(),(ArrayList)getArguments().getSerializable("comments")));
+            ArrayList<Comment> c = new ArrayList<>();
+
+
+
+
+            comment_list.setAdapter(new MyCommentAdapter(getContext(),(ArrayList)(getArguments().getSerializable("comments"))));
 
 
             ImageRequest request = new ImageRequest(getArguments().getString("image_url"),
@@ -148,6 +155,9 @@ public class ShowBookDialogFragment extends DialogFragment {
                     Intent intent = new Intent(Constants.CONTACT_REQUEST);
                     intent.putExtra("user_id_r",getArguments().getString("user_id",""));
                     intent.putExtra("username_r",getArguments().getString("name"));
+
+                    //if (getParentFragment().getClass().equals(Search))
+
                     observer.notifyContactRequest(intent);
                 }
 

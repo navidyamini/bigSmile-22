@@ -17,7 +17,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:tint="@android:color/holo_green_dark"
-        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+        app:srcCompat="@drawable/ic_email_white_24dp" />
 
     <TextView
         android:id="@+id/userNameText"

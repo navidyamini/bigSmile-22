@@ -154,8 +154,9 @@ public class SearchMap extends Fragment {
                             b1.putString("genre",book.get("genre").toString());
                             b1.putString("book_conditions",book.get("book_conditions").toString());
                             b1.putString("extra_tags",book.get("extra_tags").toString());
-                            b1.putString("isbn",book.get("isbn").toString());
+                            b1.putString("ISBN",book.get("ISBN").toString());
                             b1.putString("book_id",book.get("book_id").toString());
+                            b1.putParcelableArrayList("comments",(ArrayList)book.get("comments"));
 
                             if (book.get("image_url")!=null)
                                 b1.putString("image_url",book.get("image_url").toString());
@@ -334,14 +335,14 @@ public class SearchMap extends Fragment {
                             b.putString("edition_year",mDataset.get(position).getString("edition_year"));
                             b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
                             b.putString("publisher",mDataset.get(position).getString("publisher"));
-                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("ISBN",mDataset.get(position).getString("ISBN"));
                             b.putString("genre",mDataset.get(position).getString("genre"));
                             b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
                             b.putString("name",mDataset.get(position).getString("name"));
                             b.putString("surname",mDataset.get(position).getString("surname"));
                             b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
-
+                            b.putString("book_id",mDataset.get(position).getString("book_id"));
                             b.putByteArray("book_conditions_image",bytes);
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
@@ -363,13 +364,14 @@ public class SearchMap extends Fragment {
                             b.putString("edition_year",mDataset.get(position).getString("edition_year"));
                             b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
                             b.putString("publisher",mDataset.get(position).getString("publisher"));
-                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("ISBN",mDataset.get(position).getString("ISBN"));
                             b.putString("genre",mDataset.get(position).getString("genre"));
                             b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
                             b.putString("name",mDataset.get(position).getString("name"));
                             b.putString("surname",mDataset.get(position).getString("surname"));
                             b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
+                            b.putString("book_id",mDataset.get(position).getString("book_id"));
 
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();

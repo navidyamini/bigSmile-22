@@ -198,8 +198,39 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
 
-                                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                                    startActivity(intent);
+                                    if (mDatabase==null)
+                                        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                                    mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            for (DataSnapshot user : dataSnapshot.getChildren()){
+
+                                                if (user.getKey().equals(mAuth.getCurrentUser().getUid())){
+
+                                                    User mUser = user.getValue(User.class);
+                                                    getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",mUser.username).apply();
+
+
+                                                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                                    startActivity(intent);
+
+
+                                                }
+
+
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
 
 
                                     //updateUI(user);
@@ -461,6 +492,8 @@ public class LoginSignupActivity extends FragmentActivity implements LoginFragme
                                         for (DataSnapshot child : dataSnapshot.child("users").getChildren()) {
                                             User user_element = child.getValue(User.class);
                                             if (user_element.phone.equals(user.getPhoneNumber())) {
+
+                                                getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user_element.username).apply();
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                                 startActivity(intent);
                                                 finish();

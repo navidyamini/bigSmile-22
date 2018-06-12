@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -104,6 +105,77 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
 
     @Override
+    public void retrieveBook(final Intent intent) {
+
+        if (Constants.RETRIEVE_BOOK.equals(intent.getAction())){
+
+            mAuth = FirebaseAuth.getInstance();
+
+            System.out.println(getIntent().getStringExtra("book_id"));
+            final String userID = mAuth.getCurrentUser().getUid();
+
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("users").child(userID).child("books").child(intent.getStringExtra("book_id")).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    final Book book = dataSnapshot.getValue(Book.class);
+
+
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                    StorageReference storageRef = storage.getReference().child("images").child("books").child(intent.getStringExtra("book_id"));
+
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
+
+                            if (fragment.isAdded() && fragment.isVisible()) {
+                                //((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_insert));
+                                fragment.setFormEnabled(true);
+                                fragment.retrieveBookInformation(book,bmp);
+                            }
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+
+                            final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
+
+                            if (fragment.isAdded() && fragment.isVisible()) {
+                                //((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_insert));
+                                fragment.setFormEnabled(true);
+                                fragment.retrieveBookInformation(book,null);
+                            }
+                        }
+                    });
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w("aaa", "loadPost:onCancelled", databaseError.toException());
+                }
+            });
+
+
+
+
+
+        }
+
+
+    }
+
+    @Override
     public void getUserInformation(Intent intent) {
 
         if (Constants.GET_USER_INFO.equals(intent.getAction())){
@@ -136,28 +208,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         avg_rating = (float) final_rating / count;
                     }
 
-                    if ((ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
-                            getChildFragmentManager().findFragmentByTag("ShowBookDialog")!=null) {
-                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                    ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
                                 getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
 
-                        if (fragment != null && fragment.isVisible()) {
+                    if (fragment != null && fragment.isVisible()) {
 
-                            fragment.retrieveUserInformation(user, avg_rating, comments);
+                        fragment.retrieveUserInformation(user, avg_rating, comments);
 
-                        }
-                    } else {
-
-                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowUserDialog");
-
-                        if (fragment!=null && fragment.isVisible()) {
-
-                            fragment.retrieveUserInformation(user,avg_rating,comments);
-
-                        }
                     }
-
-
 
                 }
 
@@ -882,28 +940,30 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                             Bundle b = new Bundle();
 
-                            for (DataSnapshot books : child.child("books").getChildren()) {
-                                Book book_element = books.getValue(Book.class);
-                                if(book_element!=null) {
-                                    if ((title.equals("") &&
-                                            genre.equals("") &&
-                                            publisher.equals("") &&
-                                            author.equals("")) ||
-                                            book_element.title.equals(title) ||
-                                            book_element.genre.equals(genre) ||
-                                            book_element.publisher.equals(publisher) ||
-                                            book_element.author.equals(author)) {
+                            if (!child.getKey().equals(mAuth.getCurrentUser().getUid())) {
 
-                                        comments.clone();
-                                        for (DataSnapshot comment : books.child("comments").getChildren()) {
-                                            comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
+                                for (DataSnapshot books : child.child("books").getChildren()) {
+                                    Book book_element = books.getValue(Book.class);
+                                    if (book_element != null) {
+
+
+                                        if ((title.equals("") && genre.equals("") && publisher.equals("") && author.equals("")) ||
+                                                ((book_element.title.toLowerCase().contains(title.toLowerCase()) && title.length()>0)||
+                                                        (book_element.genre.toLowerCase().contains(genre.toLowerCase()) && genre.length()>0)||
+                                                        (book_element.publisher.toLowerCase().contains(publisher.toLowerCase()) && publisher.length()>0) ||
+                                                        (book_element.author.toLowerCase().contains(author.toLowerCase()) && author.length()>0))) {
+
+                                            comments.clone();
+                                            for (DataSnapshot comment : books.child("comments").getChildren()) {
+                                                comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
+                                            }
+
+                                            HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
+                                            book_map.put("book_id", books.getKey());
+                                            book_map.put("comments", comments.clone());
+                                            book_list.add(book_map);
+
                                         }
-
-                                        HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
-                                        book_map.put("book_id",books.getKey());
-                                        book_map.put("comments",comments.clone());
-                                        book_list.add(book_map);
-
                                     }
                                 }
                             }
@@ -964,7 +1024,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             String edition_year = intent.getStringExtra("edition_year");
             String book_conditions = intent.getStringExtra("book_conditions");
             String publisher = intent.getStringExtra("publisher");
-            String isbn = intent.getStringExtra("isbn");
+            String isbn = intent.getStringExtra("ISBN");
             String genre = intent.getStringExtra("genre");
             String extra_tags = intent.getStringExtra("extra_tags");
             String image_url = intent.getStringExtra("image_url");
@@ -1069,6 +1129,116 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             scanIntegrator.setOrientationLocked(true);
             scanIntegrator.setBarcodeImageEnabled(true);
             scanIntegrator.initiateScan();
+
+        } else if (Constants.EDIT_BOOK.equals(intent.getAction())){
+
+
+            System.out.println("EDIT BOOK");
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            String title = intent.getStringExtra("title");
+            String author = intent.getStringExtra("author");
+            String edition_year = intent.getStringExtra("edition_year");
+            String book_conditions = intent.getStringExtra("book_conditions");
+            String publisher = intent.getStringExtra("publisher");
+            String isbn = intent.getStringExtra("ISBN");
+            String genre = intent.getStringExtra("genre");
+            String extra_tags = intent.getStringExtra("extra_tags");
+            String image_url = intent.getStringExtra("image_url");
+            String insert_time = String.valueOf(new Date().getTime());
+
+            Book book = new Book(isbn, title, author, publisher, edition_year, book_conditions, genre, extra_tags, image_url,insert_time);
+
+            final AddBookDialogFragment fragment = (AddBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("AddBookDialog");
+
+            if (fragment.isAdded() && fragment.isVisible()) {
+                //((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_insert));
+                fragment.setFormEnabled(false);
+            }
+
+
+
+            final DatabaseReference insertRef = mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").push();
+            insertRef.updateChildren(book.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                    if (task.isSuccessful()) {
+
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("books").child(insertRef.getKey()).child("requests").addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                                if (dataSnapshot!=null)
+                                    dataSnapshot.getValue(MyRequest.class);
+
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        System.out.println("BOOK EDITED");
+                        if (fragment.isAdded() && fragment.isVisible()) {
+                            fragment.dismiss();
+                            Toast.makeText(getApplicationContext(),getString(R.string.edit_complete),Toast.LENGTH_LONG).show();
+
+                        }
+
+                        if (intent.hasExtra("book_bitmap")) {
+                            Bitmap bitmap = intent.getParcelableExtra("book_bitmap");
+                            StorageReference storageRef = firebaseStorage.getReference().child("images").child("books").child(insertRef.getKey() + ".png");
+
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+
+                            UploadTask uploadTask = storageRef.putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+
+                                    System.out.println("EXCEPTION " + exception);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    System.out.println("Book image inserted into Cloud Storage");
+                                }
+                            });
+                        }
+                    }
+
+                    if (fragment.isVisible() && fragment.isAdded()) {
+                        fragment.setFormEnabled(true);
+                        ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
+                    }
+                }
+            });
+
+
+
+
+
 
         }
     }
@@ -1395,14 +1565,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     @Override
     public void notifyContactRequest(Intent intent) {
         if (Constants.CONTACT_REQUEST.equals(intent.getAction())){
-            ((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
+            //((ShowBookDialogFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame).getChildFragmentManager().findFragmentByTag("ShowBookDialog")).dismiss();
             Intent i = new Intent(getApplicationContext(),ChatActivity.class);
             i.putExtra(AppConstants.USER_ID_S,FirebaseAuth.getInstance().getCurrentUser().getUid());
             i.putExtra(AppConstants.USER_ID_R,intent.getStringExtra("user_id_r"));
             i.putExtra(AppConstants.USER_USERNAME_R,intent.getStringExtra("username_r"));
             i.putExtra(AppConstants.USER_USERNAME_S,getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
             startActivity(i);
-
 
         }
     }

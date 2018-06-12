@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment {
     private LinearLayoutManager mLayoutManagerPrefs,mLayoutManagerGenre,mLayoutManagerNews;
     private ArrayList<Bundle> books_prefs,books_genre,books_news;
     private HomeBookAdapter myAdapterPref, myAdapterNews, myAdapterGenre;
+    private RelativeLayout wait_lay;
 
     public interface HomeObserver{
 
@@ -63,6 +64,7 @@ public class HomeFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_home, container, false);
 
+        wait_lay = (RelativeLayout) rootView.findViewById(R.id.wait_lay);
 
         book_list_prefs = (RecyclerView) rootView.findViewById(R.id.book_list_prefs);
         book_list_prefs.setHasFixedSize(true);
@@ -159,7 +161,7 @@ public class HomeFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.books_entry,parent,false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_entry_big,parent,false);
             TextView title = v.findViewById(R.id.title);
             TextView author = v.findViewById(R.id.author);
             ImageView cover = v.findViewById(R.id.cover);
@@ -178,6 +180,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
+                    wait_lay.setVisibility(View.VISIBLE);
                     //ASK FIREBASE TO RETRIEVE USER INFO AND BOOK ADDITIONAL INFO
                     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -189,6 +192,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onSuccess(byte[] bytes) {
 
+                            wait_lay.setVisibility(View.INVISIBLE);
 
                             Bundle b = new Bundle();
                             b.putString("title",mDataset.get(position).getString("title"));
@@ -196,7 +200,7 @@ public class HomeFragment extends Fragment {
                             b.putString("edition_year",mDataset.get(position).getString("edition_year"));
                             b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
                             b.putString("publisher",mDataset.get(position).getString("publisher"));
-                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("ISBN",mDataset.get(position).getString("ISBN"));
                             b.putString("genre",mDataset.get(position).getString("genre"));
                             b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
@@ -217,6 +221,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             // Handle any errors
+                            wait_lay.setVisibility(View.INVISIBLE);
 
                             Bundle b = new Bundle();
                             b.putString("title",mDataset.get(position).getString("title"));
@@ -224,7 +229,7 @@ public class HomeFragment extends Fragment {
                             b.putString("edition_year",mDataset.get(position).getString("edition_year"));
                             b.putString("book_conditions",mDataset.get(position).getString("book_conditions"));
                             b.putString("publisher",mDataset.get(position).getString("publisher"));
-                            b.putString("isbn",mDataset.get(position).getString("isbn"));
+                            b.putString("ISBN",mDataset.get(position).getString("ISBN"));
                             b.putString("genre",mDataset.get(position).getString("genre"));
                             b.putString("extra_tags",mDataset.get(position).getString("extra_tags"));
                             b.putString("image_url",mDataset.get(position).getString("image_url"));
@@ -317,7 +322,7 @@ public class HomeFragment extends Fragment {
                 b1.putString("genre", entry.get("genre").toString());
                 b1.putString("book_conditions", entry.get("book_conditions").toString());
                 b1.putString("extra_tags", entry.get("extra_tags").toString());
-                b1.putString("isbn", entry.get("isbn").toString());
+                b1.putString("ISBN", entry.get("ISBN").toString());
                 if (entry.get("image_url") != null)
                     b1.putString("image_url", entry.get("image_url").toString());
                 b1.putString("book_id",entry.get("book_id").toString());
@@ -332,6 +337,7 @@ public class HomeFragment extends Fragment {
         }
 
         myAdapterPref.notifyDataSetChanged();
+        wait_lay.setVisibility(View.INVISIBLE);
 
     }
 

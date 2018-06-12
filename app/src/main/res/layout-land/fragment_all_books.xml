@@ -48,7 +48,7 @@
                 android:outlineProvider="bounds"
                 android:scaleType="fitXY"
                 android:visibility="invisible"
-                app:srcCompat="@drawable/no_cover" />
+                app:srcCompat="@drawable/blank" />
         </RelativeLayout>
 
         <RelativeLayout

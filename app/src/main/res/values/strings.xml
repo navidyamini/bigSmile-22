@@ -135,5 +135,7 @@
     <string name="received_request">You have received a new book request from </string>
 
     <string name="book_request">You have received a new book request. </string>
+    <string name="modify_book_txt">Modify your book</string>
+    <string name="aforisma">\'There are no faster or firmer friendships than those formed between people who love the same books.\' - Irving Stone</string>
 </resources>
 

@@ -76,6 +76,15 @@ public class ShowUserDialogFragment extends DialogFragment {
         comment_list = (ListView) v.findViewById(R.id.commentsListView);
         profile_image = (ImageView) v.findViewById(R.id.userProfileImage);
 
+
+
+        return v;
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         Activity a=getActivity();
         if (a instanceof ShowUserDialogFragment.FragUserObserver) {
             ShowUserDialogFragment.FragUserObserver observer = (ShowUserDialogFragment.FragUserObserver) a;
@@ -84,9 +93,6 @@ public class ShowUserDialogFragment extends DialogFragment {
             observer.getUserInformation(intent);
         }
 
-
-
-        return v;
 
     }
 

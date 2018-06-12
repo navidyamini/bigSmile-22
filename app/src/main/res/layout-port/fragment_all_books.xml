@@ -50,7 +50,7 @@
                 android:outlineProvider="bounds"
                 android:scaleType="fitXY"
                 android:visibility="invisible"
-                app:srcCompat="@drawable/no_cover" />
+                app:srcCompat="@drawable/blank" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -112,8 +112,6 @@
                         android:layout_below="@+id/publication_year"
                         android:layout_centerVertical="true"
                         android:layout_marginTop="10dp"
-                        android:layout_toEndOf="@+id/image_lay"
-                        android:layout_toRightOf="@+id/image_lay"
                         android:fontFamily="@font/roboto_light"
                         android:text="Bio"
                         android:textColor="@android:color/white" />

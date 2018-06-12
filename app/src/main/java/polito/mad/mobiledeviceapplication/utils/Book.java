@@ -39,7 +39,7 @@ public class Book {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("isbn", this.ISBN);
+        result.put("ISBN", this.ISBN);
         result.put("author", this.author);
         result.put("title", this.title);
         result.put("publisher", this.publisher);

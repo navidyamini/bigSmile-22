@@ -67,13 +67,17 @@ public class MyBooksFragment extends Fragment {
         edit_book.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                /*if(((FragAdapter)pager.getAdapter()).getFragment(0) != null){
-                    Intent intent = new Intent(getContext(), EditBookActivity.class);
-                    AllBooks fragmentEdit =(AllBooks)((FragAdapter)pager.getAdapter()).getFragment(0);
-                    intent.putExtra("book_id",fragmentEdit.currentBookId);
-                    startActivity(intent);
 
-                }*/
+                Bundle b = new Bundle();
+
+                AllBooks fragmentEdit =(AllBooks)((FragAdapter)pager.getAdapter()).getFragment(0);
+                b.putString("book_id",fragmentEdit.currentBookId);
+                b.putBoolean("edit",true);
+                Fragment addBookDialogFragment = new AddBookDialogFragment();
+                addBookDialogFragment.setArguments(b);
+                ((AddBookDialogFragment)addBookDialogFragment).show(getChildFragmentManager(), "AddBookDialog");
+
+
 
             }
         });

@@ -39,7 +39,12 @@ public class Constants {
     public final static String RATE_REQUEST_BORROWER ="RATE_REQUEST_BORROWER";
     public final static String RATE_REQUEST_OWNER ="RATE_REQUEST_OWNER";
 
+    public final static String RETRIEVE_BOOK ="RETRIEVE_BOOK";
+
+
     public final static String GET_USER_INFO = "GET_USER_INFO";
+    public final static String EDIT_BOOK = "EDIT_BOOK";
+
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
 

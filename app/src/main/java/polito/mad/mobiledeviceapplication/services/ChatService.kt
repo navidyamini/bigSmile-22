@@ -105,7 +105,7 @@ class ChatService : android.app.Service() {
 
                         }
 
-                        override fun onChildChanged(dataSnapshot: DataSnapshot, s: String) {
+                        override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
 
                         }
 

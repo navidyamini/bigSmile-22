@@ -39,7 +39,15 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,6 +57,7 @@ import java.net.URI;
 
 import polito.mad.mobiledeviceapplication.MainActivity;
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -68,6 +77,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
     public interface FragBookObserver {
         void notifyActionBook(Intent intent);
+        void retrieveBook(Intent intent);
     }
 
     private FloatingActionButton confirmBook, scanBook, deleteImageBook;
@@ -82,7 +92,6 @@ public class AddBookDialogFragment extends DialogFragment{
     private static final int MY_PERMISSIONS_REQUEST_WRITE = 2;
     private static final int REQUEST_PERMISSION_SETTING = 3;
 
-    private ImageView bookImg;
     private Bitmap imageBitmap;
 
     private boolean permission_bool;
@@ -97,7 +106,7 @@ public class AddBookDialogFragment extends DialogFragment{
         checkPermissions();
 
         pickImageButton = (FloatingActionButton) v.findViewById(R.id.takeBookImage);
-        bookImg = (ImageView) v.findViewById(R.id.bookImage);
+        book_image = (ImageView) v.findViewById(R.id.bookImage);
 
 
 /////////////////////////////////////////////////////////////
@@ -156,7 +165,6 @@ public class AddBookDialogFragment extends DialogFragment{
         deleteImageBook.setVisibility(View.INVISIBLE);
 
 
-        book_image = (ImageView) v.findViewById(R.id.bookImage);
 
 
 
@@ -261,7 +269,7 @@ public class AddBookDialogFragment extends DialogFragment{
                     imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), contentURI);
                     String path = saveImage(imageBitmap);
                     Toast.makeText(this.getActivity(), getString(R.string.save_image), Toast.LENGTH_SHORT).show();
-                    bookImg.setImageBitmap(imageBitmap);
+                    book_image.setImageBitmap(imageBitmap);
                     explaination_switcher.setVisibility(View.INVISIBLE);
                     title_dialog.setVisibility(View.INVISIBLE);
                     deleteImageBook.setVisibility(View.VISIBLE);
@@ -276,7 +284,7 @@ public class AddBookDialogFragment extends DialogFragment{
 
             if (data!=null) {
                 imageBitmap = (Bitmap) data.getExtras().get("data");
-                bookImg.setImageBitmap(imageBitmap);
+                book_image.setImageBitmap(imageBitmap);
                 explaination_switcher.setVisibility(View.INVISIBLE);
                 title_dialog.setVisibility(View.INVISIBLE);
                 deleteImageBook.setVisibility(View.VISIBLE);
@@ -395,49 +403,108 @@ public class AddBookDialogFragment extends DialogFragment{
     @Override
     public void onStart() {
         super.onStart();
-
-        retrieveBookImage(bookImg);
         getDialog().getWindow()
                 .setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
+        if (getArguments()!=null) {
+            if (getArguments().getBoolean("edit")) {
 
-        confirmBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                title_dialog.setText(getString(R.string.modify_book_txt));
+                explaination_switcher.setVisibility(View.INVISIBLE);
 
-                boolean isISBNValid = checkISBN();
-                boolean isAuthorValid = checkAuthor();
-                boolean isEditionYearValid = checkEditionYear();
-                boolean isGenreValid = checkGenre();
-                boolean isPublisherValid = checkPublisher();
-                boolean isTitleValid = checkTitle();
+                Activity a = getActivity();
+                if (a instanceof AddBookDialogFragment.FragBookObserver) {
+                    AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
+                    Intent intent = new Intent(Constants.RETRIEVE_BOOK);
+                    intent.putExtra("book_id", getArguments().getString("book_id"));
+                    observer.retrieveBook(intent);
+                }
+            }
+        }
 
-                if (isISBNValid && isAuthorValid && isEditionYearValid && isGenreValid && isPublisherValid && isTitleValid){
-                    Activity a=getActivity();
-                    if (a instanceof AddBookDialogFragment.FragBookObserver) {
-                        AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
-                        Intent intent = new Intent(Constants.NEW_BOOK);
-                        intent.putExtra("isbn", isbn.getText().toString());
-                        intent.putExtra("title", title.getText().toString());
-                        intent.putExtra("author", author.getText().toString());
-                        intent.putExtra("publisher", publisher.getText().toString());
-                        intent.putExtra("book_conditions", book_conditions.getText().toString());
-                        intent.putExtra("edition_year", edition_year.getText().toString());
-                        intent.putExtra("genre", genre.getText().toString());
-                        intent.putExtra("extra_tags", extra_tags.getText().toString());
-                        intent.putExtra("image_url",image_url);
 
-                        if (imageBitmap!=null)
-                            intent.putExtra("book_bitmap",imageBitmap);
+        if (getArguments()!=null) {
+            if (!getArguments().getBoolean("edit")) {
 
-                        observer.notifyActionBook(intent);
+                confirmBook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        boolean isISBNValid = checkISBN();
+                        boolean isAuthorValid = checkAuthor();
+                        boolean isEditionYearValid = checkEditionYear();
+                        boolean isGenreValid = checkGenre();
+                        boolean isPublisherValid = checkPublisher();
+                        boolean isTitleValid = checkTitle();
+
+                        if (isISBNValid && isAuthorValid && isEditionYearValid && isGenreValid && isPublisherValid && isTitleValid) {
+                            Activity a = getActivity();
+                            if (a instanceof AddBookDialogFragment.FragBookObserver) {
+                                AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
+                                Intent intent = new Intent(Constants.NEW_BOOK);
+                                intent.putExtra("ISBN", isbn.getText().toString());
+                                intent.putExtra("title", title.getText().toString());
+                                intent.putExtra("author", author.getText().toString());
+                                intent.putExtra("publisher", publisher.getText().toString());
+                                intent.putExtra("book_conditions", book_conditions.getText().toString());
+                                intent.putExtra("edition_year", edition_year.getText().toString());
+                                intent.putExtra("genre", genre.getText().toString());
+                                intent.putExtra("extra_tags", extra_tags.getText().toString());
+                                intent.putExtra("image_url", image_url);
+
+                                if (imageBitmap != null)
+                                    intent.putExtra("book_bitmap", imageBitmap);
+
+                                observer.notifyActionBook(intent);
+
+                            }
+                        }
+
 
                     }
-                }
-
-
+                });
             }
-        });
+        } else {
+
+            confirmBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    boolean isISBNValid = checkISBN();
+                    boolean isAuthorValid = checkAuthor();
+                    boolean isEditionYearValid = checkEditionYear();
+                    boolean isGenreValid = checkGenre();
+                    boolean isPublisherValid = checkPublisher();
+                    boolean isTitleValid = checkTitle();
+
+                    if (isISBNValid && isAuthorValid && isEditionYearValid && isGenreValid && isPublisherValid && isTitleValid) {
+                        Activity a = getActivity();
+                        if (a instanceof AddBookDialogFragment.FragBookObserver) {
+                            AddBookDialogFragment.FragBookObserver observer = (AddBookDialogFragment.FragBookObserver) a;
+                            Intent intent = new Intent(Constants.EDIT_BOOK);
+                            intent.putExtra("ISBN", isbn.getText().toString());
+                            intent.putExtra("title", title.getText().toString());
+                            intent.putExtra("author", author.getText().toString());
+                            intent.putExtra("publisher", publisher.getText().toString());
+                            intent.putExtra("book_conditions", book_conditions.getText().toString());
+                            intent.putExtra("edition_year", edition_year.getText().toString());
+                            intent.putExtra("genre", genre.getText().toString());
+                            intent.putExtra("extra_tags", extra_tags.getText().toString());
+                            intent.putExtra("image_url", image_url);
+
+                            if (imageBitmap != null)
+                                intent.putExtra("book_bitmap", imageBitmap);
+
+                            observer.notifyActionBook(intent);
+
+
+                        }
+                    }
+
+                }
+            });
+        }
+
 
         scanBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -586,10 +653,7 @@ public class AddBookDialogFragment extends DialogFragment{
     private void retrieveBookImage(ImageView imageView) {
         try {
             String photoPath = "";
-            if (((MainActivity)getActivity()).mAuth.getCurrentUser()!=null)
-                photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid()+"/book.jpg";
-            else
-                photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+this.getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID","")+"/book.jpg";
+            photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid()+"/book.jpg";
 
             Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
             if (bitmap!=null) {
@@ -743,10 +807,7 @@ public class AddBookDialogFragment extends DialogFragment{
         if (((MainActivity)getActivity()).mAuth==null)
             ((MainActivity)getActivity()).mAuth = FirebaseAuth.getInstance();
 
-        if (((MainActivity)getActivity()).mAuth.getCurrentUser()!=null)
-            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid());
-        else
-            wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+getActivity().getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("UID",""));
+        wallpaperDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SMILE/pictures/"+((MainActivity)getActivity()).mAuth.getCurrentUser().getUid());
 
 
 
@@ -776,7 +837,33 @@ public class AddBookDialogFragment extends DialogFragment{
 
     }
 
+    public void retrieveBookInformation(Book book, Bitmap image) {
 
+
+        title.setText(book.title);
+        isbn.setText(book.ISBN);
+        author.setText(book.author);
+        publisher.setText(book.publisher);
+        book_conditions.setText(book.book_conditions);
+        edition_year.setText(book.edition_year);
+        genre.setText(book.genre);
+        extra_tags.setText(book.extra_tags);
+
+        if (image!=null)
+            book_image.setImageBitmap(image);
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 
 
 }

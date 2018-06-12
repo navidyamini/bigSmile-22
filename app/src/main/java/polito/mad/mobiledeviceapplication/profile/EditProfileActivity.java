@@ -143,7 +143,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     if (mDatabase == null)
                         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-                    User user = new User(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username","2"),
+                    User user = new User(username_edit.getText().toString(),
                             getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("password",""),
                             name_edit.getText().toString(),
                             surname_edit.getText().toString(),
