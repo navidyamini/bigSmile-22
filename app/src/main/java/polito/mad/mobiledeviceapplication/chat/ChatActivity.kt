@@ -178,6 +178,7 @@ class ChatActivity : AppCompatActivity() {
                                             if (chat != null) {
                                                 chats?.add(chat)
                                             }
+                                            chat_list?.scrollToPosition(mChatAdapter!!.mDataset.size - 1)
                                             mChatAdapter?.notifyDataSetChanged()
                                             chat_list?.scrollToPosition(mChatAdapter!!.mDataset.size - 1)
 

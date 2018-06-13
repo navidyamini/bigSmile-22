@@ -3,17 +3,16 @@ package polito.mad.mobiledeviceapplication;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -79,13 +78,15 @@ import polito.mad.mobiledeviceapplication.search.SearchForm;
 import polito.mad.mobiledeviceapplication.search.SearchFragment;
 import polito.mad.mobiledeviceapplication.search.SearchMap;
 import polito.mad.mobiledeviceapplication.services.ChatService;
-import polito.mad.mobiledeviceapplication.settings.SettingsFragment;
+import polito.mad.mobiledeviceapplication.mypoints.MyPointsFragment;
 import polito.mad.mobiledeviceapplication.utils.AppConstants;
 import polito.mad.mobiledeviceapplication.utils.Book;
 import polito.mad.mobiledeviceapplication.utils.Comment;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.MyRequest;
 import polito.mad.mobiledeviceapplication.utils.User;
+
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 /**
  * Created by user on 22/04/2018.
@@ -225,11 +226,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     }
 
     @Override
-    public void getUserInformation(Intent intent) {
+    public void getUserInformation(final Intent intent) {
 
         if (Constants.GET_USER_INFO.equals(intent.getAction())){
 
-            final String user_id = intent.getStringExtra("user_id");
+            String user_id = "";
+            if (intent.hasExtra("user_id"))
+                user_id = intent.getStringExtra("user_id");
+            else
+                user_id = mAuth.getCurrentUser().getUid();
 
             if (mDatabase == null)
                 mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -257,12 +262,26 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         avg_rating = (float) final_rating / count;
                     }
 
-                    ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                    if (intent.hasExtra("user_id")) {
+                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
                                 getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
 
-                    if (fragment != null && fragment.isVisible()) {
+                        if (fragment != null && fragment.isVisible()) {
 
-                        fragment.retrieveUserInformation(user, avg_rating, comments);
+                            fragment.retrieveUserInformation(user, avg_rating, comments);
+
+                        }
+                    } else {
+
+                        MyPointsFragment fragment = (MyPointsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+                        if (fragment != null && fragment.isVisible()) {
+
+                            fragment.retrieveUserInformation(user, avg_rating, comments);
+
+                        }
+
+
 
                     }
 
@@ -1351,9 +1370,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SearchFragment()).commit();
 
                         return true;
-                    case R.id.setting:
+                    case R.id.mypoints:
 
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new SettingsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,new MyPointsFragment()).commit();
 
                         return true;
 
@@ -1418,10 +1437,24 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             }
         });
 
-
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-        tx.replace(R.id.content_frame, new HomeFragment());
+
+        if (getIntent().hasExtra("command")) {
+            if (getIntent().getStringExtra("command").equals("request")) {
+
+                RequestsFragment f = new RequestsFragment();
+                Bundle b = new Bundle();
+                b.putString("request","received");
+                f.setArguments(b);
+                tx.replace(R.id.content_frame, f);
+
+            }
+        } else {
+            initializeRequestsListener();
+            tx.replace(R.id.content_frame, new HomeFragment());
+        }
         tx.commit();
+
 
         startService(new Intent(getApplicationContext(), ChatService.class));
 
@@ -1446,7 +1479,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         }
 
 
-        initializeRequestsListener();
 
 
 
@@ -1649,7 +1681,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                                if (dataSnapshot.getValue(MyRequest.class).status.equals(MyRequest.STATUS.WAIT)) {
+                                System.out.println(dataSnapshot.getValue(MyRequest.class).status);
+                                if (dataSnapshot.getValue(MyRequest.class).status.equals(MyRequest.STATUS.WAIT.name())) {
 
                                     String other_user = dataSnapshot.getValue(MyRequest.class).requester_id;
 
@@ -1663,19 +1696,45 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                                             System.out.println("ADDED REQUEST BY " + dataSnapshot.getValue(User.class).username);
 
+                                            Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                            notificationIntent.putExtra("command","request");
+                                            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                                                    notificationIntent, FLAG_UPDATE_CURRENT );
 
-                                            Notification notification = new NotificationCompat.Builder(getApplicationContext(), "Message")
-                                                    .setSmallIcon(R.drawable.ic_email_white_24dp)
-                                                    .setContentTitle(getString(R.string.app_name))
-                                                    .setContentText(R.string.received_request + dataSnapshot.getValue(User.class).username)
-                                                    .setAutoCancel(true)
-                                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.book_request)))
-                                                    .build();
 
-                                            NotificationManager mNotificationManager =
-                                                    (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                                            mNotificationManager.notify(1, notification);
+                                            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
 
+                                                Notification notification = new NotificationCompat.Builder(getApplicationContext(), "Message")
+                                                        .setSmallIcon(R.drawable.ic_email_white_24dp)
+                                                        .setContentTitle(getString(R.string.app_name))
+                                                        .setContentText(R.string.received_request + dataSnapshot.getValue(User.class).username)
+                                                        .setAutoCancel(true)
+                                                        .setContentIntent(pendingIntent)
+                                                        .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.book_request)))
+                                                        .build();
+
+                                                NotificationManager mNotificationManager =
+                                                        (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                                                mNotificationManager.notify(1, notification);
+
+                                            } else {
+
+                                                Notification notification = new NotificationCompat.Builder(getApplicationContext())
+                                                        .setSmallIcon(R.drawable.ic_email_white_24dp)
+                                                        .setContentTitle(getString(R.string.app_name))
+                                                        .setContentText(R.string.received_request + dataSnapshot.getValue(User.class).username)
+                                                        .setAutoCancel(true)
+                                                        .setContentIntent(pendingIntent)
+                                                        .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.book_request)))
+                                                        .build();
+
+                                                NotificationManager mNotificationManager =
+                                                        (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                                                mNotificationManager.notify(1, notification);
+
+
+
+                                            }
 
                                         }
 

@@ -2,6 +2,7 @@ package polito.mad.mobiledeviceapplication.services
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -23,6 +24,8 @@ import com.google.firebase.database.ValueEventListener
 
 import polito.mad.mobiledeviceapplication.MainActivity
 import polito.mad.mobiledeviceapplication.R
+import polito.mad.mobiledeviceapplication.chat.ChatActivity
+import polito.mad.mobiledeviceapplication.utils.AppConstants
 import polito.mad.mobiledeviceapplication.utils.Chat
 import polito.mad.mobiledeviceapplication.utils.Constants
 
@@ -33,6 +36,7 @@ import polito.mad.mobiledeviceapplication.utils.Constants
 class ChatService : android.app.Service() {
 
     private var sender: String? = null
+    private var key_s: String? = null
     private var flag: String? = null
     private var show_not: Boolean? = false
     override fun onBind(intent: Intent?): IBinder? {
@@ -73,8 +77,13 @@ class ChatService : android.app.Service() {
                                 if(child.key == "flag")
                                     flag = child.value as String?
 
-                                if (child.key == "sender")
+                                if (child.key == "sender") {
                                     sender = child.value as String?
+                                }
+
+                                if (child.key == "senderUid")
+                                    key_s = child.value as String?
+
 
                                 if (child.key == "receiverUid")
                                     if (child.value == FirebaseAuth.getInstance().currentUser?.uid && flag=="new")
@@ -87,14 +96,24 @@ class ChatService : android.app.Service() {
 
                                 var bitmap = BitmapFactory.decodeResource(applicationContext.resources, R.drawable.ic_email_white_24dp)
                                 bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
+                                val notificationIntent = Intent(applicationContext, ChatActivity::class.java)
+                                notificationIntent.putExtra(AppConstants.USER_USERNAME_S, getSharedPreferences(Constants.PREFERENCE_FILE, Context.MODE_PRIVATE).getString("username",""))
+                                notificationIntent.putExtra(AppConstants.USER_USERNAME_R, sender)
+                                notificationIntent.putExtra(AppConstants.USER_ID_S, FirebaseAuth.getInstance().currentUser!!.uid)
+                                notificationIntent.putExtra(AppConstants.USER_ID_R, key_s)
 
-                                if( Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                                val pendingIntent = PendingIntent.getActivity(applicationContext, 0,
+                                        notificationIntent, FLAG_UPDATE_CURRENT)
+
+
+                                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     val builder = NotificationCompat.Builder(applicationContext, "Message")
                                             .setContentTitle(sender)
                                             .setContentText(getString(R.string.new_message))
                                             .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.new_message)))
                                             .setSmallIcon(R.drawable.ic_email_white_24dp)
                                             .setAutoCancel(true)
+                                            .setContentIntent(pendingIntent)
                                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                                             .setVibrate(longArrayOf(0, 250, 250, 250))
                                     val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -108,6 +127,7 @@ class ChatService : android.app.Service() {
                                             .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.new_message)))
                                             .setSmallIcon(R.drawable.ic_email_white_24dp)
                                             .setAutoCancel(true)
+                                            .setContentIntent(pendingIntent)
                                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                                             .setVibrate(longArrayOf(0, 250, 250, 250))
                                     val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

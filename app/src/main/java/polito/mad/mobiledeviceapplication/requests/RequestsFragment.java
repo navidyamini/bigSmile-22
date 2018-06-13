@@ -109,6 +109,10 @@ public class RequestsFragment extends Fragment {
             }
         });
 
+        if (getArguments()!=null)
+            if (getArguments().get("request").equals("received"))
+                pager.setCurrentItem(1);
+
         return rootView;
 
     }
