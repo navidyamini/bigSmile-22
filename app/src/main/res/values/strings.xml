@@ -144,5 +144,37 @@
     <string name="unsuccessfully_requested">This procedure has encountered an error. Please retry later</string>
     <string name="unavailable_operation">You cannot request for an already borrowed book</string>
     <string name="are_you_sure">Are you sure you want to borrow this book?</string>
+    <string name="confirm_reception">Confirm the reception of the book</string>
+    <string name="not_yet">No, not yet</string>
+    <string name="finalize_borrowing">Finalize borrowing</string>
+    <string name="have_you_sent_back">Have you sent the book back to the owner?</string>
+    <string name="yes_I_have">Yes, I have</string>
+    <string name="are_you_sure_to_cancel">Are you sure you want to cancel this reservation? The owner will be notified about your decision</string>
+    <string name="accepted_request">Your request has been accepted by the owner and he will soon send the book to you</string>
+    <string name="book_status_sentback">Book status: Sent Back</string>
+    <string name="not_received_yet">The book you have sent hasn\'t been received by the owner yet</string>
+    <string name="book_status_accepted">Book status: Accepted</string>
+    <string name="request_accepted">Your request has been accepted by the owner and he will soon send the book to you</string>
+    <string name="refuse_request">DELETE REQUEST</string>
+    <string name="accept_request">ACCEPT REQUEST</string>
+    <string name="finalize_lending">Finalize the lending</string>
+    <string name="lending_finalization">Lending finalization</string>
+    <string name="have_you_received_book">Have you received your book back from the borrower?</string>
+    <string name="yes_book_back">Yes, I have got my book back</string>
+    <string name="not_received">No, I haven\'t received it</string>
+    <string name="cancel_request">CANCEL REQUEST</string>
+    <string name="delete_book_request">Delete book request</string>
+    <string name="are_you_sure_to_reject">Are you sure you want to reject this reservation? The borrower will be notified about your decision</string>
+    <string name="ok_delete_it">OK, delete it</string>
+    <string name="start_lending">START LENDING</string>
+    <string name="more_info">More info about the book</string>
+    <string name="book_status_sent">Book status: SENT</string>
+    <string name="book_sent_not_received">The book has been sent to the borrower but it has not been received or it has not been notified by him/her</string>
+    <string name="book_status_received">Book status: RECEIVED</string>
+    <string name="book_received_correctly">The book has been received correctly by the borrower</string>
+    <string name="contact_borrower">Contact the borrower</string>
+    <string name="ok">Ok</string>
+    <string name="contact_owner">Chat with the owner</string>
+    <string name="borrow_request">Borrow this book</string>
 </resources>
 

@@ -111,7 +111,7 @@
     <string name="operations">operazioni</string>
     <string name="status">Stato:</string>
 
-    <string name="rate_experience">vota la tua esperienza</string>
+    <string name="rate_experience">Vota la tua esperienza</string>
     <string name="comment">Commento su:</string>
     <string name="comment2">Commento</string>
 
@@ -142,6 +142,38 @@
     <string name="unsuccessfully_requested">Questa procedura ha riscontrato un errore. Per favore riprova più tardi</string>
     <string name="unavailable_operation">Non puoi effetturare una prenotazione per un libro non ancora disponibile</string>
     <string name="are_you_sure">Sei sicuro di voler prenotare questo libro?</string>
+    <string name="confirm_reception">"Conferma la ricezione del libro "</string>
+    <string name="not_yet">"No, non ancora "</string>
+    <string name="finalize_borrowing">"Finalizzare il prestito "</string>
+    <string name="have_you_sent_back">"Hai inviato il libro al proprietario? "</string>
+    <string name="yes_I_have">"Sì "</string>
+    <string name="are_you_sure_to_cancel">"Sei sicuro di voler cancellare questa prenotazione? Il proprietario verrà informato della tua decisione "</string>
+    <string name="accepted_request">"La tua richiesta è stata accettata dal proprietario e ti manderà presto il libro "</string>
+    <string name="book_status_sentback">" Stato del libro: Rispedito"</string>
+    <string name="not_received_yet">"Il libro che hai inviato non è ancora stato ricevuto dal proprietario "</string>
+    <string name="book_status_accepted">Stato del libro: Accettato</string>
+    <string name="request_accepted">"La tua richiesta è stata accettata dal proprietario e ti manderà presto il libro "</string>
+    <string name="refuse_request">"CANCELLA RICHIESTA "</string>
+    <string name="accept_request">ACCETTA RICHIESTA</string>
+    <string name="finalize_lending">"Completa il prestito "</string>
+    <string name="lending_finalization">"Finalizzazione del prestito "</string>
+    <string name="have_you_received_book">"Hai ricevuto il tuo libro dal mutuatario? "</string>
+    <string name="yes_book_back">"Sì, ho riaperto il mio libro "</string>
+    <string name="not_received">"No, non l'ho ricevuto "</string>
+    <string name="cancel_request">CANCELLA RICHIESTA</string>
+    <string name="delete_book_request">"Elimina la richiesta del libro "</string>
+    <string name="are_you_sure_to_reject">"Sei sicuro di voler rifiutare questa prenotazione? Il proprietario riceverà una notifica sulla sua decisione "</string>
+    <string name="ok_delete_it">"OK, cancellalo "</string>
+    <string name="start_lending">"INIZIA A PRESTARE "</string>
+    <string name="more_info">"Maggiori informazioni sul libro "</string>
+    <string name="book_status_sent">"Stato del libro: Inviato "</string>
+    <string name="book_sent_not_received">"Il libro è stato inviato al mutuatario ma non è stato ricevuto o non è stato notificato da lui / lei "</string>
+    <string name="book_status_received">"Stato del libro: RICEVUTO "</string>
+    <string name="book_received_correctly">"Il libro è stato ricevuto correttamente dal mutuatario "</string>
+    <string name="contact_borrower">Contattare il proprietario</string>
+    <string name="ok">Ok</string>
+    <string name="contact_owner">Contatta il proprietario</string>
+    <string name="borrow_request">Richiedi il prestito</string>
 
 
 </resources>

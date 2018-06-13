@@ -94,7 +94,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:padding="6dp"
                 android:paddingBottom="10dp"
-                android:text="Chat with the owner"
+                android:text="@string/contact_owner"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp" />
 
@@ -112,7 +112,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:padding="6dp"
                 android:paddingBottom="10dp"
-                android:text="Borrow request"
+                android:text="@string/borrow_request"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp" />
 

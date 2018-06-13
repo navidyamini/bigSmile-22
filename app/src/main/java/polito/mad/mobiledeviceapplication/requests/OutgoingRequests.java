@@ -157,7 +157,7 @@ public class OutgoingRequests extends Fragment {
             if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.SENT.toString())) {
 
 
-                holder.cancel_btn.setText("Contact the borrower");
+                holder.cancel_btn.setText(R.string.contact_borrower);
                 holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -178,7 +178,7 @@ public class OutgoingRequests extends Fragment {
                 });
 
 
-                holder.operation_btn.setText("Confirm the reception of the book");
+                holder.operation_btn.setText(R.string.confirm_reception);
                 holder.operation_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -202,16 +202,16 @@ public class OutgoingRequests extends Fragment {
             } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.RECEIVED.toString())) {
 
 
-                holder.operation_btn.setText("Finalize the lending");
+                holder.operation_btn.setText(R.string.finalize_lending);
                 holder.operation_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
                         builder.setCancelable(false);
-                        builder.setTitle("Finalize borrowing");
-                        builder.setMessage("Have you sent the book back to the owner?");
-                        builder.setPositiveButton("Yes, I have", new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.finalize_borrowing);
+                        builder.setMessage(R.string.have_you_sent_back);
+                        builder.setPositiveButton(R.string.yes_I_have, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -236,7 +236,7 @@ public class OutgoingRequests extends Fragment {
 
                                 builder1.setView(v);
                                 builder1.setCancelable(false);
-                                builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                builder1.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
@@ -267,7 +267,7 @@ public class OutgoingRequests extends Fragment {
                                     }
                                 });
 
-                                builder1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                builder1.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
@@ -279,7 +279,7 @@ public class OutgoingRequests extends Fragment {
 
                             }
                         });
-                        builder.setNegativeButton("No, not yet", new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(R.string.not_yet, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -292,7 +292,7 @@ public class OutgoingRequests extends Fragment {
                     }
                 });
 
-                holder.cancel_btn.setText("Contact the borrower");
+                holder.cancel_btn.setText(R.string.contact_borrower);
                 holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -315,7 +315,7 @@ public class OutgoingRequests extends Fragment {
 
             } else if (((MyRequest) mDataset.get(position).get("request")).toMap().get("status").toString().equals(MyRequest.STATUS.ACCEPTED.toString())) {
 
-                holder.operation_btn.setText("More info about the book");
+                holder.operation_btn.setText(R.string.more_info);
                 holder.operation_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -323,9 +323,9 @@ public class OutgoingRequests extends Fragment {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
                         builder.setCancelable(false);
-                        builder.setTitle("Book status: ACCEPTED");
-                        builder.setMessage("Your request has been accepted by the owner and he will soon send the book to you");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.book_status_accepted);
+                        builder.setMessage(R.string.request_accepted);
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -339,16 +339,16 @@ public class OutgoingRequests extends Fragment {
                 });
 
 
-                holder.cancel_btn.setText("REFUSE REQUEST");
+                holder.cancel_btn.setText(R.string.refuse_request);
                 holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
                         builder.setCancelable(true);
-                        builder.setTitle("Delete book request");
-                        builder.setMessage("Are you sure you want to cancel this reservation? The owner will be notified about your decision");
-                        builder.setPositiveButton("OK, delete it", new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.delete_book_request);
+                        builder.setMessage(R.string.are_you_sure_to_cancel);
+                        builder.setPositiveButton(R.string.ok_delete_it, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -367,7 +367,7 @@ public class OutgoingRequests extends Fragment {
 
                             }
                         });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -385,7 +385,7 @@ public class OutgoingRequests extends Fragment {
 
 
 
-                holder.operation_btn.setText("More info about the book");
+                holder.operation_btn.setText(R.string.more_info);
                 holder.operation_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -409,15 +409,15 @@ public class OutgoingRequests extends Fragment {
                 });
 
 
-                holder.cancel_btn.setText("REFUSE REQUEST");
+                holder.cancel_btn.setText(R.string.refuse_request);
                 holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
                         builder.setCancelable(true);
-                        builder.setTitle("Delete book request");
-                        builder.setMessage("Are you sure you want to cancel this reservation? The owner will be notified about your decision");
+                        builder.setTitle(R.string.delete_book_request);
+                        builder.setMessage(R.string.are_you_sure_to_cancel);
                         builder.setPositiveButton("OK, delete it", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -437,7 +437,7 @@ public class OutgoingRequests extends Fragment {
 
                             }
                         });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -455,7 +455,7 @@ public class OutgoingRequests extends Fragment {
 
             } else {
 
-                holder.operation_btn.setText("More info about the book");
+                holder.operation_btn.setText(R.string.more_info);
                 holder.operation_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -464,8 +464,8 @@ public class OutgoingRequests extends Fragment {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
                             builder.setCancelable(false);
-                            builder.setTitle("Book status: ACCEPTED");
-                            builder.setMessage("Your request has been accepted by the owner and he will soon send the book to you");
+                            builder.setTitle(R.string.book_status_accepted);
+                            builder.setMessage(R.string.accepted_request);
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -478,9 +478,9 @@ public class OutgoingRequests extends Fragment {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DialogTheme);
                             builder.setCancelable(false);
-                            builder.setTitle("Book status: SENTBACK");
-                            builder.setMessage("The book you have sent hasn't been received by the owner yet");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            builder.setTitle(R.string.book_status_sentback);
+                            builder.setMessage(R.string.not_received_yet);
+                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -494,7 +494,7 @@ public class OutgoingRequests extends Fragment {
                         }
                 });
 
-                holder.cancel_btn.setText("Contact the borrower");
+                holder.cancel_btn.setText(R.string.contact_borrower);
                 holder.cancel_btn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
