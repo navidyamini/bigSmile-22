@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
+import android.os.Build
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
 import android.util.Log
@@ -87,18 +88,34 @@ class ChatService : android.app.Service() {
                                 var bitmap = BitmapFactory.decodeResource(applicationContext.resources, R.drawable.ic_email_white_24dp)
                                 bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true)
 
-                                val builder = NotificationCompat.Builder(applicationContext, "Message")
-                                        .setContentTitle(sender)
-                                        .setContentText(getString(R.string.new_message))
-                                        .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.new_message)))
-                                        .setSmallIcon(R.drawable.ic_email_white_24dp)
-                                        .setAutoCancel(true)
-                                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                                        .setVibrate(longArrayOf(0, 250, 250, 250))
+                                if( Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                                    val builder = NotificationCompat.Builder(applicationContext, "Message")
+                                            .setContentTitle(sender)
+                                            .setContentText(getString(R.string.new_message))
+                                            .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.new_message)))
+                                            .setSmallIcon(R.drawable.ic_email_white_24dp)
+                                            .setAutoCancel(true)
+                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                            .setVibrate(longArrayOf(0, 250, 250, 250))
+                                    val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-                                val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                    notificationManager.notify(30, builder.build())
+                                }
+                                else{
+                                    val builder = NotificationCompat.Builder(applicationContext)
+                                            .setContentTitle(sender)
+                                            .setContentText(getString(R.string.new_message))
+                                            .setStyle(NotificationCompat.BigTextStyle().bigText(getString(R.string.new_message)))
+                                            .setSmallIcon(R.drawable.ic_email_white_24dp)
+                                            .setAutoCancel(true)
+                                            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                                            .setVibrate(longArrayOf(0, 250, 250, 250))
+                                    val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-                                notificationManager.notify(30, builder.build())
+                                    notificationManager.notify(30, builder.build())
+
+                                }
+
                                 println("NOTIFICATION")
 
                             }
