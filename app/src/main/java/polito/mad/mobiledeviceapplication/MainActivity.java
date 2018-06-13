@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
@@ -1438,7 +1439,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         });
 
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-
+        if(savedInstanceState !=null){
+            String fragmentClass = savedInstanceState.getString("fragmentClass");
+            if(fragmentClass.equals(MyBooksFragment.class.getCanonicalName()))
+                tx.replace(R.id.content_frame, new MyBooksFragment());
+            //else if()
+        } else {
         if (getIntent().hasExtra("command")) {
             if (getIntent().getStringExtra("command").equals("request")) {
 
@@ -1452,7 +1458,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         } else {
             initializeRequestsListener();
             tx.replace(R.id.content_frame, new HomeFragment());
-        }
+        }}
         tx.commit();
 
 
@@ -1486,11 +1492,17 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("fragmentClass",getSupportFragmentManager().findFragmentById(R.id.content_frame).getClass().getCanonicalName());
+        super.onSaveInstanceState(outState);
 
-
-
-
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

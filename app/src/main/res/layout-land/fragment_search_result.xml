@@ -11,9 +11,8 @@
 
     <RelativeLayout
         android:id="@+id/map_layout"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        >
+        android:layout_width="330dp"
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/explaination2"
@@ -41,7 +40,6 @@
             android:layout_height="match_parent"
             tools:context="polito.mad.mobiledeviceapplication.search.SearchMap" />
 
-        >
 
     </RelativeLayout>
 
@@ -53,6 +51,7 @@
         >
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/book_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"

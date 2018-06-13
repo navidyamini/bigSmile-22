@@ -47,12 +47,6 @@ public class MyBooksFragment extends Fragment {
         pager.setAdapter(new FragAdapter(getChildFragmentManager(), 1, getContext()));
 
         ((MainActivity) getActivity()).toolbar.setTitle(R.string.my_books);
-        return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         add_book.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +75,16 @@ public class MyBooksFragment extends Fragment {
 
             }
         });
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
 
     }
 

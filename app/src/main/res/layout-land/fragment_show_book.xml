@@ -23,8 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="62dp">
+            android:layout_alignTop="@+id/cover">
 
             <ListView
                 android:id="@+id/comment_list"
@@ -155,12 +154,12 @@
 
             <Button
                 android:id="@+id/borrow_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="false"
-                android:layout_alignStart="@+id/scrollView2"
                 android:layout_below="@+id/contact_button"
-                android:layout_marginStart="72dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/rounded_button"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="6dp"
@@ -171,11 +170,14 @@
 
             <Button
                 android:id="@+id/contact_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/comment_list"
-                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_button"
                 android:fontFamily="@font/roboto_medium"
@@ -209,13 +211,14 @@
                 android:layout_below="@+id/book_conditions"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 app:srcCompat="@drawable/book_cover" />
 
             <ImageButton
                 android:id="@+id/info_button"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignEnd="@+id/name_surname"
+                android:layout_alignStart="@+id/comment_list"
                 android:layout_alignTop="@+id/name_surname"
                 android:background="@android:color/transparent"
                 android:scaleType="centerInside"
