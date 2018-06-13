@@ -25,7 +25,7 @@ public class SettingsFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_settings, container, false);
 
-        ((MainActivity)getActivity()).toolbar.setTitle(R.string.setting);
+        ((MainActivity)getActivity()).toolbar.setTitle(R.string.points);
 
         return rootView;
     }
