@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0.6"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/back111" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/book_list"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/back4"
-        android:scrollbarAlwaysDrawHorizontalTrack="true" />
+        android:layout_marginTop="16dp" />
 
     <RelativeLayout
         android:id="@+id/detail_lay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/book_list"
-        android:layout_alignParentStart="true">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:alpha="0.6"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/back111" />
+        android:layout_width="230dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/book_list">
 
         <RelativeLayout
             android:id="@+id/image_lay"
@@ -37,7 +38,7 @@
 
             <ImageView
                 android:id="@+id/book_image"
-                android:layout_width="140dp"
+                android:layout_width="160dp"
                 android:layout_height="200dp"
                 android:layout_alignParentBottom="false"
                 android:layout_alignParentLeft="false"
@@ -53,15 +54,14 @@
 
         <RelativeLayout
             android:id="@+id/details"
-            android:layout_width="180dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="20dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="20dp"
-            android:visibility="visible">
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -111,8 +111,6 @@
                         android:layout_below="@+id/publication_year"
                         android:layout_centerVertical="true"
                         android:layout_marginTop="10dp"
-                        android:layout_toEndOf="@+id/image_lay"
-                        android:layout_toRightOf="@+id/image_lay"
                         android:fontFamily="@font/roboto_light"
                         android:text="Bio"
                         android:textColor="@android:color/white" />
@@ -180,7 +178,8 @@
         android:id="@+id/wait_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#b8cfd8dc">
+        android:background="#b8cfd8dc"
+        android:visibility="visible">
 
         <ProgressBar
             android:id="@+id/progressBar"

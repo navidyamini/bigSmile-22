@@ -44,7 +44,7 @@ public class MyBooksFragment extends Fragment {
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
 
         tabLayout.setupWithViewPager(pager);
-        pager.setAdapter(new FragAdapter(getChildFragmentManager(), 3, getContext()));
+        pager.setAdapter(new FragAdapter(getChildFragmentManager(), 1, getContext()));
 
         ((MainActivity) getActivity()).toolbar.setTitle(R.string.my_books);
         return rootView;
@@ -102,9 +102,7 @@ public class MyBooksFragment extends Fragment {
             super(fm);
             this.context = context;
             this.tabCount = tabCount;
-            tabTitles = new String[]{context.getResources().getString(R.string.all_books),
-                    context.getResources().getString(R.string.lent_books),
-                    context.getResources().getString(R.string.available_books)};
+            tabTitles = new String[]{context.getResources().getString(R.string.all_books)};
             this.fragments = new ArrayList<>();
         }
 
@@ -116,15 +114,6 @@ public class MyBooksFragment extends Fragment {
                     fragments.add(0,allMyBooksFrag);
                     return allMyBooksFrag;
 
-                case 1:
-                    LentBooks myLentBooks = new LentBooks();
-                    fragments.add(1,myLentBooks);
-                    return myLentBooks;
-
-                case 2:
-                    AvailableBooks myAvailableBooksFrag = new AvailableBooks();
-                    fragments.add(2,myAvailableBooksFrag);
-                    return myAvailableBooksFrag;
 
                 default:
                     return null;
