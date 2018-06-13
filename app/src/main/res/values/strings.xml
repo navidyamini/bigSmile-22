@@ -133,6 +133,7 @@
 
     <string name="insert_manually">It is not possible to retrieve data automatically from this book. Please insert its information manually.</string>
     <string name="received_request">You have received a new book request from </string>
+    <string name="owner">Owner</string>
 
     <string name="book_request">You have received a new book request. </string>
     <string name="modify_book_txt">Modify your book</string>

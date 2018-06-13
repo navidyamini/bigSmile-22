@@ -92,15 +92,15 @@ public class ShowBookDialogFragment extends DialogFragment {
         if (getArguments()!=null){
 
             title.setText(getArguments().getString("title"));
-            author.setText("Autore: " + getArguments().getString("author"));
-            publisher.setText("Casa editrice: " + getArguments().getString("publisher"));
-            edition_year.setText("Anno di pubblicazione: " + getArguments().getString("edition_year"));
-            genre.setText("Genere: " + getArguments().getString("genre"));
-            book_conditions.setText("Condizioni: " + getArguments().getString("book_conditions"));
-            extra_tags.setText("Informazioni extra: " +getArguments().getString("extra_tags"));
+            author.setText(getString(R.string.author)+": "+ getArguments().getString("author"));
+            publisher.setText(getString(R.string.publisher)+": " + getArguments().getString("publisher"));
+            edition_year.setText(getString(R.string.edition_year)+": "+ getArguments().getString("edition_year"));
+            genre.setText(getString(R.string.genre)+": "+ getArguments().getString("genre"));
+            book_conditions.setText(getString(R.string.book_conditions)+": "+ getArguments().getString("book_conditions"));
+            extra_tags.setText(getString(R.string.extra_tags)+": "+getArguments().getString("extra_tags"));
             isbn.setText("ISBN: " +getArguments().getString("ISBN"));
 
-            name_surname.setText("Proprietario: " + getArguments().getString("name") + " " + getArguments().getString("surname"));
+            name_surname.setText(getString(R.string.owner)+": "+ getArguments().getString("name") + " " + getArguments().getString("surname"));
 
             ArrayList<Comment> c = new ArrayList<>();
 

@@ -38,6 +38,7 @@
         android:layout_gravity="right"
         android:isIndicator="true"
         android:numStars="5"
+        android:progressTint="@android:color/holo_orange_dark"
         android:rating="2.0"
         android:scaleX="0.5"
         android:scaleY="0.5"
