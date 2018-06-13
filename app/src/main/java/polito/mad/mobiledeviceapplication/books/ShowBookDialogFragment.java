@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Rating;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,6 +38,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Comment;
@@ -320,12 +325,39 @@ public class ShowBookDialogFragment extends DialogFragment {
             TextView userComment = (TextView) convertView.findViewById(R.id.userComment);
             RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
             TextView username = (TextView) convertView.findViewById(R.id.userNameText);
-            ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
+            final ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
 
             ratingBar.setEnabled(false);
             userComment.setText(mDataset.get(position).get("message").toString());
             ratingBar.setRating(Float.parseFloat(mDataset.get(position).get("rate").toString()));
             username.setText("User " + position);
+
+
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+            final long ONE_MEGABYTE = 1024 * 1024;
+            StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mDataset.get(position).get("writer_id")+".png");
+
+            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    userImage.setImageBitmap(bmp);
+
+
+
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+
+
+                }
+            });
 
 
             return convertView;

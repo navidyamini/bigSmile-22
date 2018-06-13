@@ -9,7 +9,7 @@
     android:layout_marginRight="5dp"
     android:background="@drawable/relative_layout_background">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -17,7 +17,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:tint="@android:color/holo_green_dark"
-        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="3dp" />
 
     <TextView
         android:id="@+id/userNameText"

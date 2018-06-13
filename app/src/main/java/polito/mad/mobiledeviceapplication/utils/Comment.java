@@ -18,7 +18,7 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(String message, float rate, String borrower_id) {
+    public Comment(String message, float rate, String writer_id) {
         this.message = message;
         this.rate = rate;
         this.writer_id = writer_id;
@@ -29,7 +29,7 @@ public class Comment {
         HashMap<String, Object> result = new HashMap<>();
         result.put("message", this.message);
         result.put("rate", this.rate);
-        result.put("borrower_id",this.writer_id);
+        result.put("writer_id",this.writer_id);
 
 
         return result;

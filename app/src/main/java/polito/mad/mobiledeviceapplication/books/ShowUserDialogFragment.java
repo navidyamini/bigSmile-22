@@ -3,6 +3,8 @@ package polito.mad.mobiledeviceapplication.books;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +32,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,6 +107,35 @@ public class ShowUserDialogFragment extends DialogFragment {
         username.setText(user.username);
         user_rating.setRating(rating);
         comment_list.setAdapter(new MyCommentAdapter(getContext(),comments));
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(getArguments().getString("user_id","")+".png");
+
+        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                profile_image.setImageBitmap(bmp);
+
+
+
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+
+
+            }
+        });
+
         //retrieveLatLng(user.address);
 
 
@@ -143,12 +178,36 @@ public class ShowUserDialogFragment extends DialogFragment {
             TextView userComment = (TextView) convertView.findViewById(R.id.userComment);
             RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
             TextView username = (TextView) convertView.findViewById(R.id.userNameText);
-            ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
+            final ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
 
             ratingBar.setEnabled(false);
             userComment.setText(mDataset.get(position).message);
             ratingBar.setRating(mDataset.get(position).rate);
             username.setText("User " + position);
+
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+
+            final long ONE_MEGABYTE = 1024 * 1024;
+            StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mDataset.get(position).writer_id+".png");
+
+            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    userImage.setImageBitmap(bmp);
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+
+
+                }
+            });
+
 
 
             return convertView;
