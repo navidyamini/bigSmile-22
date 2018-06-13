@@ -40,12 +40,18 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import polito.mad.mobiledeviceapplication.R;
 import polito.mad.mobiledeviceapplication.utils.Comment;
 import polito.mad.mobiledeviceapplication.utils.Constants;
+import polito.mad.mobiledeviceapplication.utils.User;
 
 /**
  * Created by user on 11/05/2018.
@@ -316,7 +322,7 @@ public class ShowBookDialogFragment extends DialogFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView==null)
             {
                 convertView=LayoutInflater.from(context).inflate(R.layout.item_comments, null);
@@ -324,7 +330,7 @@ public class ShowBookDialogFragment extends DialogFragment {
 
             TextView userComment = (TextView) convertView.findViewById(R.id.userComment);
             RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
-            TextView username = (TextView) convertView.findViewById(R.id.userNameText);
+            final TextView username = (TextView) convertView.findViewById(R.id.userNameText);
             final ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
 
             ratingBar.setEnabled(false);
@@ -332,32 +338,50 @@ public class ShowBookDialogFragment extends DialogFragment {
             ratingBar.setRating(Float.parseFloat(mDataset.get(position).get("rate").toString()));
             username.setText("User " + position);
 
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-
-            final long ONE_MEGABYTE = 1024 * 1024;
-            StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mDataset.get(position).get("writer_id")+".png");
-
-            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            mDatabase.child("users").child(mDataset.get(position).get("writer_id").toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onSuccess(byte[] bytes) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    final User user = dataSnapshot.getValue(User.class);
+                    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    userImage.setImageBitmap(bmp);
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mDataset.get(position).get("writer_id")+".png");
+
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+
+                            username.setText(user.username);
+
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            userImage.setImageBitmap(bmp);
 
 
 
 
 
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                            username.setText(user.username);
+
+
+                        }
+                    });
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });
+
+
+
 
 
             return convertView;
