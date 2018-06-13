@@ -1669,10 +1669,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                 } catch (Exception e) {
                                     Toast.makeText(MainActivity.this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
 
-                                    if (fragment.isAdded() && fragment.isVisible()) {
-                                        fragment.setFormEnabled(true);
-                                        ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
-                                    }
+                                    try {
+                                        if (fragment.isAdded() && fragment.isVisible()) {
+                                            fragment.setFormEnabled(true);
+                                            ((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.available_book));
+                                        }
+                                    } catch (Exception e1){}
                                 }
 
                             }
@@ -1691,8 +1693,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                 });
 
-                if (fragment.isAdded() && fragment.isVisible())
-                    fragment.setFormEnabled(false);
+                try {
+                    if (fragment.isAdded() && fragment.isVisible())
+                        fragment.setFormEnabled(false);
+                }catch (Exception e){}
 
                 stringRequest.setRetryPolicy(new DefaultRetryPolicy(5 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 Volley.newRequestQueue(getApplicationContext()).add(stringRequest);
@@ -1939,7 +1943,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 User user = dataSnapshot.getValue(User.class);
-                getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username);
+                getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username).apply();
 
                 ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + " " + user.username);
 
