@@ -305,7 +305,7 @@ class ChatActivity : AppCompatActivity() {
                                     for (message in chat.children) {
 
                                         for (field in message.children) {
-                                            key = field.key
+                                            key = field.key as String
 
                                             if (key == "flag") {
                                                 flag= field.value as String
@@ -326,7 +326,7 @@ class ChatActivity : AppCompatActivity() {
                                             if(flag == "new" && receiverUid==userid && sender ==intent.getStringExtra(AppConstants.USER_USERNAME_R)){
                                                // unreadMessage.visibility = View.INVISIBLE
                                                 for (field in message.children) {
-                                                    key = field.key
+                                                    key = field.key as String
 
                                                     if (key == "flag") {
                                                         flag= field.value as String

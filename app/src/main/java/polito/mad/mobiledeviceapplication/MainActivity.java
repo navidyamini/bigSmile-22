@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,7 @@ import com.google.firebase.storage.UploadTask;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -103,6 +106,52 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     private NavigationView navigation;
     public android.support.v7.widget.Toolbar toolbar;
 
+
+    @Override
+    public void retrieveImage(@NotNull Intent intent) {
+
+        if (Constants.RETRIEVE_IMAGE.equals(intent.getAction())) {
+
+//            if (firebaseStorage==null)
+//                firebaseStorage = FirebaseStorage.getInstance();
+//
+//
+//            if (firebaseStorage==null)
+//                firebaseStorage = FirebaseStorage.getInstance();
+//
+//            final long ONE_MEGABYTE = 1024 * 1024;
+//            StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(intent.getStringExtra("user_id")+".png");
+//
+//            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                @Override
+//                public void onSuccess(byte[] bytes) {
+//
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                    final InboxFragment fragment = (InboxFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+//
+//                    if (fragment.isAdded() && fragment.isVisible()) {
+//                        //((TextSwitcher) fragment.getView().findViewById(R.id.explaination_switcher)).setText(getString(R.string.wait_book_insert));
+//                        fragment.retrieveBookInformation(book,bmp);
+//                    }
+//
+//
+//
+//
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception exception) {
+//                    // Handle any errors
+//
+//
+//                }
+//            });
+//
+//
+//        }
+        }
+
+    }
 
     @Override
     public void retrieveBook(final Intent intent) {
@@ -1264,7 +1313,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
         navigation = (NavigationView) findViewById(R.id.drawer_navigation);
-        ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + " " + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
+        //((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + " " + getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getString("username",""));
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -1400,7 +1449,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         initializeRequestsListener();
 
 
+
+
+
     }
+
+
 
 
 
@@ -1503,6 +1557,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     protected void onStart() {
         super.onStart();
 
+        retrieveUser();
 
 
 
@@ -1693,4 +1748,60 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
         });
 
     }
+
+
+
+    private void retrieveUser(){
+
+        if (mDatabase==null)
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                User user = dataSnapshot.getValue(User.class);
+                ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + " " + user.username);
+
+                if (firebaseStorage==null)
+                    firebaseStorage = FirebaseStorage.getInstance();
+
+                final long ONE_MEGABYTE = 1024 * 1024;
+                StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mAuth.getCurrentUser().getUid()+".png");
+
+                storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        ((ImageView)navigation.getHeaderView(0).findViewById(R.id.user_image)).setImageBitmap(bmp);
+
+
+
+
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+    }
+
 }

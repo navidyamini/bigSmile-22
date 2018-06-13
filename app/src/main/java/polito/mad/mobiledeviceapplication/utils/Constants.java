@@ -44,6 +44,8 @@ public class Constants {
 
     public final static String GET_USER_INFO = "GET_USER_INFO";
     public final static String EDIT_BOOK = "EDIT_BOOK";
+    public final static String RETRIEVE_IMAGE = "RETRIEVE_IMAGE";
+
 
     public final static String URL_BOOKS = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 

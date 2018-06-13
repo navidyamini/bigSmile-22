@@ -6,6 +6,16 @@
     android:background="@drawable/header_back"
     android:orientation="vertical">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/user_name"
+        android:layout_alignStart="@+id/user_name"
+        android:layout_marginBottom="10dp"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="3dp" />
+
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"

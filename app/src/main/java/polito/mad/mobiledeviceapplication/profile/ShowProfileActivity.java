@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,12 +31,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -67,7 +73,7 @@ public class ShowProfileActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_SETTING = 3;
 
     private ImageView profileImage;
-
+    private FirebaseStorage storage;
     private boolean permission_bool = false;
 
 
@@ -79,6 +85,7 @@ public class ShowProfileActivity extends AppCompatActivity {
         setContentView(R.layout.show_activity);
 
         mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_show);
         setSupportActionBar(myToolbar);
@@ -315,6 +322,30 @@ public class ShowProfileActivity extends AppCompatActivity {
                     Toast.makeText(this, getString(R.string.save_image), Toast.LENGTH_SHORT).show();
                     profileImage.setImageBitmap(bitmap);
 
+                    StorageReference storageRef = storage.getReference().child("images").child("users").child(mAuth.getCurrentUser().getUid() + ".png");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                    byte[] mdata = baos.toByteArray();
+
+                    UploadTask uploadTask = storageRef.putBytes(mdata);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                            System.out.println("EXCEPTION " + exception);
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            System.out.println("Book image inserted into Cloud Storage");
+                        }
+                    });
+
+
+
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
@@ -327,6 +358,29 @@ public class ShowProfileActivity extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 profileImage.setImageBitmap(thumbnail);
                 saveImage(thumbnail);
+
+                StorageReference storageRef = storage.getReference().child("images").child("users").child(mAuth.getCurrentUser().getUid() + ".png");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] mdata = baos.toByteArray();
+
+                UploadTask uploadTask = storageRef.putBytes(mdata);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+
+                        System.out.println("EXCEPTION " + exception);
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        System.out.println("Book image inserted into Cloud Storage");
+                    }
+                });
+
+
+
                 Toast.makeText(this, getString(R.string.save_image), Toast.LENGTH_SHORT).show();
             }
         }

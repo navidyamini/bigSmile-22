@@ -2,6 +2,7 @@ package polito.mad.mobiledeviceapplication.chat
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -19,7 +22,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_chat_list.*
+import org.jetbrains.anko.image
 
 import java.util.ArrayList
 
@@ -45,6 +50,7 @@ class InboxFragment : Fragment() {
 
     interface FragChatObserver {
         fun notifyChatRequest(intent: Intent)
+        fun retrieveImage(intent: Intent)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,7 +90,7 @@ class InboxFragment : Fragment() {
                                 for (message in chat.children) {
 
                                     for (field in message.children) {
-                                        key = field.key
+                                        key = field.key as String
 
                                         if (key == "receiverUid") {
                                             receiverUid = field.value as String
@@ -204,7 +210,7 @@ class InboxFragment : Fragment() {
                                     for (message in chat.children) {
 
                                         for (field in message.children) {
-                                            key = field.key
+                                            key = field.key as String
 
                                             if (key == "flag") {
                                                 flag= field.value as String
@@ -237,6 +243,21 @@ class InboxFragment : Fragment() {
                             //handle databaseError
                         }
                     })
+
+            val storage = FirebaseStorage.getInstance()
+            val ONE_MEGABYTE = (1024 * 1024).toLong()
+            val storageRef = storage.reference.child("images").child("users").child(chat_user_ids!![position] + ".png")
+
+            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(OnSuccessListener<ByteArray> { bytes ->
+                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                holder.mView.findViewById<ImageView>(R.id.otherUserImage).setImageBitmap(bmp)
+
+            }).addOnFailureListener(OnFailureListener {
+                // Handle any errors
+            })
+
+
+
             //holder.userName.text = mDataset[position]
             holder.mView.setOnClickListener {
                 val a = activity
