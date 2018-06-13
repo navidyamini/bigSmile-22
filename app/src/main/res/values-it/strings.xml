@@ -136,6 +136,12 @@
     <string name="user_username">Nome Utent</string>
     <string name="owner">Proprietario</string>
     <string name="aforisma">\'Non ci sono amicizie più rapide di quelle tra persone che amano gli stessi libri\' - Irving Stone</string>
+    <string name="available_book_txt">Questo libro è disponibile</string>
+    <string name="not_available_book_txt">Questo libro non è disponibile</string>
+    <string name="correctly_requested">La prenotazione è avvenuta con successo</string>
+    <string name="unsuccessfully_requested">Questa procedura ha riscontrato un errore. Per favore riprova più tardi</string>
+    <string name="unavailable_operation">Non puoi effetturare una prenotazione per un libro non ancora disponibile</string>
+    <string name="are_you_sure">Sei sicuro di voler prenotare questo libro?</string>
 
 
 </resources>

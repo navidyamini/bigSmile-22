@@ -7,8 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Rating;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -28,6 +30,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +62,7 @@ import polito.mad.mobiledeviceapplication.utils.User;
 
 public class ShowBookDialogFragment extends DialogFragment {
 
-    private TextView title,author,publisher,edition_year,genre,book_conditions,extra_tags,isbn;
+    private TextView title,author,publisher,edition_year,genre,book_conditions,extra_tags,isbn,free;
     private TextView name_surname;
     private ImageView cover, book_conditions_image;
     private Button contact_button;
@@ -86,6 +89,7 @@ public class ShowBookDialogFragment extends DialogFragment {
         book_conditions = (TextView) v.findViewById(R.id.book_conditions);
         extra_tags = (TextView) v.findViewById(R.id.extra_tags);
         isbn = (TextView) v.findViewById(R.id.isbn);
+        free = (TextView) v.findViewById(R.id.free);
 
         cover = (ImageView) v.findViewById(R.id.cover);
         book_conditions_image = (ImageView) v.findViewById(R.id.book_condition_image);
@@ -102,6 +106,7 @@ public class ShowBookDialogFragment extends DialogFragment {
 
         if (getArguments()!=null){
 
+            System.out.println("book id " + getArguments().getString("book_id"));
             title.setText(getArguments().getString("title"));
             author.setText(getString(R.string.author)+": "+ getArguments().getString("author"));
             publisher.setText(getString(R.string.publisher)+": " + getArguments().getString("publisher"));
@@ -112,6 +117,16 @@ public class ShowBookDialogFragment extends DialogFragment {
             isbn.setText("ISBN: " +getArguments().getString("ISBN"));
 
             name_surname.setText(getString(R.string.owner)+": "+ getArguments().getString("name") + " " + getArguments().getString("surname"));
+
+            if (getArguments().getBoolean("free")) {
+                free.setText(getString(R.string.available_book_txt));
+                free.setTextColor(Color.GREEN);
+            } else {
+                free.setText(getString(R.string.not_available_book_txt));
+                free.setTextColor(Color.YELLOW);
+
+            }
+
 
             ArrayList<Comment> c = new ArrayList<>();
 
@@ -178,89 +193,104 @@ public class ShowBookDialogFragment extends DialogFragment {
         borrow_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder mbuilder = new AlertDialog.Builder(getContext());
-                View v = inflater.inflate(R.layout.borrow_request,container,false);
-                final EditText startDate = v.findViewById(R.id.startDateEditText);
-                final EditText endDate = v.findViewById(R.id.endDateEditText);
 
-                startDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DatePickerDialog picker;
-                        //DatePickerDialog date = new DatePickerDialog(getContext());
-                        final Calendar cldr = Calendar.getInstance();
-                        int day = cldr.get(Calendar.DAY_OF_MONTH);
-                        int month = cldr.get(Calendar.MONTH);
-                        int year = cldr.get(Calendar.YEAR);
-                        // date picker dialog
-                        picker = new DatePickerDialog(getContext(), R.style.DialogTheme,
-                                new DatePickerDialog.OnDateSetListener() {
-                                    @Override
-                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                        startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                        dismiss();
-                                    }
-                                }, year, month, day);
-                        picker.show();
+                if (getArguments().getBoolean("free")) {
 
-                    }
-                });
-                endDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DatePickerDialog picker1;
-                        //DatePickerDialog date = new DatePickerDialog(getContext());
-                        final Calendar cldr = Calendar.getInstance();
+                    AlertDialog.Builder mbuilder = new AlertDialog.Builder(getContext(),R.style.DialogTheme);
+                    /*View v = inflater.inflate(R.layout.borrow_request, container, false);
+                    final EditText startDate = v.findViewById(R.id.startDateEditText);
+                    final EditText endDate = v.findViewById(R.id.endDateEditText);
 
-                        int day = cldr.get(Calendar.DAY_OF_MONTH);
-                        int month = cldr.get(Calendar.MONTH);
-                        int year = cldr.get(Calendar.YEAR);
-                        System.out.println(getContext());
-                        // date picker dialog
-                        picker1 = new DatePickerDialog(view.getContext(), R.style.DialogTheme,
+                    startDate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            DatePickerDialog picker;
+                            //DatePickerDialog date = new DatePickerDialog(getContext());
+                            final Calendar cldr = Calendar.getInstance();
+                            int day = cldr.get(Calendar.DAY_OF_MONTH);
+                            int month = cldr.get(Calendar.MONTH);
+                            int year = cldr.get(Calendar.YEAR);
+                            // date picker dialog
+                            picker = new DatePickerDialog(getContext(), R.style.DialogTheme,
+                                    new DatePickerDialog.OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                            startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                            dismiss();
+                                        }
+                                    }, year, month, day);
+                            picker.show();
 
-                                new DatePickerDialog.OnDateSetListener() {
-                                    @Override
-                                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                        endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                        dismiss();
-                                    }
-                                }, year, month, day);
-                        picker1.show();
-
-                    }
-                });
-
-                mbuilder.setView(v);
-                mbuilder.setCancelable(false);
-                final Activity a=getActivity();
-
-                mbuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        if (a instanceof ShowBookDialogFragment.FragContactObserver) {
-                            ShowBookDialogFragment.FragContactObserver observer = (ShowBookDialogFragment.FragContactObserver) a;
-                            Intent intent = new Intent(Constants.BORROW_REQUEST);
-                            intent.putExtra("user_id_r",getArguments().getString("user_id",""));
-                            //intent.putExtra("username_r",getArguments().getString("name"));
-                            intent.putExtra("start_date",startDate.getText().toString());
-                            intent.putExtra("end_date",endDate.getText().toString());
-                            intent.putExtra("book_id",getArguments().getString("book_id"));
-                            observer.notifyBorrowRequest(intent);
                         }
+                    });
+                    endDate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            DatePickerDialog picker1;
+                            //DatePickerDialog date = new DatePickerDialog(getContext());
+                            final Calendar cldr = Calendar.getInstance();
+
+                            int day = cldr.get(Calendar.DAY_OF_MONTH);
+                            int month = cldr.get(Calendar.MONTH);
+                            int year = cldr.get(Calendar.YEAR);
+                            System.out.println(getContext());
+                            // date picker dialog
+                            picker1 = new DatePickerDialog(view.getContext(), R.style.DialogTheme,
+
+                                    new DatePickerDialog.OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                            endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                            dismiss();
+                                        }
+                                    }, year, month, day);
+                            picker1.show();
+
+                        }
+                    });*/
+
+                    //mbuilder.setView(v);
+                    mbuilder.setMessage(getString(R.string.are_you_sure));
+                    mbuilder.setCancelable(false);
+                    final Activity a = getActivity();
+
+                    mbuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                        //TODO make request
-                    }
-                });
-                mbuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                mbuilder.create().show();
+                            if (a instanceof ShowBookDialogFragment.FragContactObserver) {
+                                ShowBookDialogFragment.FragContactObserver observer = (ShowBookDialogFragment.FragContactObserver) a;
+                                Intent intent = new Intent(Constants.BORROW_REQUEST);
+                                intent.putExtra("user_id_r", getArguments().getString("user_id", ""));
+                                //intent.putExtra("username_r",getArguments().getString("name"));
+                                intent.putExtra("start_date", "");
+                                intent.putExtra("end_date", "");
+                                intent.putExtra("book_id", getArguments().getString("book_id"));
+                                observer.notifyBorrowRequest(intent);
+                            }
+                            dialogInterface.dismiss();
+                            free.setText(R.string.not_available_book_txt);
+                            free.setTextColor(Color.YELLOW);
+
+
+
+                            //TODO make request
+                        }
+                    });
+                    mbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    mbuilder.create().show();
+
+                } else {
+
+                    Toast.makeText(getContext(),R.string.unavailable_operation,Toast.LENGTH_LONG).show();
+
+                }
             }
         });
 
@@ -269,10 +299,8 @@ public class ShowBookDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-
                 Bundle b = new Bundle();
-                b.putString("user_id",getArguments().getString("user_id",""));
-
+                b.putString("user_id", getArguments().getString("user_id"));
                 ShowUserDialogFragment showUserDialogFragment = new ShowUserDialogFragment();
                 showUserDialogFragment.setArguments(b);
                 showUserDialogFragment.show(getChildFragmentManager(), "ShowUserDialog");
@@ -336,7 +364,6 @@ public class ShowBookDialogFragment extends DialogFragment {
             ratingBar.setEnabled(false);
             userComment.setText(mDataset.get(position).get("message").toString());
             ratingBar.setRating(Float.parseFloat(mDataset.get(position).get("rate").toString()));
-            username.setText("User " + position);
 
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 

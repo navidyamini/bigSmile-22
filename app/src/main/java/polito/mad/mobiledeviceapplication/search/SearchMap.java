@@ -157,6 +157,7 @@ public class SearchMap extends Fragment {
                             b1.putString("ISBN",book.get("ISBN").toString());
                             b1.putString("book_id",book.get("book_id").toString());
                             b1.putParcelableArrayList("comments",(ArrayList)book.get("comments"));
+                            b1.putBoolean("free",(boolean)book.get("free"));
 
                             if (book.get("image_url")!=null)
                                 b1.putString("image_url",book.get("image_url").toString());
@@ -344,6 +345,8 @@ public class SearchMap extends Fragment {
                             b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
                             b.putString("book_id",mDataset.get(position).getString("book_id"));
                             b.putByteArray("book_conditions_image",bytes);
+                            b.putString("user_id",mDataset.get(position).getString("user_id"));
+                            b.putBoolean("free",mDataset.get(position).getBoolean("free"));
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
                             showBookDialogFragment.setArguments(b);
@@ -372,6 +375,9 @@ public class SearchMap extends Fragment {
                             b.putString("surname",mDataset.get(position).getString("surname"));
                             b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
                             b.putString("book_id",mDataset.get(position).getString("book_id"));
+                            b.putString("user_id",mDataset.get(position).getString("user_id"));
+                            b.putBoolean("free",mDataset.get(position).getBoolean("free"));
+
 
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();

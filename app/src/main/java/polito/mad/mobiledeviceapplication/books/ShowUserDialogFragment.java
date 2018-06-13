@@ -38,6 +38,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -51,6 +56,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import polito.mad.mobiledeviceapplication.R;
+import polito.mad.mobiledeviceapplication.search.SearchMap;
 import polito.mad.mobiledeviceapplication.utils.Comment;
 import polito.mad.mobiledeviceapplication.utils.Constants;
 import polito.mad.mobiledeviceapplication.utils.User;
@@ -73,6 +79,8 @@ public class ShowUserDialogFragment extends DialogFragment {
     public interface FragUserObserver {
 
         void getUserInformation(Intent intent);
+        void getUserInformation2(Intent intent);
+
 
     }
 
@@ -95,12 +103,27 @@ public class ShowUserDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Activity a=getActivity();
-        if (a instanceof ShowUserDialogFragment.FragUserObserver) {
-            ShowUserDialogFragment.FragUserObserver observer = (ShowUserDialogFragment.FragUserObserver) a;
-            Intent intent = new Intent(Constants.GET_USER_INFO);
-            intent.putExtra("user_id",getArguments().getString("user_id",""));
-            observer.getUserInformation(intent);
+
+        if (getParentFragment().getParentFragment().getClass().getCanonicalName().equals(SearchMap.class.getCanonicalName())) {
+            Activity a = getActivity();
+            if (a instanceof ShowUserDialogFragment.FragUserObserver) {
+                ShowUserDialogFragment.FragUserObserver observer = (ShowUserDialogFragment.FragUserObserver) a;
+                Intent intent = new Intent(Constants.GET_USER_INFO);
+                intent.putExtra("user_id", getArguments().getString("user_id", ""));
+
+                observer.getUserInformation2(intent);
+            }
+        } else {
+
+            Activity a = getActivity();
+            if (a instanceof ShowUserDialogFragment.FragUserObserver) {
+                ShowUserDialogFragment.FragUserObserver observer = (ShowUserDialogFragment.FragUserObserver) a;
+                Intent intent = new Intent(Constants.GET_USER_INFO);
+                intent.putExtra("user_id", getArguments().getString("user_id", ""));
+                observer.getUserInformation(intent);
+            }
+
+
         }
 
         Dialog dialog = getDialog();
@@ -117,7 +140,7 @@ public class ShowUserDialogFragment extends DialogFragment {
         user_rating.setRating(rating);
         comment_list.setAdapter(new MyCommentAdapter(getContext(),comments));
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+
 
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
@@ -178,7 +201,7 @@ public class ShowUserDialogFragment extends DialogFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView==null)
             {
                 convertView=LayoutInflater.from(context).inflate(R.layout.item_comments, null);
@@ -186,36 +209,57 @@ public class ShowUserDialogFragment extends DialogFragment {
 
             TextView userComment = (TextView) convertView.findViewById(R.id.userComment);
             RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ratingBar);
-            TextView username = (TextView) convertView.findViewById(R.id.userNameText);
+            final TextView username = (TextView) convertView.findViewById(R.id.userNameText);
             final ImageView userImage = (ImageView) convertView.findViewById(R.id.userImage);
 
             ratingBar.setEnabled(false);
             userComment.setText(mDataset.get(position).message);
             ratingBar.setRating(mDataset.get(position).rate);
-            username.setText("User " + position);
 
-            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-            final long ONE_MEGABYTE = 1024 * 1024;
-            StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mDataset.get(position).writer_id+".png");
-
-            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            mDatabase.child("users").child(mDataset.get(position).writer_id.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onSuccess(byte[] bytes) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    final User user = dataSnapshot.getValue(User.class);
+                    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    userImage.setImageBitmap(bmp);
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    StorageReference storageRef = firebaseStorage.getReference().child("images").child("users").child(mDataset.get(position).writer_id+".png");
+
+                    storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+
+                            username.setText(user.username);
+
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            userImage.setImageBitmap(bmp);
 
 
+
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                            username.setText(user.username);
+
+
+                        }
+                    });
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });
+
+
+
 
 
 

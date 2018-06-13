@@ -110,6 +110,83 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
 
     @Override
+    public void getUserInformation2(final Intent intent) {
+
+        if (Constants.GET_USER_INFO.equals(intent.getAction())){
+
+            String user_id = "";
+            if (intent.hasExtra("user_id"))
+                user_id = intent.getStringExtra("user_id");
+            else
+                user_id = mAuth.getCurrentUser().getUid();
+
+            if (mDatabase == null)
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            mDatabase.child("users").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    final User user = dataSnapshot.getValue(User.class);
+                    double final_rating = 0;
+                    int count = 0;
+                    ArrayList<Comment> comments = new ArrayList<>();
+                    for (DataSnapshot comment : dataSnapshot.child("comments").getChildren()){
+
+                        if (!comment.child("message").toString().equals("")) {
+                            comments.add(comment.getValue(Comment.class));
+                            final_rating = final_rating + Float.parseFloat(comment.child("rate").getValue().toString());
+                            count++;
+                        }
+
+
+                    }
+                    float avg_rating = 0;
+                    if (count>0) {
+                        avg_rating = (float) final_rating / count;
+                    }
+
+                    if (intent.hasExtra("user_id")) {
+
+
+                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                                getChildFragmentManager().findFragmentById(R.id.container).
+                                getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
+
+                        if (fragment != null && fragment.isVisible()) {
+
+                            fragment.retrieveUserInformation(user, avg_rating, comments);
+
+                        }
+
+                    } else {
+
+                        MyPointsFragment fragment = (MyPointsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+                        if (fragment != null && fragment.isVisible()) {
+
+                            fragment.retrieveUserInformation(user, avg_rating, comments);
+
+                        }
+                    }
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+
+    }
+
+    @Override
     public void retrieveImage(@NotNull Intent intent) {
 
         if (Constants.RETRIEVE_IMAGE.equals(intent.getAction())) {
@@ -264,14 +341,17 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                     }
 
                     if (intent.hasExtra("user_id")) {
-                        ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
-                                getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
 
-                        if (fragment != null && fragment.isVisible()) {
 
-                            fragment.retrieveUserInformation(user, avg_rating, comments);
+                            ShowUserDialogFragment fragment = (ShowUserDialogFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame).
+                                    getChildFragmentManager().findFragmentByTag("ShowBookDialog").getChildFragmentManager().findFragmentByTag("ShowUserDialog");
 
-                        }
+                            if (fragment != null && fragment.isVisible()) {
+
+                                fragment.retrieveUserInformation(user, avg_rating, comments);
+
+                            }
+
                     } else {
 
                         MyPointsFragment fragment = (MyPointsFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -281,10 +361,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                             fragment.retrieveUserInformation(user, avg_rating, comments);
 
                         }
-
-
-
                     }
+
+
 
                 }
 
@@ -856,7 +935,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                             insertRef.push().setValue(r).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    System.out.println("Inserted requests");
+
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), R.string.correctly_requested, Toast.LENGTH_LONG).show();
+                                        searchBooks(new Intent(Constants.SEARCH_PREFS));
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), R.string.unsuccessfully_requested, Toast.LENGTH_LONG).show();
+
+                                    }
                                 }
                             });
 
@@ -916,6 +1002,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
                                 for (DataSnapshot books : child.child("books").getChildren()) {
 
+                                    boolean free = true;
+                                    for (DataSnapshot request : books.child("requests").getChildren()){
+
+                                        MyRequest request1 = request.getValue(MyRequest.class);
+                                        if (!(request1.status.equals(MyRequest.STATUS.ENDED.name()) || (request1.status.equals(MyRequest.STATUS.REJECTED.name()))))
+                                            free = false;
+                                        }
+
 
                                     for (DataSnapshot comment : books.child("comments").getChildren()) {
 
@@ -928,11 +1022,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                         //if (book_element.genre.equals(getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).getStringSet("pref_genre",new android.support.v4.util.ArraySet<String>())))
                                         HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
                                         book_map.put("book_id", books.getKey());
+                                        book_map.put("free",free);
                                         book_map.put("comments", comments.clone());
                                         book_list.add(book_map);
 
                                         comments.clear();
                                     }
+
 
                                 }
 
@@ -1022,6 +1118,16 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                                         (book_element.publisher.toLowerCase().contains(publisher.toLowerCase()) && publisher.length()>0) ||
                                                         (book_element.author.toLowerCase().contains(author.toLowerCase()) && author.length()>0))) {
 
+                                            boolean free = true;
+                                            for (DataSnapshot request : books.child("requests").getChildren()){
+
+                                                MyRequest request1 = request.getValue(MyRequest.class);
+                                                if (!(request1.status.equals(MyRequest.STATUS.ENDED.name()) || (request1.status.equals(MyRequest.STATUS.REJECTED.name()))))
+                                                    free = false;
+                                            }
+
+
+
                                             comments.clone();
                                             for (DataSnapshot comment : books.child("comments").getChildren()) {
                                                 comments.add((HashMap<String, Object>) comment.getValue(Comment.class).toMap());
@@ -1030,6 +1136,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
                                             HashMap<String, Object> book_map = (HashMap<String, Object>) book_element.toMap();
                                             book_map.put("book_id", books.getKey());
                                             book_map.put("comments", comments.clone());
+                                            book_map.put("free",free);
                                             book_list.add(book_map);
 
                                         }
@@ -1832,6 +1939,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 User user = dataSnapshot.getValue(User.class);
+                getSharedPreferences(Constants.PREFERENCE_FILE,MODE_PRIVATE).edit().putString("username",user.username);
+
                 ((TextView)navigation.getHeaderView(0).findViewById(R.id.user_name)).setText(getString(R.string.welcome) + " " + user.username);
 
                 if (firebaseStorage==null)

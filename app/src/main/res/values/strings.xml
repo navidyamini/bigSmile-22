@@ -138,5 +138,11 @@
     <string name="book_request">You have received a new book request. </string>
     <string name="modify_book_txt">Modify your book</string>
     <string name="aforisma">\'There are no faster or firmer friendships than those formed between people who love the same books.\' - Irving Stone</string>
+    <string name="available_book_txt">This book is available</string>
+    <string name="not_available_book_txt">This book is not available</string>
+    <string name="correctly_requested">The request has been done with success</string>
+    <string name="unsuccessfully_requested">This procedure has encountered an error. Please retry later</string>
+    <string name="unavailable_operation">You cannot request for an already borrowed book</string>
+    <string name="are_you_sure">Are you sure you want to borrow this book?</string>
 </resources>
 

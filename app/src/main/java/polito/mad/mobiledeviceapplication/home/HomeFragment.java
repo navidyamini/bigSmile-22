@@ -209,6 +209,7 @@ public class HomeFragment extends Fragment {
                             b.putString("user_id",mDataset.get(position).getString("user_id"));
                             b.putString("book_id",mDataset.get(position).getString("book_id"));
                             b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
+                            b.putBoolean("free",mDataset.get(position).getBoolean("free"));
 
                             b.putByteArray("book_conditions_image",bytes);
 
@@ -238,6 +239,7 @@ public class HomeFragment extends Fragment {
                             b.putString("user_id",mDataset.get(position).getString("user_id"));
                             b.putString("book_id",mDataset.get(position).getString("book_id"));
                             b.putSerializable("comments",mDataset.get(position).getSerializable("comments"));
+                            b.putBoolean("free",mDataset.get(position).getBoolean("free"));
 
 
                             ShowBookDialogFragment showBookDialogFragment = new ShowBookDialogFragment();
@@ -329,6 +331,7 @@ public class HomeFragment extends Fragment {
 
                 b1.putString("name",((HashMap) entries.get(key).get("user")).get("name").toString());
                 b1.putString("surname",((HashMap) entries.get(key).get("user")).get("surname").toString());
+                b1.putBoolean("free", (boolean)(entry.get("free")));
 
                 b1.putSerializable("comments",((ArrayList)entry.get("comments")));
                 books_prefs.add(b1);
