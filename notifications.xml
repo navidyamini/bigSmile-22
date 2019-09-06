@@ -1,6 +1,7 @@
 <application>
   <component name="NotificationConfiguration">
     <notification groupId="Build sync orphan modules" displayType="NONE" shouldLog="false" />
+    <notification groupId="JDK Location different to JAVA_HOME" displayType="NONE" shouldLog="false" />
     <notification groupId="Localization and Internationalization" displayType="NONE" shouldLog="false" />
   </component>
 </application>
